@@ -8,14 +8,14 @@ public class DBConnect {
 	= "jdbc:oracle:thin:@ora.csc.ncsu.edu:1521:orcl";
     static Connection conn = null;
 
-    public static void setConnection(String[] args) 
+    public static void setConnection() 
     {
         try 
         {
             Class.forName("oracle.jdbc.driver.OracleDriver");
 
-	    String user = "aslingwa";	// For example, "jsmith"
-	    String passwd = "200111126";	// Your 9 digit student ID number
+	    String user = "gmeneze";	// For example, "jsmith"
+	    String passwd = "200111263";	// Your 9 digit student ID number
             
             try 
             {
