@@ -17,14 +17,7 @@ public class DBConnect {
 	    String user = "gmeneze";	// For example, "jsmith"
 	    String passwd = "200111263";	// Your 9 digit student ID number
             
-            try 
-            {
-		conn = DriverManager.getConnection(jdbcURL, user, passwd);
-            } 
-            finally 
-            {
-                close(conn);
-            }
+            conn = DriverManager.getConnection(jdbcURL, user, passwd);
         } 
         catch(Throwable oops) 
         {

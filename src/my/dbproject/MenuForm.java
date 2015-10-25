@@ -174,9 +174,9 @@ public class MenuForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Student s = ButtonEvents.getProfile(student_id);
-        this.setVisible(false);
-        new StudentProfileForm().init(s);
+        //Student s = ButtonEvents.getProfile(student_id);
+        //this.setVisible(false);
+        //StudentProfileForm().init(s);
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -203,7 +203,7 @@ public class MenuForm extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void init() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.

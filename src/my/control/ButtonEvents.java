@@ -69,7 +69,7 @@ public class ButtonEvents {
         }
         else
         {
-            st = LibrarySystem.connection.prepareCall("Select 1 from faculty where student_id = ? and password = ?");
+            st = LibrarySystem.connection.prepareCall("Select 1 from faculty where faculty_id = ? and password = ?");
             st.setString(1, id);
             st.setString(2,password);
         

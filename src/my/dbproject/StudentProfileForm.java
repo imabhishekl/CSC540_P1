@@ -279,7 +279,7 @@ public class StudentProfileForm extends javax.swing.JFrame {
         jLabel22.setText(s.getDob().toString());
         jLabel23.setText(s.getNationality());
         jLabel24.setText(s.getDepartment());
-        jLabel25.setText(s.getClassification_id());
+        jLabel25.setText(s.getClassfication_id());
         jLabel26.setText(s.getAccount_balance());
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

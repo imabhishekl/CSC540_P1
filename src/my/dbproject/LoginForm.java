@@ -112,11 +112,13 @@ public class LoginForm extends javax.swing.JFrame {
             int is_valid = ButtonEvents.validate_login(jTextField1.getText(),jPasswordField1.getText());
             if(is_valid == 1)
             {
-                System.out.println("Succeed");
+                System.out.println("Success in Login");
+                this.setVisible(false);
+                MenuForm.init();
             }
             else
             {
-                System.out.println("Failed");
+                System.out.println("Failed Login");
             }
         }
         catch(SQLException e)
