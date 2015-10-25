@@ -294,7 +294,23 @@ public class StudentProfileForm extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+<<<<<<< HEAD
         final Student fixed = s;
+=======
+        jLabel9.setText(s.getStudent_id());
+        jLabel10.setText(s.getFirst_name());
+        jLabel11.setText(s.getLast_name());
+        jLabel12.setText(s.getPhone());
+        jLabel13.setText(s.getAlternate_phone());
+        jLabel14.setText(s.getAddr_street());
+        jLabel15.setText(s.getAddr_city());
+        jLabel16.setText(s.getAddr_zip());
+        jLabel22.setText(s.getDob().toString());
+        jLabel23.setText(s.getNationality());
+        jLabel24.setText(s.getDepartment());
+        jLabel25.setText(s.getClassfication_id());
+        jLabel26.setText(s.getAccount_balance());
+>>>>>>> 0294fd89d702e439f3ead20f3572c9cfbba07d6b
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
