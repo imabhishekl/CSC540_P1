@@ -24,7 +24,7 @@ public class Student
     private Date dob;
     private String nationality;
     private String department;
-    private String classfication_id;
+    private String classification_id;
     private String account_balance;
     private String user_id;
     private String password;
@@ -185,18 +185,7 @@ public class Student
 
     /**
      * @return the classfication_id
-     */
-    public String getClassfication_id() {
-        return classfication_id;
-    }
-
-    /**
-     * @param classfication_id the classfication_id to set
-     */
-    public void setClassfication_id(String classfication_id) {
-        this.classfication_id = classfication_id;
-    }
-
+     
     /**
      * @return the account_balance
      */
@@ -237,5 +226,19 @@ public class Student
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * @return the classification_id
+     */
+    public String getClassification_id() {
+        return classification_id;
+    }
+
+    /**
+     * @param classification_id the classification_id to set
+     */
+    public void setClassification_id(String classification_id) {
+        this.classification_id = classification_id;
     }
 }
