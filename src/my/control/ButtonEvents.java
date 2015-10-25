@@ -7,11 +7,9 @@ package my.control;
 
 import TableStrcuture.Faculty;
 import TableStrcuture.Student;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
-import java.util.Date;
 
 /**
  *
