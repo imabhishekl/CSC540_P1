@@ -5,6 +5,11 @@
  */
 package my.dbproject;
 
+import TableStrcuture.Student;
+import java.sql.SQLException;
+import my.control.ButtonEvents;
+
+
 public class MenuForm extends javax.swing.JFrame {
 
     /**
@@ -167,9 +172,20 @@ public class MenuForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        //Student s = ButtonEvents.getProfile(student_id);
-        //this.setVisible(false);
-        //StudentProfileForm().init(s);
+        try
+        {
+            if(ButtonEvents.s == null)
+            {
+                System.out.println("NULL");
+            }
+            Student s = ButtonEvents.getProfileStudent(ButtonEvents.student_id);
+            this.setVisible(false);
+            StudentProfileForm.init(s);
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
