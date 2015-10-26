@@ -117,6 +117,11 @@ public class StudentProfileForm extends javax.swing.JFrame {
         jLabel26.setText("jLabel26");
 
         jButton1.setText("Back");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -241,10 +246,31 @@ public class StudentProfileForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        MenuForm.init();    
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public void init(Student s) {
+    public void setLabels(Student s)
+    {
+        jLabel9.setText(s.getStudent_id());
+        jLabel10.setText(s.getFirst_name());
+        jLabel11.setText(s.getLast_name());
+        jLabel12.setText(s.getPhone());
+        jLabel13.setText(s.getAlternate_phone());
+        jLabel14.setText(s.getAddr_street());
+        jLabel15.setText(s.getAddr_city());
+        jLabel16.setText(s.getAddr_zip());
+        jLabel22.setText(s.getDob().toString());
+        jLabel23.setText(s.getNationality());
+        jLabel24.setText(s.getDepartment());
+        jLabel25.setText(s.getClassification_id());
+        jLabel26.setText(s.getAccount_balance());
+    }
+    static public void init(Student s) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -268,25 +294,19 @@ public class StudentProfileForm extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-        jLabel9.setText(s.getStudent_id());
-        jLabel10.setText(s.getFirst_name());
-        jLabel11.setText(s.getLast_name());
-        jLabel12.setText(s.getPhone());
-        jLabel13.setText(s.getAlternate_phone());
-        jLabel14.setText(s.getAddr_street());
-        jLabel15.setText(s.getAddr_city());
-        jLabel16.setText(s.getAddr_zip());
-        jLabel22.setText(s.getDob().toString());
-        jLabel23.setText(s.getNationality());
-        jLabel24.setText(s.getDepartment());
-        jLabel25.setText(s.getClassfication_id());
-        jLabel26.setText(s.getAccount_balance());
+
+        final Student fixed = s;
+
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StudentProfileForm().setVisible(true);
+                StudentProfileForm o = new StudentProfileForm();
+                o.setVisible(true);
+                o.setLabels(fixed);
             }
         });
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
