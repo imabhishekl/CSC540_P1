@@ -9,7 +9,7 @@ package TableStrcuture;
  *
  * @author abhishek
  */
-public class Course 
+public class Courses 
 {
     private String course_id;
     private String course_name;

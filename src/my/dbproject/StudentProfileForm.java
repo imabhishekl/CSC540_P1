@@ -261,9 +261,9 @@ public class StudentProfileForm extends javax.swing.JFrame {
         jLabel11.setText(s.getLast_name());
         jLabel12.setText(s.getPhone());
         jLabel13.setText(s.getAlternate_phone());
-        jLabel14.setText(s.getAddr_street());
-        jLabel15.setText(s.getAddr_city());
-        jLabel16.setText(s.getAddr_zip());
+        jLabel14.setText(s.getAdd_street());
+        jLabel15.setText(s.getAdd_city());
+        jLabel16.setText(s.getAdd_zip());
         jLabel22.setText(s.getDob().toString());
         jLabel23.setText(s.getNationality());
         jLabel24.setText(s.getDepartment());

@@ -9,46 +9,44 @@ package TableStrcuture;
  *
  * @author chintanpanchamia
  */
-public class Journals {
-    private String issn_no;
-    private String year_of_publication;
+public class Conf {
+    private String confnum;
+    private String confname;
     private String title;
+    private String year;
     private String hunt_avail_no;
     private String hunt_total_no;
     private String hill_total_no;
     private String hill_avail_no;
-    private String group_id;
     private String e_copy;
+    private String group_id;
 
-    public Journals() {
+    /**
+     * @return the confnum
+     */
+    public String getConfnum() {
+        return confnum;
     }
 
     /**
-     * @return the issn_no
+     * @param confnum the confnum to set
      */
-    public String getIssn_no() {
-        return issn_no;
+    public void setConfnum(String confnum) {
+        this.confnum = confnum;
     }
 
     /**
-     * @param issn_no the issn_no to set
+     * @return the confname
      */
-    public void setIssn_no(String issn_no) {
-        this.issn_no = issn_no;
+    public String getConfname() {
+        return confname;
     }
 
     /**
-     * @return the year_of_publication
+     * @param confname the confname to set
      */
-    public String getYear_of_publication() {
-        return year_of_publication;
-    }
-
-    /**
-     * @param year_of_publication the year_of_publication to set
-     */
-    public void setYear_of_publication(String year_of_publication) {
-        this.year_of_publication = year_of_publication;
+    public void setConfname(String confname) {
+        this.confname = confname;
     }
 
     /**
@@ -63,6 +61,20 @@ public class Journals {
      */
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    /**
+     * @return the year
+     */
+    public String getYear() {
+        return year;
+    }
+
+    /**
+     * @param year the year to set
+     */
+    public void setYear(String year) {
+        this.year = year;
     }
 
     /**
@@ -122,20 +134,6 @@ public class Journals {
     }
 
     /**
-     * @return the group_id
-     */
-    public String getGroup_id() {
-        return group_id;
-    }
-
-    /**
-     * @param group_id the group_id to set
-     */
-    public void setGroup_id(String group_id) {
-        this.group_id = group_id;
-    }
-
-    /**
      * @return the e_copy
      */
     public String getE_copy() {
@@ -147,5 +145,19 @@ public class Journals {
      */
     public void setE_copy(String e_copy) {
         this.e_copy = e_copy;
+    }
+
+    /**
+     * @return the group_id
+     */
+    public String getGroup_id() {
+        return group_id;
+    }
+
+    /**
+     * @param group_id the group_id to set
+     */
+    public void setGroup_id(String group_id) {
+        this.group_id = group_id;
     }
 }

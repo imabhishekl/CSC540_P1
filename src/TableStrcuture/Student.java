@@ -18,9 +18,11 @@ public class Student
     private String last_name;
     private String phone;
     private String alternate_phone;
-    private String addr_street;
-    private String addr_city;
-    private String addr_zip;
+    private String add_street;
+    private String add_city;
+    private String add_zip;
+    private String add_state;
+    private String sex;
     private Date dob;
     private String nationality;
     private String department;
@@ -102,44 +104,7 @@ public class Student
     /**
      * @return the addr_street
      */
-    public String getAddr_street() {
-        return addr_street;
-    }
-
-    /**
-     * @param addr_street the addr_street to set
-     */
-    public void setAddr_street(String addr_street) {
-        this.addr_street = addr_street;
-    }
-
-    /**
-     * @return the addr_city
-     */
-    public String getAddr_city() {
-        return addr_city;
-    }
-
-    /**
-     * @param addr_city the addr_city to set
-     */
-    public void setAddr_city(String addr_city) {
-        this.addr_city = addr_city;
-    }
-
-    /**
-     * @return the addr_zip
-     */
-    public String getAddr_zip() {
-        return addr_zip;
-    }
-
-    /**
-     * @param addr_zip the addr_zip to set
-     */
-    public void setAddr_zip(String addr_zip) {
-        this.addr_zip = addr_zip;
-    }
+    
 
     /**
      * @return the dob
@@ -240,5 +205,75 @@ public class Student
      */
     public void setClassification_id(String classification_id) {
         this.classification_id = classification_id;
+    }
+
+    /**
+     * @return the add_street
+     */
+    public String getAdd_street() {
+        return add_street;
+    }
+
+    /**
+     * @param add_street the add_street to set
+     */
+    public void setAdd_street(String add_street) {
+        this.add_street = add_street;
+    }
+
+    /**
+     * @return the add_city
+     */
+    public String getAdd_city() {
+        return add_city;
+    }
+
+    /**
+     * @param add_city the add_city to set
+     */
+    public void setAdd_city(String add_city) {
+        this.add_city = add_city;
+    }
+
+    /**
+     * @return the add_zip
+     */
+    public String getAdd_zip() {
+        return add_zip;
+    }
+
+    /**
+     * @param add_zip the add_zip to set
+     */
+    public void setAdd_zip(String add_zip) {
+        this.add_zip = add_zip;
+    }
+
+    /**
+     * @return the add_state
+     */
+    public String getAdd_state() {
+        return add_state;
+    }
+
+    /**
+     * @param add_state the add_state to set
+     */
+    public void setAdd_state(String add_state) {
+        this.add_state = add_state;
+    }
+
+    /**
+     * @return the sex
+     */
+    public String getSex() {
+        return sex;
+    }
+
+    /**
+     * @param sex the sex to set
+     */
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }

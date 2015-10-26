@@ -33,9 +33,9 @@ public class ButtonEvents {
         s.setLast_name(rs.getString("last_name"));
         s.setPhone(rs.getString("phone"));
         s.setAlternate_phone(rs.getString("alternate_phone"));
-        s.setAddr_city(rs.getString("addr_city"));
-        s.setAddr_zip(rs.getString("addr_zip"));
-        s.setAddr_street(rs.getString("addr_street"));
+        s.setAdd_city(rs.getString("addr_city"));
+        s.setAdd_zip(rs.getString("addr_zip"));
+        s.setAdd_street(rs.getString("addr_street"));
         s.setDob(rs.getDate("dob"));
         s.setNationality(rs.getString("nationality"));
         s.setDepartment(rs.getString("department"));

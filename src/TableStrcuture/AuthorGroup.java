@@ -9,7 +9,7 @@ package TableStrcuture;
  *
  * @author chintanpanchamia
  */
-public class AuthorGroups {
+public class AuthorGroup {
     private String author_id;
     private String group_id;
 
