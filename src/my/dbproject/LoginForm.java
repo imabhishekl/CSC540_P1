@@ -110,7 +110,7 @@ public class LoginForm extends javax.swing.JFrame {
         try
         {            
             int is_valid = ButtonEvents.validate_login(jTextField1.getText(),jPasswordField1.getText());
-            //if(is_valid == 1)
+            if(is_valid == 1)
             {
                 System.out.println("Success in Login");
                 this.setVisible(false);

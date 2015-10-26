@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package my.control; 
 
 import TableStrcuture.Faculty;
@@ -11,36 +6,41 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 
-/**
- *
- * @author chintanpanchamia
- */
 public class ButtonEvents {
     static PreparedStatement st = null;
+    public static Student s;
+    public static String student_id;
     public static Student getProfileStudent(String student_id) throws SQLException
     {
-        Student s = new Student();
+        s = new Student();
         
         s.setStudent_id(student_id);
         //Statement st = LibrarySystem.connection.createStatement();
-        st = LibrarySystem.connection.prepareCall("Select * from student where student_id = ?");
+        st = LibrarySystem.connection.prepareStatement("Select * from student where student_id = ?");
         st.setString(1, student_id);
         
         ResultSet rs = st.executeQuery();
+        if (rs.next()) {
+
         
         s.setStudent_id(rs.getString("student_id"));
         s.setFirst_name(rs.getString("first_name"));
         s.setLast_name(rs.getString("last_name"));
         s.setPhone(rs.getString("phone"));
         s.setAlternate_phone(rs.getString("alternate_phone"));
-        s.setAdd_city(rs.getString("addr_city"));
-        s.setAdd_zip(rs.getString("addr_zip"));
-        s.setAdd_street(rs.getString("addr_street"));
+        s.setAdd_city(rs.getString("add_city"));
+        s.setAdd_zip(rs.getString("add_zip"));
+        s.setAdd_street(rs.getString("add_street"));
+        s.setAdd_state(rs.getString("add_state"));
+        s.setSex(rs.getString("sex"));
         s.setDob(rs.getDate("dob"));
         s.setNationality(rs.getString("nationality"));
         s.setDepartment(rs.getString("department"));
         s.setClassification_id(rs.getString("classification_id"));
-        s.setAccount_balance(rs.getString("account_balance"));
+        s.setAccount_balance(rs.getString("account_balance"));}
+
+        
+
         return s;
     }
     public static Faculty getProfileFaculty(String faculty_id) throws SQLException
@@ -77,10 +77,9 @@ public class ButtonEvents {
     public static int validate_login(String id,String password) throws SQLException
     {
         int status;      
-        if(LibrarySystem.connection == null)
-            System.out.println("NULL");
+        
+        student_id = id;
         st = LibrarySystem.connection.prepareStatement("Select 1 from student where student_id = ? and password = ?");
-        System.out.println("validating");
         st.setString(1, id);
         st.setString(2,password);
         
@@ -104,6 +103,5 @@ public class ButtonEvents {
             }
         }
         return 0;
-
     }
 }

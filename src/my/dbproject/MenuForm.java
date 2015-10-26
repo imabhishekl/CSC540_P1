@@ -6,12 +6,10 @@
 package my.dbproject;
 
 import TableStrcuture.Student;
+import java.sql.SQLException;
 import my.control.ButtonEvents;
 
-/**
- *
- * @author chintanpanchamia
- */
+
 public class MenuForm extends javax.swing.JFrame {
 
     /**
@@ -174,14 +172,26 @@ public class MenuForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        //Student s = ButtonEvents.getProfile(student_id);
-        //this.setVisible(false);
-        //StudentProfileForm().init(s);
+        try
+        {
+            if(ButtonEvents.s == null)
+            {
+                System.out.println("NULL");
+            }
+            Student s = ButtonEvents.getProfileStudent(ButtonEvents.student_id);
+            this.setVisible(false);
+            StudentProfileForm.init(s);
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        this.setVisible(false);
+        ResourceForm.init();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -197,7 +207,7 @@ public class MenuForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+        System.exit(0);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
