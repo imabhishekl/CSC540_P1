@@ -17,9 +17,10 @@ import java.sql.PreparedStatement;
  */
 public class ButtonEvents {
     static PreparedStatement st = null;
+    static Student s;
     public static Student getProfileStudent(String student_id) throws SQLException
     {
-        Student s = new Student();
+        s = new Student();
         
         s.setStudent_id(student_id);
         //Statement st = LibrarySystem.connection.createStatement();

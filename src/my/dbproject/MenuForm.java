@@ -5,13 +5,6 @@
  */
 package my.dbproject;
 
-import TableStrcuture.Student;
-import my.control.ButtonEvents;
-
-/**
- *
- * @author chintanpanchamia
- */
 public class MenuForm extends javax.swing.JFrame {
 
     /**
