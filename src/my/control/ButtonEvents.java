@@ -45,7 +45,7 @@ public class ButtonEvents {
     }
     public static Faculty getProfileFaculty(String faculty_id) throws SQLException
     {
-<<<<<<< HEAD
+
         Faculty f = new Faculty();
         
         f.setFaculty_id(faculty_id);
@@ -70,9 +70,8 @@ public class ButtonEvents {
         //f.setClassfication_id(rs.getString("classification_id"));
         f.setAccount_balance(rs.getString("account_balance"));
         return f;
-=======
-        Faculty f = new Faculty();             
-        return f;
+            
+      
     }
     
     public static int validate_login(String id,String password) throws SQLException
@@ -105,6 +104,6 @@ public class ButtonEvents {
             }
         }
         return 0;
->>>>>>> 0294fd89d702e439f3ead20f3572c9cfbba07d6b
+
     }
 }

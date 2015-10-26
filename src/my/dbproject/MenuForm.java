@@ -203,11 +203,11 @@ public class MenuForm extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-<<<<<<< HEAD
-    public static void main() {
-=======
+
+    
+
     public static void init() {
->>>>>>> 0294fd89d702e439f3ead20f3572c9cfbba07d6b
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
