@@ -8,6 +8,8 @@ import TableStrcuture.Student;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import TableStrcuture.Books;
+import java.util.ArrayList;
 
 public class ButtonEvents {
 
@@ -101,6 +103,44 @@ public class ButtonEvents {
         return 0;
     }
 
+
+    public static ArrayList<Books> get_books() throws SQLException
+    {
+        int status;  
+        
+        Books book;
+        
+        ArrayList<Books> bookslist = new ArrayList<Books>();
+        
+        st = LibrarySystem.connection.prepareStatement("Select * from books where hunt_total_no > 0 or hill_total_no > 0");
+        
+        try (ResultSet rs = st.executeQuery()) {
+            while(rs.next())
+            {
+                book = new Books();
+                
+                book.setIsbn_no(rs.getString("isbn_no"));
+                book.setTitle(rs.getString("title"));
+                book.setEdition(rs.getString("edition"));
+                book.setYear_of_publication(rs.getInt("year_of_publication"));
+                book.setPublisher(rs.getString("publisher"));
+                book.setHunt_avail_no(rs.getInt("hunt_avail_no"));
+                book.setHunt_total_no(rs.getInt("hunt_total_no"));
+                book.setHill_avail_no(rs.getInt("hill_avail_no"));
+                book.setHill_total_no(rs.getInt("hill_total_no"));
+                book.setE_copy(rs.getString("e_copy"));
+                book.setGroup_id(rs.getInt("group_id"));
+                
+                bookslist.add(book);
+                
+            }
+        }
+        
+        
+        return bookslist;
+
+    }
+
     
     
     public static Rooms getRoom(String lib_name,int Capacity, String type) throws SQLException
@@ -118,8 +158,11 @@ public class ButtonEvents {
             
       
     }
+
     
 }
+
+
 
 
     
