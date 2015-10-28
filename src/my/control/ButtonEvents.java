@@ -104,4 +104,37 @@ public class ButtonEvents {
         }
         return 0;
     }
+    public static Camera getProfileStudent(String student_id) throws SQLException
+    {
+        s = new Student();
+        
+        s.setStudent_id(student_id);
+        //Statement st = LibrarySystem.connection.createStatement();
+        st = LibrarySystem.connection.prepareStatement("Select * from student where student_id = ?");
+        st.setString(1, student_id);
+        
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) {
+
+        
+        s.setStudent_id(rs.getString("student_id"));
+        s.setFirst_name(rs.getString("first_name"));
+        s.setLast_name(rs.getString("last_name"));
+        s.setPhone(rs.getString("phone"));
+        s.setAlternate_phone(rs.getString("alternate_phone"));
+        s.setAdd_city(rs.getString("add_city"));
+        s.setAdd_zip(rs.getString("add_zip"));
+        s.setAdd_street(rs.getString("add_street"));
+        s.setAdd_state(rs.getString("add_state"));
+        s.setSex(rs.getString("sex"));
+        s.setDob(rs.getDate("dob"));
+        s.setNationality(rs.getString("nationality"));
+        s.setDepartment(rs.getString("department"));
+        s.setClassification_id(rs.getString("classification_id"));
+        s.setAccount_balance(rs.getString("account_balance"));}
+
+        
+
+        return s;
+    }
 }
