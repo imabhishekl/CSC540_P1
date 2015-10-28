@@ -1,6 +1,8 @@
 package my.control; 
 
 import TableStrcuture.Faculty;
+import TableStrcuture.Rooms;
+import TableStrcuture.Reserve_room;
 import TableStrcuture.Student;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -103,5 +105,22 @@ public class ButtonEvents {
             }
         }
         return 0;
+    }
+    
+    
+    public static Room getRoom(String lib_name,int Capacity, String type) throws SQLException
+    {
+
+        Rooms r = new Rooms();
+        Reserve_room rr=new Reserve_room();
+        
+        PreparedStatement st = LibrarySystem.connection.prepareCall("Select * from room where lib_name= ?");
+        st.setString(1, lib_name);
+        
+        ResultSet rs = st.executeQuery();
+        
+        return r;
+            
+      
     }
 }
