@@ -9,7 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import TableStrcuture.Books;
+import TableStrcuture.Patron;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ButtonEvents {
 
@@ -158,7 +161,74 @@ public class ButtonEvents {
             
       
     }
+    
+    public static int waitlistCamera(String camera_id, Date time, String val) throws SQLException
+    {
+        //val can be student_id or faculty_id
+        Patron p = new Patron();
+        PreparedStatement st1 = null;
+        int a;
+        //patron id cant come from patron table as dependent on other resources.
+        st1 = LibrarySystem.connection.prepareStatement("Select * from patron where patron_id=val");
+        ResultSet rs1 = st1.executeQuery();
+        a = rs1.getInt("id");
+        
+        st = LibrarySystem.connection.prepareStatement("Select * from waitlist_camera where request_time=time and patron_id=a");
+        
+        System.out.println(st);
+       
+        ResultSet rs = st.executeQuery();
+            if (!rs.next())
+            {
+                System.out.println("You have already reserved this camera on this date, choose another");
+            }
+            else
+            {
+                int count=0;
+                PreparedStatement st2 = null;
+                st2 = LibrarySystem.connection.prepareStatement("Select * from waitlist_camera");
+                ResultSet rs2 = st2.executeQuery();
+                while (rs2.next()){
+                    count+=1;
+                }
 
+                //here id needs to be autonumber in the database design; or will need to keep a counter and a query needs to be written
+                Statement statement = LibrarySystem.connection.createStatement();
+                statement.execute("insert into waitlist_camera"+"(patron_id,camera_id, id, request_time,message_sent)"
+                        +"values ("+a+","+camera_id+","+(count+1)+","+time+","+time+")");
+                
+            }
+        return 1;
+
+    }
+    public static ArrayList<Camera> displayCameras() throws SQLException
+    {
+        Camera c;
+        
+        ArrayList<Camera> cameras = new ArrayList<Camera>();
+        
+        st = LibrarySystem.connection.prepareStatement("Select * from camera");
+        System.out.println(st);
+       
+        try (ResultSet rs = st.executeQuery()) {
+            while(rs.next())
+            {
+                c = new Camera();
+                c.setCamera_id(rs.getString("camera_id"));
+                c.setModel(rs.getString("model"));
+                c.setLens(rs.getString("lens"));
+                c.setMemory_available(rs.getString("memory_available"));
+                c.setMake(rs.getString("make"));
+                c.setLib_name(rs.getString("lib_name"));
+                
+                
+                cameras.add(c);
+                
+            }
+        }
+        return cameras;
+
+    }
     
 }
 
