@@ -108,7 +108,6 @@ public class ButtonEvents {
         return 0;
     }
 
-
     public static ArrayList<Books> get_books() throws SQLException
     {
         int status;  
@@ -146,9 +145,7 @@ public class ButtonEvents {
 
     }
 
-    
-    
-    public static Rooms getRoom(String lib_name,int Capacity, String type) throws SQLException
+    public static Rooms getRoom(String lib_name,int capacity, String type) throws SQLException
     {
 
         Rooms r = new Rooms();
@@ -258,5 +255,16 @@ public class ButtonEvents {
         
         return 1;
     }
-}
 
+    public static int getBalance() throws SQLException
+    {
+        st = LibrarySystem.connection.prepareStatement("Select patron_type from patron where patron_id ="+student_id);
+        ResultSet rs = st.executeQuery();
+        
+        String patron_type = rs.getString("patron_type");
+        PreparedStatement st1 = LibrarySystem.connection.prepareStatement("Select account_balance from "+patron_type+" where "+patron_type+"_id = "+student_id);
+        int a = Integer.parseInt(rs.getString("account_balance"));
+        return a;
+    }
+    
+}
