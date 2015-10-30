@@ -3,10 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/home/amrit/CSC540_P1/src/my/control/Test.java</file>
             <file>file:/home/amrit/CSC540_P1/src/TableStrcuture/CameraCheckout.java</file>
             <file>file:/home/amrit/CSC540_P1/src/TableStrcuture/WaitlistCamera.java</file>
             <file>file:/home/amrit/CSC540_P1/src/my/control/ButtonEvents.java</file>
+=======
+            <file>file:/C:/Users/Pooja%20Asher/CSC540_P1/src/my/control/LibrarySystem.java</file>
+            <file>file:/C:/Users/Pooja%20Asher/CSC540_P1/src/my/control/ButtonEvents.java</file>
+            <file>file:/C:/Users/Pooja%20Asher/CSC540_P1/src/my/control/Test.java</file>
+>>>>>>> 96e8121884c1203fd8e18144120f0d178f8c13a1
         </group>
     </open-files>
 </project-private>

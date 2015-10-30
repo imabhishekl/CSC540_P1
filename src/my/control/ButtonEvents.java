@@ -195,7 +195,7 @@ public class ButtonEvents {
                 }
                 Calendar cal= Calendar.getInstance();
                 cal.setTime(date);
-                cal.set(Calendar.HOUR_OF_DAY, 9);            
+                cal.set(Calendar.HOUR_OF_DAY, 8);            
                 cal.set(Calendar.MINUTE, 0);                 
                 cal.set(Calendar.SECOND, 0);                 
                 cal.set(Calendar.MILLISECOND, 0); 
@@ -205,7 +205,7 @@ public class ButtonEvents {
                 
                 //here id needs to be autonumber in the database design; or will need to keep a counter and a query needs to be written
                 Statement statement = LibrarySystem.connection.createStatement();
-                statement.execute("insert into waitlist_camera"+"(patron_id,camera_id, id, request_time,message_sent)"
+                statement.execute("insert into waitlist_camera (patron_id,camera_id, id, request_time,message_sent)"
                         +"values ("+a+","+camera_id+","+(count+1)+","+tstamp1+","+tstamp+")");
                 
             }
@@ -219,7 +219,6 @@ public class ButtonEvents {
         ArrayList<Camera> cameras = new ArrayList<Camera>();
         
         st = LibrarySystem.connection.prepareStatement("Select * from camera");
-        System.out.println(st);
        
         try (ResultSet rs = st.executeQuery()) {
             while(rs.next())
@@ -241,5 +240,23 @@ public class ButtonEvents {
 
     }
     
+    public static int check_outcamera(String camera_id, String student_id) throws SQLException
+    {
+                
+        st = LibrarySystem.connection.prepareStatement("Select * from patron where patron_id="+student_id);
+        ResultSet rs = st.executeQuery();
+        int a = rs.getInt("id");
+        PreparedStatement st1 = null;
+        Date date=new Date();
+        Timestamp ts1 = new Timestamp(date.getTime());
+        //st1 = LibrarySystem.connection.prepareStatement("insert into camera_checkout (patron_id,camera_id, start_time, end_time,due_time,checkout)"
+          //              +"values ("+id+","+camera_id+","+ts1+","+tstamp1+","+tstamp+")");
+
+
+        
+        
+        
+        return 1;
+    }
 }
 
