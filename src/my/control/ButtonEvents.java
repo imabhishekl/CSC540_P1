@@ -13,6 +13,8 @@ import TableStrcuture.Patron;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.sql.Timestamp;
+import java.util.Calendar;
 
 public class ButtonEvents {
 
@@ -162,7 +164,7 @@ public class ButtonEvents {
       
     }
     
-    public static int waitlistCamera(String camera_id, Date time, String val) throws SQLException
+    public static int waitlistCamera(String camera_id, Date date, String val) throws SQLException
     {
         //val can be student_id or faculty_id
         Patron p = new Patron();
@@ -175,8 +177,6 @@ public class ButtonEvents {
         
         st = LibrarySystem.connection.prepareStatement("Select * from waitlist_camera where request_time=time and patron_id=a");
         
-        System.out.println(st);
-       
         ResultSet rs = st.executeQuery();
             if (!rs.next())
             {
@@ -191,11 +191,22 @@ public class ButtonEvents {
                 while (rs2.next()){
                     count+=1;
                 }
-
+                Calendar cal= Calendar.getInstance();
+                cal.setTime(date);
+                cal.set(Calendar.HOUR_OF_DAY, 9);            
+                cal.set(Calendar.MINUTE, 0);                 
+                cal.set(Calendar.SECOND, 0);                 
+                cal.set(Calendar.MILLISECOND, 0); 
+                cal.setTime(date);
+                Date zeroedDate = cal.getTime();
+                Timestamp tstamp1 = new Timestamp(date.getTime());
+                
+                Timestamp tstamp = new Timestamp(zeroedDate.getTime());                
+                
                 //here id needs to be autonumber in the database design; or will need to keep a counter and a query needs to be written
                 Statement statement = LibrarySystem.connection.createStatement();
                 statement.execute("insert into waitlist_camera"+"(patron_id,camera_id, id, request_time,message_sent)"
-                        +"values ("+a+","+camera_id+","+(count+1)+","+time+","+time+")");
+                        +"values ("+a+","+camera_id+","+(count+1)+","+tstamp1+","+tstamp+")");
                 
             }
         return 1;

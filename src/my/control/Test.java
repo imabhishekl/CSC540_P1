@@ -6,6 +6,9 @@
 package my.control;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,15 +17,17 @@ import java.util.logging.Logger;
  * @author Pooja Asher
  */
 public class Test {
-    public static void main(String arg[]){
-        LibrarySystem l=new LibrarySystem();
+
+    public static void main(String arg[]) {
+        LibrarySystem l = new LibrarySystem();
         l.setup();
-        ButtonEvents b= new ButtonEvents();
-        try {
-            b.displayCameras();
-        } catch (SQLException ex) {
-            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+       
+        /*ButtonEvents b= new ButtonEvents();
+         try {
+         b.displayCameras();
+         } catch (SQLException ex) {
+         Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+         }*/
+
     }
 }
