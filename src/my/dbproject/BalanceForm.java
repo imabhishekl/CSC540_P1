@@ -104,11 +104,11 @@ public class BalanceForm extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public void display()
+    public void display(int x)
     {
-        jTextField1.setText();
+        jTextField1.setText("Your account balance is:"+x);
     }
-    public static void init() {
+    public static void init(int x) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -131,13 +131,14 @@ public class BalanceForm extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(BalanceForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        final int a = x;
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 BalanceForm b = new BalanceForm();
                 b.setVisible(true);
-                b.display();
+                b.display(a);
             }
         });
        

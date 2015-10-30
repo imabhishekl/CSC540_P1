@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package my.control;
+import TableStrcuture.Rooms;
+import TableStrcuture.Reserve_room;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -18,9 +20,8 @@ import java.util.logging.Logger;
  */
 public class Test {
 
-    public static void main(String arg[]) {
-        LibrarySystem l = new LibrarySystem();
-        l.setup();
+
+    
        
         /*ButtonEvents b= new ButtonEvents();
          try {
@@ -28,6 +29,17 @@ public class Test {
          } catch (SQLException ex) {
          Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
          }*/
+
+
+    public static void main(String args[])
+    {
+        LibrarySystem l=new LibrarySystem();
+        l.setup();
+        System.out.println("main");
+        try{
+            Rooms r=ButtonEvents.getRoom("Hunt",3,"study");
+        }
+        catch(Exception e){};
 
     }
 }

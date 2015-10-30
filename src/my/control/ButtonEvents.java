@@ -109,6 +109,7 @@ public class ButtonEvents {
     }
 
 
+
     public static ArrayList<Books> get_books() throws SQLException
     {
         int status;  
@@ -148,21 +149,30 @@ public class ButtonEvents {
 
     
     
-    public static Rooms getRoom(String lib_name,int Capacity, String type) throws SQLException
+  
+    
+    
+    public static Rooms getRoom(String lib_name,int capacity, String type) throws SQLException
+
     {
 
         Rooms r = new Rooms();
         Reserve_room rr=new Reserve_room();
         
-        PreparedStatement st = LibrarySystem.connection.prepareCall("Select * from room where lib_name= ?");
+        PreparedStatement st = LibrarySystem.connection.prepareCall("select * from rooms where lib_name= ? and capacity= ?");
         st.setString(1, lib_name);
+        st.setInt(2, capacity);
         
         ResultSet rs = st.executeQuery();
-        
-        return r;
-            
-      
+        while(rs.next()){
+            {
+                r.setRoom_no(rs.getString("room_no"));
+                System.out.println(rs.getString("room_no"));
+            }      
     }
+        return r;
+    }
+
     
     public static int waitlistCamera(String camera_id, Date date, String val) throws SQLException
     {
@@ -239,6 +249,17 @@ public class ButtonEvents {
         }
         return cameras;
 
+    }
+    
+    public static int getBalance() throws SQLException
+    {
+        st = LibrarySystem.connection.prepareStatement("Select patron_type from patron where patron_id ="+student_id);
+        ResultSet rs = st.executeQuery();
+        
+        String patron_type = rs.getString("patron_type");
+        PreparedStatement st1 = LibrarySystem.connection.prepareStatement("Select account_balance from "+patron_type+" where "+patron_type+"_id = "+student_id);
+        int a = Integer.parseInt(rs.getString("account_balance"));
+        return a;
     }
     
 }
