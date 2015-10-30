@@ -14,7 +14,6 @@ import java.sql.Timestamp;
 public class WaitlistCamera {
     private int patron_id;
     private String camera_id;
-    private int id;
     private Timestamp request_time;
     private Timestamp message_sent;
 
@@ -44,20 +43,6 @@ public class WaitlistCamera {
      */
     public void setCamera_id(String camera_id) {
         this.camera_id = camera_id;
-    }
-
-    /**
-     * @return the id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 
     /**

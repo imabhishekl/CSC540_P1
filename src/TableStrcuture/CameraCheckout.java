@@ -16,7 +16,6 @@ public class CameraCheckout {
     private Timestamp start_time;
     private Timestamp end_time;
     private Timestamp checkout;
-    private Timestamp due_time;
 
     /**
      * @return the patron_id
@@ -86,20 +85,6 @@ public class CameraCheckout {
      */
     public void setCheckout(Timestamp checkout) {
         this.checkout = checkout;
-    }
-
-    /**
-     * @return the due_time
-     */
-    public Timestamp getDue_time() {
-        return due_time;
-    }
-
-    /**
-     * @param due_time the due_time to set
-     */
-    public void setDue_time(Timestamp due_time) {
-        this.due_time = due_time;
     }
 
     

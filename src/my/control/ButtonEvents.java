@@ -183,13 +183,7 @@ public class ButtonEvents {
             }
             else
             {
-                int count=0;
-                PreparedStatement st2 = null;
-                st2 = LibrarySystem.connection.prepareStatement("Select * from waitlist_camera");
-                ResultSet rs2 = st2.executeQuery();
-                while (rs2.next()){
-                    count+=1;
-                }
+               
                 Calendar cal= Calendar.getInstance();
                 cal.setTime(date);
                 cal.set(Calendar.HOUR_OF_DAY, 8);            
@@ -202,8 +196,8 @@ public class ButtonEvents {
                 
                 //here id needs to be autonumber in the database design; or will need to keep a counter and a query needs to be written
                 Statement statement = LibrarySystem.connection.createStatement();
-                statement.execute("insert into waitlist_camera (patron_id,camera_id, id, request_time,message_sent)"
-                        +"values ("+a+","+camera_id+","+(count+1)+","+tstamp1+","+tstamp+")");
+                statement.execute("insert into waitlist_camera (patron_id,camera_id, request_time,message_sent)"
+                        +"values ("+a+","+camera_id+","+","+tstamp1+","+tstamp+")");
                 
             }
         return 1;
