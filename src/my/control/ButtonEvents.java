@@ -237,7 +237,7 @@ public class ButtonEvents {
                 while (rs2.next()){
                     count+=1;
                 }
-                Calendar cal= Calendar.getInstance();
+                /*Calendar cal= Calendar.getInstance();
                 cal.setTime(date);
                 cal.set(Calendar.HOUR_OF_DAY, 9);            
                 cal.set(Calendar.MINUTE, 0);                 
@@ -245,12 +245,12 @@ public class ButtonEvents {
                 cal.set(Calendar.MILLISECOND, 0); 
                 cal.setTime(date);
                 Date zeroedDate = cal.getTime();
-                Timestamp tstamp = new Timestamp(zeroedDate.getTime());                
+                Timestamp tstamp = new Timestamp(zeroedDate.getTime());                */
                 
                 //here id needs to be autonumber in the database design; or will need to keep a counter and a query needs to be written
                 Statement statement = LibrarySystem.connection.createStatement();
-                statement.execute("insert into waitlist_camera (patron_id,camera_id, id, request_time,message_sent)"
-                        +"values ("+a+","+camera_id+","+(count+1)+","+tstamp1+","+tstamp+")");
+                statement.execute("insert into waitlist_camera (patron_id,camera_id, id, request_time)"
+                        +"values ("+a+","+camera_id+","+(count+1)+","+tstamp1);
                 str = "Request is accpeted";
                 
             }
@@ -294,8 +294,8 @@ public class ButtonEvents {
         PreparedStatement st1 = null;
         Date date=new Date();
         Timestamp ts1 = new Timestamp(date.getTime());
-        //st1 = Li.brarySystem.connection.prepareStatement("insert into camera_checkout (patron_id,camera_id, start_time, end_time,checkout)"
-                  //      +"values ("+id+","+camera_id+","+ts1+","+tstamp1+","+tstamp+")");
+        //st1 = LibrarySystem.connection.prepareStatement("insert into camera_checkout (patron_id,camera_id, start_time, end_time,checkout)"
+          //              +"values ("+id+","+camera_id+","+ts1+","+tstamp1+","+tstamp+")");
 
 
         
