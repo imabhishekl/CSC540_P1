@@ -16,6 +16,8 @@ import my.dbproject.LoginForm;
 public class LibrarySystem 
 {
     static Connection connection = null;
+    static String login_id;
+    static String patron_type;
     
     public static void setup()
     {

@@ -8,6 +8,13 @@ import TableStrcuture.Student;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import TableStrcuture.Books;
+import TableStrcuture.Patron;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Date;
+import java.sql.Timestamp;
+import java.util.Calendar;
 
 public class ButtonEvents {
 
@@ -76,32 +83,112 @@ public class ButtonEvents {
     }
 
     public static int validate_login(String id, String password) throws SQLException {
-        int status;
 
         student_id = id;
-        st = LibrarySystem.connection.prepareStatement("Select 1 from student where student_id = ? and password = ?");
+        st = LibrarySystem.connection.prepareStatement("Select STUDENT_ID from student where student_id = ? and password = ?");
         st.setString(1, id);
         st.setString(2, password);
 
         ResultSet rs = st.executeQuery();
 
         if (rs.next()) {
+            LibrarySystem.login_id = rs.getString(1);
+            LibrarySystem.patron_type = LibrarySystemConst.STUDENT;
             return 1;
         } else {
-            st = LibrarySystem.connection.prepareCall("Select 1 from faculty where faculty_id = ? and password = ?");
+            st = LibrarySystem.connection.prepareCall("Select FACULTY_ID from faculty where faculty_id = ? and password = ?");
             st.setString(1, id);
             st.setString(2, password);
 
             rs = st.executeQuery();
 
             if (rs.next()) {
+                LibrarySystem.login_id = rs.getString(1);
+                LibrarySystem.patron_type = LibrarySystemConst.FACULTY;
                 return 1;
             }
         }
         return 0;
     }
     
-    
+    public static int checkout_books(Books book_detail,String library_name)throws SQLException
+    {
+        String query = null;
+        String set_clause;
+        
+        if(library_name.equals(LibrarySystemConst.HUNT))
+        {
+            set_clause = "HUNT_AVAIL_NO";
+        }
+        else
+        {
+            set_clause = "HILL_AVAIL_NO";
+        }
+        LibrarySystem.connection.setAutoCommit(false);
+        
+        query = "update books set " + set_clause + "= ? where isbn = ?";
+        st = LibrarySystem.connection.prepareStatement(query);
+        st.setInt(1, LibraryAPI.getAvailableBooks(book_detail.getIsbn_no(), set_clause));
+        st.setString(2, book_detail.getIsbn_no());
+        
+        if(st.execute())
+        {
+            /* Update the checkout_books */
+            query = "insert into checkout_books (PUBLICATION_ID,PATRON_ID,START_TIME) values(?,?,?)";
+            st = LibrarySystem.connection.prepareStatement(query);
+            st.setInt(1, LibraryAPI.getPubllicationId(book_detail.getIsbn_no()));
+            st.setInt(2, LibraryAPI.getPatronId(LibrarySystem.login_id));
+            st.setDate(3, new java.sql.Date(System.currentTimeMillis()));
+            
+            if(st.execute())
+            {
+                LibrarySystem.connection.commit();
+                LibrarySystem.connection.setAutoCommit(true);
+                return 1;
+            }
+        }
+        LibrarySystem.connection.rollback();
+        LibrarySystem.connection.setAutoCommit(true);
+        return -1;
+    }
+
+    public static ArrayList<Books> get_books() throws SQLException
+    {
+        int status;  
+        
+        Books book;
+        
+        ArrayList<Books> bookslist = new ArrayList<Books>();
+        
+        st = LibrarySystem.connection.prepareStatement("Select * from books where hunt_total_no > 0 or hill_total_no > 0");
+        
+        try (ResultSet rs = st.executeQuery()) {
+            while(rs.next())
+            {
+                book = new Books();
+                
+                book.setIsbn_no(rs.getString("isbn_no"));
+                book.setTitle(rs.getString("title"));
+                book.setEdition(rs.getString("edition"));
+                book.setYear_of_publication(rs.getInt("year_of_publication"));
+                book.setPublisher(rs.getString("publisher"));
+                book.setHunt_avail_no(rs.getInt("hunt_avail_no"));
+                book.setHunt_total_no(rs.getInt("hunt_total_no"));
+                book.setHill_avail_no(rs.getInt("hill_avail_no"));
+                book.setHill_total_no(rs.getInt("hill_total_no"));
+                book.setE_copy(rs.getString("e_copy"));
+                book.setGroup_id(rs.getInt("group_id"));
+                
+                bookslist.add(book);
+                
+            }
+        }
+        
+        
+        return bookslist;
+
+    }
+
     public static Rooms getRoom(String lib_name,int capacity, String type) throws SQLException
     {
 
@@ -114,14 +201,110 @@ public class ButtonEvents {
         st.setString(3,type);
         
         ResultSet rs = st.executeQuery();
-        while(rs.next()){
-            {
-                r.setRoom_no(rs.getString("room_no"));
-                System.out.println(rs.getString("room_no"));
-            }      
-    }
+        
         return r;
+            
+      
+    }
+    
+    public static int waitlistCamera(String camera_id, Date date, String val) throws SQLException
+    {
+        //val can be student_id or faculty_id
+        Patron p = new Patron();
+        PreparedStatement st1 = null;
+        int a;
+        Timestamp tstamp1 = new Timestamp(date.getTime());
+
+        //patron id cant come from patron table as dependent on other resources.
+        st1 = LibrarySystem.connection.prepareStatement("Select * from patron where patron_id="+val);
+        ResultSet rs1 = st1.executeQuery();
+        a = rs1.getInt("id");
+        
+        st = LibrarySystem.connection.prepareStatement("Select * from waitlist_camera where request_time="+tstamp1+" and patron_id="+a);
+        
+        ResultSet rs = st.executeQuery();
+            if (!rs.next())
+            {
+                System.out.println("You have already reserved this camera on this date, choose another");
+            }
+            else
+            {
+               
+                Calendar cal= Calendar.getInstance();
+                cal.setTime(date);
+                cal.set(Calendar.HOUR_OF_DAY, 8);            
+                cal.set(Calendar.MINUTE, 0);                 
+                cal.set(Calendar.SECOND, 0);                 
+                cal.set(Calendar.MILLISECOND, 0); 
+                cal.setTime(date);
+                Date zeroedDate = cal.getTime();
+                Timestamp tstamp = new Timestamp(zeroedDate.getTime());                
+                
+                //here id needs to be autonumber in the database design; or will need to keep a counter and a query needs to be written
+                Statement statement = LibrarySystem.connection.createStatement();
+                statement.execute("insert into waitlist_camera (patron_id,camera_id, request_time,message_sent)"
+                        +"values ("+a+","+camera_id+","+","+tstamp1+","+tstamp+")");
+                
+            }
+        return 1;
+
+    }
+    public static ArrayList<Camera> displayCameras() throws SQLException
+    {
+        Camera c;
+        
+        ArrayList<Camera> cameras = new ArrayList<Camera>();
+        
+        st = LibrarySystem.connection.prepareStatement("Select * from camera");
+       
+        try (ResultSet rs = st.executeQuery()) {
+            while(rs.next())
+            {
+                c = new Camera();
+                c.setCamera_id(rs.getString("camera_id"));
+                c.setModel(rs.getString("model"));
+                c.setLens(rs.getString("lens"));
+                c.setMemory_available(rs.getString("memory_available"));
+                c.setMake(rs.getString("make"));
+                c.setLib_name(rs.getString("lib_name"));
+                
+                
+                cameras.add(c);
+                
+            }
+        }
+        return cameras;
+
+    }
+    
+    public static int check_outcamera(String camera_id, String student_id) throws SQLException
+    {
+                
+        st = LibrarySystem.connection.prepareStatement("Select * from patron where patron_id="+student_id);
+        ResultSet rs = st.executeQuery();
+        int a = rs.getInt("id");
+        PreparedStatement st1 = null;
+        Date date=new Date();
+        Timestamp ts1 = new Timestamp(date.getTime());
+        //st1 = LibrarySystem.connection.prepareStatement("insert into camera_checkout (patron_id,camera_id, start_time, end_time,due_time,checkout)"
+          //              +"values ("+id+","+camera_id+","+ts1+","+tstamp1+","+tstamp+")");
+
+
+        
+        
+        
+        return 1;
     }
 
+    public static int getBalance() throws SQLException
+    {
+        st = LibrarySystem.connection.prepareStatement("Select patron_type from patron where patron_id ="+student_id);
+        ResultSet rs = st.executeQuery();
+        
+        String patron_type = rs.getString("patron_type");
+        PreparedStatement st1 = LibrarySystem.connection.prepareStatement("Select account_balance from "+patron_type+" where "+patron_type+"_id = "+student_id);
+        int a = Integer.parseInt(rs.getString("account_balance"));
+        return a;
+    }
+    
 }
-
