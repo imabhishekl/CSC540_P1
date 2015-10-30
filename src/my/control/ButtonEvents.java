@@ -108,9 +108,10 @@ public class ButtonEvents {
         Rooms r = new Rooms();
         Reserve_room rr=new Reserve_room();
         
-        PreparedStatement st = LibrarySystem.connection.prepareCall("select * from rooms where lib_name= ? and capacity= ?");
+        PreparedStatement st = LibrarySystem.connection.prepareCall("select room_no from rooms where lib_name= ? and capacity= ? and type=?");
         st.setString(1, lib_name);
         st.setInt(2, capacity);
+        st.setString(3,type);
         
         ResultSet rs = st.executeQuery();
         while(rs.next()){
