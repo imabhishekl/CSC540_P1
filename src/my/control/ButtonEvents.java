@@ -100,55 +100,27 @@ public class ButtonEvents {
         }
         return 0;
     }
-<<<<<<< HEAD
     
     
-    public static Room getRoom(String lib_name,int Capacity, String type) throws SQLException
+    public static Rooms getRoom(String lib_name,int capacity, String type) throws SQLException
     {
 
         Rooms r = new Rooms();
         Reserve_room rr=new Reserve_room();
         
-        PreparedStatement st = LibrarySystem.connection.prepareCall("Select * from room where lib_name= ?");
+        PreparedStatement st = LibrarySystem.connection.prepareCall("select * from rooms where lib_name= ? and capacity= ?");
         st.setString(1, lib_name);
+        st.setInt(2, capacity);
         
         ResultSet rs = st.executeQuery();
-        
+        while(rs.next()){
+            {
+                r.setRoom_no(rs.getString("room_no"));
+                System.out.println(rs.getString("room_no"));
+            }      
+    }
         return r;
-            
-      
     }
+
 }
-=======
 
-    public static Camera getCamera(String camera_id) throws SQLException {
-        Camera c = new Camera();
-
-        c.getStudent_id(student_id);
-        //Statement st = LibrarySystem.connection.createStatement();
-        st = LibrarySystem.connection.prepareStatement("Select * from camera where student_id = ?");
-
-        ResultSet rs = st.executeQuery();
-        if (rs.next()) {
-
-            s.setStudent_id(rs.getString("student_id"));
-            s.setFirst_name(rs.getString("first_name"));
-            s.setLast_name(rs.getString("last_name"));
-            s.setPhone(rs.getString("phone"));
-            s.setAlternate_phone(rs.getString("alternate_phone"));
-            s.setAdd_city(rs.getString("add_city"));
-            s.setAdd_zip(rs.getString("add_zip"));
-            s.setAdd_street(rs.getString("add_street"));
-            s.setAdd_state(rs.getString("add_state"));
-            s.setSex(rs.getString("sex"));
-            s.setDob(rs.getDate("dob"));
-            s.setNationality(rs.getString("nationality"));
-            s.setDepartment(rs.getString("department"));
-            s.setClassification_id(rs.getString("classification_id"));
-            s.setAccount_balance(rs.getString("account_balance"));
-        }
-
-        return s;
-    }
-}
->>>>>>> 9ad557ebac68612183c3445a56071fb784c7f63a
