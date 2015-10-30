@@ -161,7 +161,7 @@ public class ButtonEvents {
       
     }
     
-    public static int waitlistCamera(String camera_id, Date date, String val) throws SQLException
+    public static String waitlistCamera(String camera_id, Date date, String val) throws SQLException
     {
         //val can be student_id or faculty_id
         Patron p = new Patron();
@@ -175,11 +175,11 @@ public class ButtonEvents {
         a = rs1.getInt("id");
         
         st = LibrarySystem.connection.prepareStatement("Select * from waitlist_camera where request_time="+tstamp1+" and patron_id="+a);
-        
+        String str;
         ResultSet rs = st.executeQuery();
             if (!rs.next())
             {
-                System.out.println("You have already reserved this camera on this date, choose another");
+                str = "You have already reserved this camera on this date, choose another";
             }
             else
             {
@@ -198,9 +198,10 @@ public class ButtonEvents {
                 Statement statement = LibrarySystem.connection.createStatement();
                 statement.execute("insert into waitlist_camera (patron_id,camera_id, request_time,message_sent)"
                         +"values ("+a+","+camera_id+","+","+tstamp1+","+tstamp+")");
+                str = "Request is accpeted";
                 
             }
-        return 1;
+        return str;
 
     }
     public static ArrayList<Camera> displayCameras() throws SQLException
@@ -231,7 +232,7 @@ public class ButtonEvents {
 
     }
     
-    public static int check_outcamera(String camera_id, String student_id) throws SQLException
+    public static int request_camera(String camera_id, String student_id) throws SQLException
     {
                 
         st = LibrarySystem.connection.prepareStatement("Select * from patron where patron_id="+student_id);
@@ -240,8 +241,8 @@ public class ButtonEvents {
         PreparedStatement st1 = null;
         Date date=new Date();
         Timestamp ts1 = new Timestamp(date.getTime());
-        //st1 = LibrarySystem.connection.prepareStatement("insert into camera_checkout (patron_id,camera_id, start_time, end_time,due_time,checkout)"
-          //              +"values ("+id+","+camera_id+","+ts1+","+tstamp1+","+tstamp+")");
+        //st1 = Li.brarySystem.connection.prepareStatement("insert into camera_checkout (patron_id,camera_id, start_time, end_time,checkout)"
+                  //      +"values ("+id+","+camera_id+","+ts1+","+tstamp1+","+tstamp+")");
 
 
         
