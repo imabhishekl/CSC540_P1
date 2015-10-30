@@ -170,12 +170,14 @@ public class ButtonEvents {
         Patron p = new Patron();
         PreparedStatement st1 = null;
         int a;
+        Timestamp tstamp1 = new Timestamp(date.getTime());
+
         //patron id cant come from patron table as dependent on other resources.
-        st1 = LibrarySystem.connection.prepareStatement("Select * from patron where patron_id=val");
+        st1 = LibrarySystem.connection.prepareStatement("Select * from patron where patron_id="+val);
         ResultSet rs1 = st1.executeQuery();
         a = rs1.getInt("id");
         
-        st = LibrarySystem.connection.prepareStatement("Select * from waitlist_camera where request_time=time and patron_id=a");
+        st = LibrarySystem.connection.prepareStatement("Select * from waitlist_camera where request_time="+tstamp1+" and patron_id="+a);
         
         ResultSet rs = st.executeQuery();
             if (!rs.next())
@@ -199,8 +201,6 @@ public class ButtonEvents {
                 cal.set(Calendar.MILLISECOND, 0); 
                 cal.setTime(date);
                 Date zeroedDate = cal.getTime();
-                Timestamp tstamp1 = new Timestamp(date.getTime());
-                
                 Timestamp tstamp = new Timestamp(zeroedDate.getTime());                
                 
                 //here id needs to be autonumber in the database design; or will need to keep a counter and a query needs to be written
@@ -242,10 +242,4 @@ public class ButtonEvents {
     }
     
 }
-
-
-
-
-    
-
 
