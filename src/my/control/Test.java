@@ -24,10 +24,10 @@ public class Test {
 
         LibrarySystem l=new LibrarySystem();
         l.setup();
-        System.out.println("main");
+        
         try{
-            Date date =new Date();
-            System.out.println(ButtonEvents.waitlistCamera("CA1", date));
+            ButtonEvents.getRoom("Hunt", 3, "study");
+            System.out.println("main");
         }
         catch(Exception e){};
     }
