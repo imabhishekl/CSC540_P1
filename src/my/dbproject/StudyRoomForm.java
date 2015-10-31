@@ -8,6 +8,8 @@ package my.dbproject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import javax.swing.JOptionPane;
 import static my.control.ButtonEvents.student_id;
 import my.control.LibrarySystem;
 
@@ -16,7 +18,7 @@ import my.control.LibrarySystem;
  * @author chintanpanchamia
  */
 public class StudyRoomForm extends javax.swing.JFrame {
-
+    
     /**
      * Creates new form StudyRoomForm
      */
@@ -88,11 +90,11 @@ public class StudyRoomForm extends javax.swing.JFrame {
 
         jLabel5.setText(":");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }));
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024" }));
 
         jLabel6.setText("Duration");
 
@@ -238,14 +240,39 @@ public class StudyRoomForm extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
     
         // TODO add your handling code here:
+        String lib_name;
+        int capacity;
+        String type;
+        int duration;
+        Timestamp date_time;
         
-        
-       
+       if(jRadioButton1.isSelected()){
+           lib_name="hunt";
+       }
+       else if(jRadioButton2.isSelected()){
+               lib_name="hill";
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    else{
+        JOptionPane.showMessageDialog(null, "Choose a Library");
+    }
+     if(jRadioButton3.isSelected()){
+           type="study";
+       }
+       else if(jRadioButton4.isSelected()){
+               type="conference";
+    }                                        
+    else{
+        JOptionPane.showMessageDialog(null, "Choose type of room to reserve");
+    }  
+     
+     duration=Integer.parseInt(jComboBox4.getSelectedItem().toString());
+     capacity=jSlider1.getValue();
+     date_time=new Timestamp(Integer.parseInt(jComboBox3.getSelectedItem().toString()),Integer.parseInt(jComboBox1.getSelectedItem().toString()),Integer.parseInt(jComboBox2.getSelectedItem().toString()),Integer.parseInt(jTextField4.getText()),Integer.parseInt(jTextField5.getText()),0,0);
+       
     /**
      * @param args the command line arguments
      */
+    }
     public static void init() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
