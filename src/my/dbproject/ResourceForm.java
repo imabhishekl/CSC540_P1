@@ -5,6 +5,11 @@
  */
 package my.dbproject;
 
+import TableStrcuture.Books;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import my.control.ButtonEvents;
+
 /**
  *
  * @author chintanpanchamia
@@ -169,7 +174,13 @@ public class ResourceForm extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.setVisible(false);
-        BookSelectionForm.init();
+        try
+        {
+            ArrayList<Books> a = ButtonEvents.get_books();
+            BookSelectionForm.init(a);
+        }
+        catch(SQLException e){}
+        //BookSelectionForm.init();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

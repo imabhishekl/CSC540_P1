@@ -5,7 +5,11 @@
  */
 package my.dbproject;
 
+import TableStrcuture.Books;
+import java.util.ArrayList;
 import javax.swing.JList;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,6 +23,24 @@ public class BookSelectionForm extends javax.swing.JFrame {
     public BookSelectionForm() {
         initComponents();
         
+    }
+    
+    public void display(ArrayList<Books> x)
+    {
+        String[] schema = {"ISBN","Title","Edition","Author","Year of Publication","Publisher","Library","e-Copy","Hard Copy"};
+        DefaultTableModel d = new DefaultTableModel(schema,0);
+        jTable1 = new JTable(d);
+        
+        for(int i = 0;i < x.size();i++)
+        {
+            int isbn = Integer.parseInt(x.get(i).getIsbn_no());
+            String title = x.get(i).getTitle();
+            String edition = x.get(i).getEdition();
+            String Author = "Yeda";
+            int year = x.get(i).getYear_of_publication();
+            String publisher = x.get(i).getPublisher();
+            
+        }
     }
 
     /**
@@ -40,25 +62,6 @@ public class BookSelectionForm extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Reserve the Books you want"));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "ISBN", "Title", "Edition", "Author(s)", "Year", "Publisher", "Library"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
         jScrollPane2.setViewportView(jTable1);
 
         jButton1.setText("Checkout/Reserve");
@@ -122,7 +125,7 @@ public class BookSelectionForm extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void init() {
+    public static void init(ArrayList<Books> a) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -145,11 +148,14 @@ public class BookSelectionForm extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(BookSelectionForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        final ArrayList<Books> x = a;
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BookSelectionForm().setVisible(true);
+                BookSelectionForm b = new BookSelectionForm();
+                b.display(x);
+                b.setVisible(true);
             }
         });
     }
