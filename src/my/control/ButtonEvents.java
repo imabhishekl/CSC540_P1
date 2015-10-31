@@ -155,7 +155,7 @@ public class ButtonEvents {
     public static ArrayList<Books> get_books() throws SQLException
     {
         int status;  
-        
+            
         Books book;
         
         ArrayList<Books> bookslist = new ArrayList<Books>();
@@ -178,6 +178,8 @@ public class ButtonEvents {
                 book.setHill_total_no(rs.getInt("hill_total_no"));
                 book.setE_copy(rs.getString("e_copy"));
                 book.setGroup_id(rs.getInt("group_id"));
+                
+                book.setAuthor_list(LibraryAPI.getAuthorList(book.getGroup_id()));
                 
                 bookslist.add(book);
                 

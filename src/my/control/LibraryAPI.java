@@ -8,6 +8,7 @@ package my.control;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -60,5 +61,23 @@ public class LibraryAPI
             return rs.getInt(1);
         }
         return -1;
+    }
+    
+    public static ArrayList<String> getAuthorList(int group_id)throws SQLException
+    {
+        ArrayList<String> author_list = new ArrayList<>();
+        String query;
+        
+        query = "select FIRST_NAME,LAST_NAME from authors where author_id IN (Select author_id from authors_group where group_id = ?)";
+        PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
+        ps.setInt(1, group_id);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        while(rs.next())
+        {
+            author_list.add(rs.getString(1) + " " + rs.getString(2));
+        }
+        return author_list;
     }
 }
