@@ -26,7 +26,8 @@ public class Test {
         l.setup();
         System.out.println("main");
         try{
-            Rooms r=ButtonEvents.getRoom("Hunt",3,"study");
+            Date date =new Date();
+            System.out.println(ButtonEvents.waitlistCamera("CA1", date));
         }
         catch(Exception e){};
     }
