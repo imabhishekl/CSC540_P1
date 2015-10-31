@@ -20,26 +20,15 @@ import java.util.logging.Logger;
  */
 public class Test {
 
+    public static void main(String arg[]) {
 
-    
-       
-        /*ButtonEvents b= new ButtonEvents();
-         try {
-         b.displayCameras();
-         } catch (SQLException ex) {
-         Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-         }*/
-
-
-    public static void main(String args[])
-    {
         LibrarySystem l=new LibrarySystem();
         l.setup();
         System.out.println("main");
         try{
-            Rooms r=ButtonEvents.getRoom("Hunt",3,"study");
+            Date date =new Date();
+            System.out.println(ButtonEvents.waitlistCamera("CA1", date));
         }
         catch(Exception e){};
-
     }
 }
