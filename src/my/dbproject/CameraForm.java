@@ -8,10 +8,14 @@ package my.dbproject;
 import TableStrcuture.Camera;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import my.control.ButtonEvents;
 
 /**
  *
@@ -29,7 +33,7 @@ public class CameraForm extends javax.swing.JFrame {
     {
         String[] schema = {"Camera ID", "Lens", "Model", "Make", "Memory Available", "Library"};
         DefaultTableModel d = new DefaultTableModel(schema,0);
-        jTable1 = new JTable(d);
+        System.out.println(c.toString());
         
         for (int i = 0; i< c.size(); i++)
         {
@@ -39,30 +43,40 @@ public class CameraForm extends javax.swing.JFrame {
             String make = c.get(i).getMake();
             String memory_available = c.get(i).getMemory_available();
             String library = c.get(i).getLib_name();
-            
+            System.out.println(camera_id);
             Object[] o = {camera_id, lens, model, make, memory_available, library};
             
             d.addRow(o);
         }
         
-        ArrayList <String> a = new ArrayList <String>();
+        jTable1.setModel(d);
+        //System.out.println(jTable1);
+        
+        //List <String> a = new ArrayList <String>();
         /*long time = System.currentTimeMillis();
         java.sql.Date d = new java.sql.Date(time);*/
         SimpleDateFormat f = new SimpleDateFormat("MM-dd-YYYY");
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-        for(int i = 1;i <= 8; i++)
+        if (cal.getTime().before(Calendar.getInstance().getTime())) 
         {
-            
-            
-            //System.out.println(c.get(Calendar.DAY_OF_WEEK));
-            System.out.println(f.format(cal.getTime()));
             cal.add(Calendar.DAY_OF_WEEK, 7);
-            
-            a.add(f.format(cal.getTime()));
         }
+            for(int i = 1;i <= 8; i++)
+            {
+                
+                jComboBox1.addItem(f.format(cal.getTime()));
+                //a.add(f.format(cal.getTime()));
+                //System.out.println(a.toString());
+                //System.out.println(f.format(cal.getTime()));
+                cal.add(Calendar.DAY_OF_WEEK, 7);
+                
+                
+            }
         
-        jComboBox1
+        
+        
+        //System.out.println(a.toArray());
     }
 
     /**
@@ -89,6 +103,11 @@ public class CameraForm extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         jButton1.setText("Enter Waitlist");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Back");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -98,8 +117,6 @@ public class CameraForm extends javax.swing.JFrame {
         });
 
         jLabel1.setText("Select a Date");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -158,6 +175,12 @@ public class CameraForm extends javax.swing.JFrame {
         this.setVisible(false);
         ResourceForm.init();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        
+        //ButtonEvents.waitlistCamera(null, null);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
