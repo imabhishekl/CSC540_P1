@@ -186,7 +186,8 @@ public class CameraForm extends javax.swing.JFrame {
         int select = jTable1.getSelectedRow();
         String camera_id = jTable1.getValueAt(select, 0).toString();
         String[] temp_date = jComboBox1.getSelectedItem().toString().split("-");
-        Date formal_date = new Date(Integer.parseInt(temp_date[2])-1900, Integer.parseInt(temp_date[0])-1, Integer.parseInt(temp_date[1]), 0,0,0);
+        Date formal_date;
+        formal_date = new Date(Integer.parseInt(temp_date[2])-1900, Integer.parseInt(temp_date[0])-1, Integer.parseInt(temp_date[1]), 0,0,0);
         try {
             ButtonEvents.waitlistCamera(camera_id, formal_date);
 //System.out.println(formal_date);
