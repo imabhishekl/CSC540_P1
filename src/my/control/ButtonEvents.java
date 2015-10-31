@@ -283,15 +283,14 @@ public class ButtonEvents {
         Patron p = new Patron();
         st = LibrarySystem.connection.prepareStatement("Select * from patron where patron_id=?");
         st.setString(1, LibrarySystem.login_id);
-
+        int a=0;
         ResultSet rs = st.executeQuery();
         while (rs.next()) {
-            int a = rs.getInt("id");
-            System.out.println(a);
+            a = rs.getInt("id");
         }
-        PreparedStatement st1 = null;
-        st1 = LibrarySystem.connection.prepareStatement("Select * from patron where patron_id=" + student_id);
-        ResultSet rs1 = st1.executeQuery();
+        
+        st = LibrarySystem.connection.prepareStatement("Select * from patron where patron_id=" + student_id);
+        rs = st.executeQuery();
 
         //st1 = LibrarySystem.connection.prepareStatement("insert into camera_checkout (patron_id,camera_id, start_time, end_time,checkout)"
         //              +"values ("+id+","+camera_id+","+ts1+","+tstamp1+","+tstamp+")");
