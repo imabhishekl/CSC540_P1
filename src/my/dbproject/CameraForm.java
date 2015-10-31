@@ -6,12 +6,17 @@
 package my.dbproject;
 
 import TableStrcuture.Camera;
-import java.sql.Date;
+import java.sql.SQLException;
+import java.text.ParseException;
+//import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -178,8 +183,25 @@ public class CameraForm extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
+        int select = jTable1.getSelectedRow();
+        String camera_id = jTable1.getValueAt(select, 0).toString();
+        String[] temp_date = jComboBox1.getSelectedItem().toString().split("-");
+        Date formal_date = new Date(Integer.parseInt(temp_date[2])-1900, Integer.parseInt(temp_date[0])-1, Integer.parseInt(temp_date[1]), 0,0,0);
+        try {
+            ButtonEvents.waitlistCamera(camera_id, formal_date);
+//System.out.println(formal_date);
         
-        //ButtonEvents.waitlistCamera(null, null);
+//SimpleDateFormat s = new SimpleDateFormat("MM-dd-YYYY");
+            /*try {
+            //Date formal_date = s.parse(temp_date);
+            //System.out.println(formal_date+""+camera_id);
+            //ButtonEvents.waitlistCamera(null, null);
+            } catch (ParseException ex) {
+            //Logger.getLogger(CameraForm.class.getName()).log(Level.SEVERE, null, ex);
+            }*/
+        } catch (SQLException ex) {
+            //Logger.getLogger(CameraForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

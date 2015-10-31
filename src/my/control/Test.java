@@ -9,10 +9,13 @@ import TableStrcuture.Reserve_room;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,22 +26,12 @@ import java.util.logging.Logger;
  */
 public class Test {
 
-    public static void main(String arg[]) {
+    public static void main(String arg[]) throws ParseException {
 
-        ArrayList <Date> a = new ArrayList<Date>();
-        /*long time = System.currentTimeMillis();
-        java.sql.Date d = new java.sql.Date(time);*/
-        SimpleDateFormat f = new SimpleDateFormat("MM-dd-YYYY");
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-        for(int i = 1;i <= 3; i++)
-        {
-            
-            
-            //System.out.println(c.get(Calendar.DAY_OF_WEEK));
-            System.out.println(f.format(c.getTime()));
-            c.add(Calendar.DAY_OF_WEEK, 7);
-        }
+        String string = "January 2, 2010";
+DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+        java.util.Date date = format.parse(string);
+System.out.println(date);
 
         
         //System.out.println(d);
