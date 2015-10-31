@@ -5,6 +5,8 @@
  */
 package TableStrcuture;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author chintanpanchamia
@@ -21,6 +23,7 @@ public class Books {
     private int hill_total_no;
     private String e_copy;
     private int group_id;
+    private ArrayList<String> author_list = new ArrayList<>();
 
     /**
      * @return the isbn_no
@@ -175,4 +178,20 @@ public class Books {
     public void setGroup_id(int group_id) {
         this.group_id = group_id;
     }
+
+    /**
+     * @return the author_list
+     */
+    public ArrayList<String> getAuthor_list() {
+        return author_list;
+    }
+
+    /**
+     * @param author_list the author_list to set
+     */
+    public void setAuthor_list(ArrayList<String> author_list) {
+        this.author_list = author_list;
+    }
+
+
 }
