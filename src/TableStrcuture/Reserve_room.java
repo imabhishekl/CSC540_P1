@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package TableStrcuture;
+import java.sql.Timestamp;
 
 /**
  *
@@ -13,6 +14,9 @@ public class Reserve_room {
     private int patron_ID;
     private String room_no;
     private String lib_name;
+    private Timestamp start_time;
+    private Timestamp end_time;
+    private Timestamp checkout;
     /**
      * @return the isbn_no
      */
