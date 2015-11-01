@@ -366,18 +366,18 @@ public class ButtonEvents {
         //LibrarySystem.login_id = "S1";
         //LibrarySystem.patron_id=5;
         Date date = new Date(System.currentTimeMillis());
-
+        date=date1;
         Calendar cal = Calendar.getInstance();
 
         cal.setTime(date);
-        cal.set(Calendar.HOUR, 9);
+        cal.set(Calendar.HOUR_OF_DAY, 8);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         Date zeroedDate = cal.getTime();
         Timestamp tstamp = new Timestamp(zeroedDate.getTime());
         String str = "";
-
+        
         st = LibrarySystem.connection.prepareStatement("Select * from waitlist_camera where request_time=? and patron_id=?");
         st.setTimestamp(1, tstamp);
         st.setInt(2, LibrarySystem.patron_id);
@@ -593,16 +593,34 @@ public class ButtonEvents {
         String str = "";
         Date date = new Date(System.currentTimeMillis());
         Timestamp tstamp_current = new Timestamp(date.getTime());
+                Timestamp end_time;
+
         st = LibrarySystem.connection.prepareStatement("Select * from camera_checkout where patron_id =? and camera_id=?");
         st.setInt(1, LibrarySystem.patron_id);
         st.setString(2, LibrarySystem.camera_id);
         ResultSet rs = st.executeQuery();
+        Timestamp tst = null;
         if (rs.next()){
-            Timestamp tst=rs.getTimestamp("start_time");
+            tst=rs.getTimestamp("start_time");
             //tst.getTime()+
         }
+
+        Calendar cal=Calendar.getInstance();
+        cal.setTimeInMillis(tst.getTime());
+        cal.add(Calendar.DAY_OF_YEAR,6);
+        cal.set(Calendar.HOUR_OF_DAY, 18);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        end_time=new Timestamp(cal.getTimeInMillis());
+        System.out.println(end_time.toString());
+        long hours = (tstamp_current.getTime() - end_time.getTime())/(1000*60*60);
         
-        //calculating the end time
+        st = LibrarySystem.connection.prepareStatement("Select * from late_fee where resource_type =camera");
+        rs = st.executeQuery();
+        if (rs.next()){
+            
+        }
         return str;
     }
 
