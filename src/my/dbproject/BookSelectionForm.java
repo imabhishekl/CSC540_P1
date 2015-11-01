@@ -25,22 +25,64 @@ public class BookSelectionForm extends javax.swing.JFrame {
         
     }
     
+    @SuppressWarnings("empty-statement")
     public void display(ArrayList<Books> x)
     {
-        String[] schema = {"ISBN","Title","Edition","Author","Year of Publication","Publisher","Library","e-Copy","Hard Copy"};
+        String[] schema = {"ISBN","Title","Edition","Author","Year of Publication","Publisher","Library","e-Copy","Hard Copies (currently available)"};
         DefaultTableModel d = new DefaultTableModel(schema,0);
-        jTable1 = new JTable(d);
-        
+        //jTable1 = new JTable(d);
+        System.out.println("You're in.");
         for(int i = 0;i < x.size();i++)
         {
-            int isbn = Integer.parseInt(x.get(i).getIsbn_no());
+            
+            String isbn = x.get(i).getIsbn_no();
             String title = x.get(i).getTitle();
             String edition = x.get(i).getEdition();
-            String Author = "Yeda";
+            String Author = "";
+            ArrayList <String> al = x.get(i).getAuthor_list();
+            for(int j = 0; j < al.size(); j++)
+            {
+                Author += al.get(j)+",";
+            }
             int year = x.get(i).getYear_of_publication();
             String publisher = x.get(i).getPublisher();
+            String e_copy = x.get(i).getE_copy();
+            String library = "";
+            String hard_copy = "";
+            int hunt_total = x.get(i).getHunt_total_no();
+            int hunt_avail = x.get(i).getHunt_avail_no();
+            int hill_total = x.get(i).getHill_total_no();
+            int hill_avail = x.get(i).getHill_avail_no();
+            System.out.println(hunt_avail);
+            System.out.println(hunt_total);
+            System.out.println(hill_avail);
+            System.out.println(hill_total);
+            if(e_copy.equalsIgnoreCase("Y"))
+            {
+                library = "-"; hard_copy = "-";
+                Object[] o = {isbn, title, edition, Author, year, publisher, library, e_copy, hard_copy};
+                d.addRow(o);
+                
+            }
+            if(hunt_total > 0)
+            {
+                library = "Hunt"; 
+                hard_copy = "" + hunt_avail;
+                Object[] o = {isbn, title, edition, Author, year, publisher, library, e_copy, hard_copy};
+                d.addRow(o);
+            }
+            if(hill_total > 0)
+            {
+                library = "Hill";
+                hard_copy = "" + hill_avail;
+                Object[] o = {isbn, title, edition, Author, year, publisher, library, e_copy, hard_copy};
+                d.addRow(o);
+            }
+            
+            //if(e)
             
         }
+        jTable1.setModel(d);
     }
 
     /**
@@ -72,6 +114,11 @@ public class BookSelectionForm extends javax.swing.JFrame {
         });
 
         jButton2.setText("Back");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -121,6 +168,11 @@ public class BookSelectionForm extends javax.swing.JFrame {
         this.setVisible(false);
         MenuForm.init();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        this.setVisible(false);
+        ResourceForm.init();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

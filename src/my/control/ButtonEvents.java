@@ -1,6 +1,5 @@
 package my.control;
 
-import TableStrcuture.Camera;
 import TableStrcuture.Faculty;
 import TableStrcuture.Rooms;
 import TableStrcuture.Reserve_room;
@@ -9,9 +8,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import TableStrcuture.Books;
+import TableStrcuture.Camera;
+import TableStrcuture.Conf;
+import TableStrcuture.Journals;
 import TableStrcuture.Patron;
 import TableStrcuture.WaitlistCamera;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.sql.Timestamp;
@@ -128,15 +129,16 @@ public class ButtonEvents {
             set_clause = "HILL_AVAIL_NO";
         }
         LibrarySystem.connection.setAutoCommit(false);
+        
+        query = "update books set " + set_clause + "= ? where ISBN_NO = ?";
 
-        query = "update books set " + set_clause + "= ? where isbn = ?";
         st = LibrarySystem.connection.prepareStatement(query);
         st.setInt(1, LibraryAPI.getAvailableBooks(book_detail.getIsbn_no(), set_clause));
         st.setString(2, book_detail.getIsbn_no());
 
         if (st.execute()) {
             /* Update the checkout_books */
-            query = "insert into checkout_books (PUBLICATION_ID,PATRON_ID,START_TIME) values(?,?,?)";
+            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME) values(?,?,?)";
             st = LibrarySystem.connection.prepareStatement(query);
             st.setInt(1, LibraryAPI.getPubllicationId(book_detail.getIsbn_no()));
             st.setInt(2, LibraryAPI.getPatronId(LibrarySystem.login_id));
@@ -153,14 +155,97 @@ public class ButtonEvents {
         return -1;
     }
 
-    public static ArrayList<Books> get_books() throws SQLException {
-        int status;
-
+    public static int checkout_journal(Journals journal_detail,String library_name)throws SQLException
+    {
+        String query = null;
+        String set_clause;
+        
+        if(library_name.equals(LibrarySystemConst.HUNT))
+        {
+            set_clause = "HUNT_AVAIL_NO";
+        }
+        else
+        {
+            set_clause = "HILL_AVAIL_NO";
+        }
+        LibrarySystem.connection.setAutoCommit(false);
+        
+        query = "update journals set " + set_clause + "= ? where ISSN_NO = ?";
+        st = LibrarySystem.connection.prepareStatement(query);
+        st.setInt(1, LibraryAPI.getAvailableJournals(journal_detail.getIssn_no(), set_clause));
+        st.setString(2, journal_detail.getIssn_no());
+        
+        if(st.execute())
+        {
+            /* Update the checkout_books */
+            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME) values(?,?,?)";
+            st = LibrarySystem.connection.prepareStatement(query);
+            st.setInt(1, LibraryAPI.getPubllicationId(journal_detail.getIssn_no()));
+            st.setInt(2, LibraryAPI.getPatronId(LibrarySystem.login_id));
+            st.setDate(3, new java.sql.Date(System.currentTimeMillis()));
+            
+            if(st.execute())
+            {
+                LibrarySystem.connection.commit();
+                LibrarySystem.connection.setAutoCommit(true);
+                return 1;
+            }
+        }
+        LibrarySystem.connection.rollback();
+        LibrarySystem.connection.setAutoCommit(true);
+        return -1;
+    }
+    
+    public static int checkout_conf(Conf conf_detail,String library_name)throws SQLException
+    {
+        String query = null;
+        String set_clause;
+        
+        if(library_name.equals(LibrarySystemConst.HUNT))
+        {
+            set_clause = "HUNT_AVAIL_NO";
+        }
+        else
+        {
+            set_clause = "HILL_AVAIL_NO";
+        }
+        LibrarySystem.connection.setAutoCommit(false);
+        
+        query = "update conf set " + set_clause + "= ? where CONF_NUM = ?";
+        st = LibrarySystem.connection.prepareStatement(query);
+        st.setInt(1, LibraryAPI.getAvailableConf(conf_detail.getConfnum(), set_clause));
+        st.setString(2, conf_detail.getConfnum());
+        
+        if(st.execute())
+        {
+            /* Update the checkout_books */
+            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME) values(?,?,?)";
+            st = LibrarySystem.connection.prepareStatement(query);
+            st.setInt(1, LibraryAPI.getPubllicationId(conf_detail.getConfnum()));
+            st.setInt(2, LibraryAPI.getPatronId(LibrarySystem.login_id));
+            st.setDate(3, new java.sql.Date(System.currentTimeMillis()));
+            
+            if(st.execute())
+            {
+                LibrarySystem.connection.commit();
+                LibrarySystem.connection.setAutoCommit(true);
+                return 1;
+            }
+        }
+        LibrarySystem.connection.rollback();
+        LibrarySystem.connection.setAutoCommit(true);
+        return -1;
+    }
+    
+    public static ArrayList<Books> get_books() throws SQLException
+    {
+        int status;  
+            
         Books book;
-
-        ArrayList<Books> bookslist = new ArrayList<Books>();
-
-        st = LibrarySystem.connection.prepareStatement("Select * from books where hunt_total_no > 0 or hill_total_no > 0");
+        
+        ArrayList<Books> bookslist = new ArrayList<>();
+        
+        st = LibrarySystem.connection.prepareStatement("Select * from BOOKS where hunt_total_no > 0 or hill_total_no > 0");       
 
         try (ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
@@ -182,27 +267,96 @@ public class ButtonEvents {
                 bookslist.add(book);
 
             }
-        }
-
+        }                
         return bookslist;
-
+    }
+    
+    public static ArrayList<Conf> get_conference() throws SQLException
+    {            
+        Conf conf;
+        
+        ArrayList<Conf> conf_list = new ArrayList<>();
+        
+        st = LibrarySystem.connection.prepareStatement("Select * from conf where hunt_total_no > 0 or hill_total_no > 0");
+        
+        try (ResultSet rs = st.executeQuery()) {
+            while(rs.next())
+            {
+                conf = new Conf();
+                
+                conf.setConfnum(rs.getString("CONF_NUM"));
+                conf.setConfname(rs.getString("CONF_NAME"));
+                conf.setTitle(rs.getString("TITLE"));
+                conf.setYear(rs.getInt("YEAR"));
+                conf.setHunt_avail_no(rs.getInt("HUNT_AVAIL_NO"));
+                conf.setHunt_total_no(rs.getInt("HUNT_TOTAL_NO"));
+                conf.setHill_total_no(rs.getInt("HILL_AVAIL_NO"));
+                conf.setHill_avail_no(rs.getInt("HILL_TOTAL_NO"));
+                conf.setE_copy(rs.getString("E_COPY"));
+                conf.setGroup_id(rs.getInt("GROUP_ID"));
+                
+                conf.setAuthor_list(LibraryAPI.getAuthorList(conf.getGroup_id()));
+                
+                conf_list.add(conf);               
+            }
+        }                
+        return conf_list;
     }
 
-    public static Rooms getRoom(String lib_name, int capacity, String type,Timestamp start, Timestamp end) throws SQLException {
+    public static ArrayList<Journals> get_journal() throws SQLException
+    {            
+        Journals journal;
+        
+        ArrayList<Journals> journal_list = new ArrayList<>();
+        
+        st = LibrarySystem.connection.prepareStatement("Select * from journals where hunt_total_no > 0 or hill_total_no > 0");
+        
+        try (ResultSet rs = st.executeQuery()) {
+            while(rs.next())
+            {
+                journal = new Journals();
+                
+                journal.setIssn_no(rs.getString("ISSN_NO"));
+                journal.setYear_of_publication(rs.getInt("YEAR_OF_PUBLICATION"));
+                journal.setTitle(rs.getString("TITLE"));
+                journal.setHunt_avail_no(rs.getInt("HUNT_AVAIL_NO"));
+                journal.setHunt_total_no(rs.getInt("HUNT_TOTAL_NO"));
+                journal.setHill_total_no(rs.getInt("HILL_AVAIL_NO"));
+                journal.setHill_avail_no(rs.getInt("HILL_TOTAL_NO"));
+                journal.setE_copy(rs.getString("E_COPY"));
+                journal.setGroup_id(rs.getInt("GROUP_ID"));
+                
+                journal.setAuthor_list(LibraryAPI.getAuthorList(journal.getGroup_id()));
+                
+                journal_list.add(journal);               
+            }
+        }                
+        return journal_list;
+    }
+
+    public static ArrayList<Rooms> getRoom(String lib_name, int capacity, String type,Timestamp start, Timestamp end) throws SQLException 
+    {
         
         Rooms r = new Rooms();
         Reserve_room rr = new Reserve_room();
         PreparedStatement st = LibrarySystem.connection.prepareCall("select * from rooms where capacity= ? and type=? and lib_name= ?  ");
+        
+        ArrayList<Rooms> room = new ArrayList<>();
+        
         st.setInt(1, capacity);
         st.setString(2, type);
 
         st.setString(3, lib_name);
         ResultSet rs = st.executeQuery();      
         while (rs.next()) {
-            
-            System.out.println(rs.getString("room_no"));
+            r.setRoom_no(rs.getString("room_no"));
+            r.setFloor_no(rs.getInt("floor_no"));
+            r.setCapacity(rs.getInt("capacity"));
+            r.setLib_name(rs.getString("lib_name"));
+            r.setType(rs.getString("type"));
+            room.add(r);
         }
-        return r;
+        return room;
 
     }
 
@@ -471,5 +625,36 @@ public class ButtonEvents {
         }
         return 1;
 
+    }
+    
+    public static int return_resource(String resource_type)throws SQLException
+    {
+        String query = null;
+        String table_name = null;
+        String set_clause;
+        String where_col = null;
+        LibrarySystem.connection.setAutoCommit(false);
+        
+        //if()
+        set_clause = "asd";
+        
+        switch(resource_type)
+        {
+            case LibrarySystemConst.BOOK:
+                table_name = "BOOK";
+                break;
+            case LibrarySystemConst.JOURNAL:
+                table_name = "JOURNAL";
+                break;
+            case LibrarySystemConst.CONFERENCE:
+                table_name = "CONFERENCE";
+                break;
+            default:
+                return -1;
+        }        
+        query = "update table " + table_name + " set " + set_clause + " = ? where " + 
+                where_col + " = ?";
+        
+        return 1;
     }
 }

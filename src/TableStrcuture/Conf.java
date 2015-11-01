@@ -5,6 +5,8 @@
  */
 package TableStrcuture;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author chintanpanchamia
@@ -13,13 +15,14 @@ public class Conf {
     private String confnum;
     private String confname;
     private String title;
-    private String year;
-    private String hunt_avail_no;
-    private String hunt_total_no;
-    private String hill_total_no;
-    private String hill_avail_no;
+    private int year;
+    private int hunt_avail_no;
+    private int hunt_total_no;
+    private int hill_total_no;
+    private int hill_avail_no;
     private String e_copy;
-    private String group_id;
+    private int group_id;
+    private ArrayList<String> author_list = new ArrayList<>();
 
     /**
      * @return the confnum
@@ -66,70 +69,70 @@ public class Conf {
     /**
      * @return the year
      */
-    public String getYear() {
+    public int getYear() {
         return year;
     }
 
     /**
      * @param year the year to set
      */
-    public void setYear(String year) {
+    public void setYear(int year) {
         this.year = year;
     }
 
     /**
      * @return the hunt_avail_no
      */
-    public String getHunt_avail_no() {
+    public int getHunt_avail_no() {
         return hunt_avail_no;
     }
 
     /**
      * @param hunt_avail_no the hunt_avail_no to set
      */
-    public void setHunt_avail_no(String hunt_avail_no) {
+    public void setHunt_avail_no(int hunt_avail_no) {
         this.hunt_avail_no = hunt_avail_no;
     }
 
     /**
      * @return the hunt_total_no
      */
-    public String getHunt_total_no() {
+    public int getHunt_total_no() {
         return hunt_total_no;
     }
 
     /**
      * @param hunt_total_no the hunt_total_no to set
      */
-    public void setHunt_total_no(String hunt_total_no) {
+    public void setHunt_total_no(int hunt_total_no) {
         this.hunt_total_no = hunt_total_no;
     }
 
     /**
      * @return the hill_total_no
      */
-    public String getHill_total_no() {
+    public int getHill_total_no() {
         return hill_total_no;
     }
 
     /**
      * @param hill_total_no the hill_total_no to set
      */
-    public void setHill_total_no(String hill_total_no) {
+    public void setHill_total_no(int hill_total_no) {
         this.hill_total_no = hill_total_no;
     }
 
     /**
      * @return the hill_avail_no
      */
-    public String getHill_avail_no() {
+    public int getHill_avail_no() {
         return hill_avail_no;
     }
 
     /**
      * @param hill_avail_no the hill_avail_no to set
      */
-    public void setHill_avail_no(String hill_avail_no) {
+    public void setHill_avail_no(int hill_avail_no) {
         this.hill_avail_no = hill_avail_no;
     }
 
@@ -150,14 +153,30 @@ public class Conf {
     /**
      * @return the group_id
      */
-    public String getGroup_id() {
+    public int getGroup_id() {
         return group_id;
     }
 
     /**
      * @param group_id the group_id to set
      */
-    public void setGroup_id(String group_id) {
+    public void setGroup_id(int group_id) {
         this.group_id = group_id;
     }
+
+    /**
+     * @return the author_list
+     */
+    public ArrayList<String> getAuthor_list() {
+        return author_list;
+    }
+
+    /**
+     * @param author_list the author_list to set
+     */
+    public void setAuthor_list(ArrayList<String> author_list) {
+        this.author_list = author_list;
+    }
+
+
 }
