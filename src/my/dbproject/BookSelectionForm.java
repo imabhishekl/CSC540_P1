@@ -35,10 +35,15 @@ public class BookSelectionForm extends javax.swing.JFrame {
         for(int i = 0;i < x.size();i++)
         {
             
-            int isbn = Integer.parseInt(x.get(i).getIsbn_no());
+            String isbn = x.get(i).getIsbn_no();
             String title = x.get(i).getTitle();
             String edition = x.get(i).getEdition();
-            String Author = "Yeda";
+            String Author = "";
+            ArrayList <String> al = x.get(i).getAuthor_list();
+            for(int j = 0; j < al.size(); j++)
+            {
+                Author += al.get(j)+",";
+            }
             int year = x.get(i).getYear_of_publication();
             String publisher = x.get(i).getPublisher();
             String e_copy = x.get(i).getE_copy();
@@ -109,6 +114,11 @@ public class BookSelectionForm extends javax.swing.JFrame {
         });
 
         jButton2.setText("Back");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -158,6 +168,11 @@ public class BookSelectionForm extends javax.swing.JFrame {
         this.setVisible(false);
         MenuForm.init();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        this.setVisible(false);
+        ResourceForm.init();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

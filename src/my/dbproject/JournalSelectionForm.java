@@ -5,6 +5,9 @@
  */
 package my.dbproject;
 
+import TableStrcuture.Journals;
+import java.util.ArrayList;
+
 /**
  *
  * @author chintanpanchamia
@@ -16,6 +19,10 @@ public class JournalSelectionForm extends javax.swing.JFrame {
      */
     public JournalSelectionForm() {
         initComponents();
+    }
+    public void populate(ArrayList <Journals> jo)
+    {
+        
     }
 
     /**
@@ -99,7 +106,7 @@ public class JournalSelectionForm extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void init() {
+    public static void init(ArrayList <Journals> jo) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -123,11 +130,14 @@ public class JournalSelectionForm extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-
+        final ArrayList <Journals> jo1 = jo;
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JournalSelectionForm().setVisible(true);
+                JournalSelectionForm j = new JournalSelectionForm();
+                j.populate(jo1);
+                j.setVisible(true);
+                
             }
         });
     }
