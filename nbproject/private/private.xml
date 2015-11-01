@@ -3,47 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/TableStrcuture/Student.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/TableStrcuture/Faculty.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/FacultyProfileForm.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/TableStrcuture/Publication.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/control/LibrarySystem.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/control/ButtonEvents.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/StudentProfileForm.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/TableStrcuture/AuthorGroup.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/StudyRoomResultForm.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/CameraForm.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/MenuForm.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/TableStrcuture/Enrollment.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/TableStrcuture/Classfication.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/TableStrcuture/Authors.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/BookSelectionForm.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/TableStrcuture/Journals.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/TableStrcuture/Camera.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/ResourceForm.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/StudyRoomForm.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/control/Test.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/TableStrcuture/Conf.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/LoginForm.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/TableStrcuture/Books.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/control/DBTry.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/DBConnect.java</file>
-=======
->>>>>>> c2ef02d77d16d5eeec347f1c826473561cfb9323
-            <file>file:/home/amrit/CSC540_P1/src/my/control/Test.java</file>
-            <file>file:/home/amrit/CSC540_P1/src/TableStrcuture/CameraCheckout.java</file>
-            <file>file:/home/amrit/CSC540_P1/src/TableStrcuture/WaitlistCamera.java</file>
-            <file>file:/home/amrit/CSC540_P1/src/my/control/ButtonEvents.java</file>
->>>>>>> b7bf0f5b00550b5e1487ad71526b8991bbfb9141
-=======
-            <file>file:/C:/Users/Pooja%20Asher/CSC540_P1/src/my/control/LibrarySystem.java</file>
-            <file>file:/C:/Users/Pooja%20Asher/CSC540_P1/src/my/control/ButtonEvents.java</file>
-            <file>file:/C:/Users/Pooja%20Asher/CSC540_P1/src/my/control/Test.java</file>
->>>>>>> 96e8121884c1203fd8e18144120f0d178f8c13a1
+            <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/my/control/ButtonEvents.java</file>
+            <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/my/dbproject/DBConnect.java</file>
+            <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/my/control/LibrarySystem.java</file>
+            <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/my/dbproject/LoginForm.java</file>
+            <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/TableStrcuture/Books.java</file>
+            <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/my/control/LibraryAPI.java</file>
+            <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/my/control/LibrarySystemConst.java</file>
         </group>
     </open-files>
 </project-private>

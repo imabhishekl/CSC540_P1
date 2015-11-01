@@ -21,13 +21,12 @@ import java.util.logging.Logger;
 public class Test {
 
     public static void main(String arg[]) {
-
-        LibrarySystem l=new LibrarySystem();
-        l.setup();
+      
         System.out.println("main");
+        LibrarySystem.setup();
         try{
-            Rooms r=ButtonEvents.getRoom("Hunt",3,"study");
+            System.out.println("Size : " + ButtonEvents.get_books().size());
         }
-        catch(Exception e){};
+        catch(Exception e){e.printStackTrace();};
     }
 }
