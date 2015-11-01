@@ -3,40 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/TableStrcuture/Camera.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/CameraForm.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/FacultyProfileForm.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/ResourceForm.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/control/ButtonEvents.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/BookSelectionForm.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/control/Test.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/DBConnect.java</file>
-            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/BalanceForm.java</file>
-=======
-<<<<<<< HEAD
-            <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/my/control/ButtonEvents.java</file>
-            <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/my/dbproject/DBConnect.java</file>
-            <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/my/control/LibrarySystem.java</file>
-            <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/my/dbproject/LoginForm.java</file>
-            <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/TableStrcuture/Books.java</file>
-            <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/my/control/LibraryAPI.java</file>
-            <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/my/control/LibrarySystemConst.java</file>
-=======
-<<<<<<< HEAD
-            <file>file:/home/amrit/CSC540_P1/src/my/control/Test.java</file>
-            <file>file:/home/amrit/CSC540_P1/src/my/control/LibrarySystemConst.java</file>
-            <file>file:/home/amrit/CSC540_P1/src/TableStrcuture/CameraCheckout.java</file>
-            <file>file:/home/amrit/CSC540_P1/src/my/control/ButtonEvents.java</file>
-            <file>file:/home/amrit/CSC540_P1/src/my/control/LibrarySystem.java</file>
-=======
-            <file>file:/C:/Users/Pooja%20Asher/CSC540_P1/src/my/dbproject/StudyRoomForm.java</file>
             <file>file:/C:/Users/Pooja%20Asher/CSC540_P1/src/my/dbproject/CameraForm.java</file>
+            <file>file:/C:/Users/Pooja%20Asher/CSC540_P1/src/my/dbproject/StudyRoomForm.java</file>
             <file>file:/C:/Users/Pooja%20Asher/CSC540_P1/src/my/dbproject/StudyRoomResultForm.java</file>
             <file>file:/C:/Users/Pooja%20Asher/CSC540_P1/src/my/control/ButtonEvents.java</file>
->>>>>>> d0eb625b010ac5b0b0fa17abcac15d7a4e9cea5b
->>>>>>> e63a0a434f22fd775012a9f2e40114cc3c83e2f8
->>>>>>> 0b55a13769f020978ef8478697466d03042d936b
+            <file>file:/C:/Users/Pooja%20Asher/CSC540_P1/src/my/dbproject/ResourceForm.java</file>
+            <file>file:/C:/Users/Pooja%20Asher/CSC540_P1/src/TableStrcuture/Rooms.java</file>
         </group>
     </open-files>
 </project-private>
