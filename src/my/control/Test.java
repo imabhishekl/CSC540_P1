@@ -26,8 +26,8 @@ public class Test {
         l.setup();
         System.out.println("main");
         try{
-            Date date =new Date();
-            System.out.println(ButtonEvents.waitlistCamera("CA1", date));
+            //Date date = new Date();
+            System.out.println(ButtonEvents.waitlistCamera("CA1"));
         }
         catch(Exception e){};
     }
