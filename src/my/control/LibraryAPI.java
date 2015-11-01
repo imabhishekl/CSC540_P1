@@ -18,10 +18,38 @@ public class LibraryAPI
 {
     public static int getAvailableBooks(String isbn,String select_clause) throws SQLException
     {
-        String query = "select " + select_clause + " from books where isbn_no = ?";
+        String query = "select " + select_clause + " from books where ISBN_NO = ?";
         PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
         
         ps.setString(1, isbn);
+        ResultSet rs = ps.executeQuery();
+        if(rs.next())
+        {
+            return rs.getInt(1);
+        }
+        return -1;
+    }
+    
+    public static int getAvailableJournals(String issn,String select_clause) throws SQLException
+    {
+        String query = "select " + select_clause + " from journals where ISSN_NO = ?";
+        PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
+        
+        ps.setString(1, issn);
+        ResultSet rs = ps.executeQuery();
+        if(rs.next())
+        {
+            return rs.getInt(1);
+        }
+        return -1;
+    }
+    
+    public static int getAvailableConf(String conf,String select_clause) throws SQLException
+    {
+        String query = "select " + select_clause + " from conf where CONF_NUM = ?";
+        PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
+        
+        ps.setString(1, conf);
         ResultSet rs = ps.executeQuery();
         if(rs.next())
         {
@@ -68,7 +96,7 @@ public class LibraryAPI
         ArrayList<String> author_list = new ArrayList<>();
         String query;
         
-        query = "select FIRST_NAME,LAST_NAME from authors where author_id IN (Select author_id from authors_group where group_id = ?)";
+        query = "select FIRST_NAME,LAST_NAME from authors where author_id IN (Select author_id from author_group where group_id = ?)";
         PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
         ps.setInt(1, group_id);
         
