@@ -6,10 +6,15 @@
 package my.dbproject;
 
 import TableStrcuture.Books;
+import java.awt.Button;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import my.control.ButtonEvents;
 
 /**
  *
@@ -31,7 +36,7 @@ public class BookSelectionForm extends javax.swing.JFrame {
         String[] schema = {"ISBN","Title","Edition","Author","Year of Publication","Publisher","Library","e-Copy","Hard Copies (currently available)"};
         DefaultTableModel d = new DefaultTableModel(schema,0);
         //jTable1 = new JTable(d);
-        System.out.println("You're in.");
+        //System.out.println("You're in.");
         for(int i = 0;i < x.size();i++)
         {
             
@@ -53,10 +58,7 @@ public class BookSelectionForm extends javax.swing.JFrame {
             int hunt_avail = x.get(i).getHunt_avail_no();
             int hill_total = x.get(i).getHill_total_no();
             int hill_avail = x.get(i).getHill_avail_no();
-            System.out.println(hunt_avail);
-            System.out.println(hunt_total);
-            System.out.println(hill_avail);
-            System.out.println(hill_total);
+            
             if(e_copy.equalsIgnoreCase("Y"))
             {
                 library = "-"; hard_copy = "-";
@@ -66,14 +68,14 @@ public class BookSelectionForm extends javax.swing.JFrame {
             }
             if(hunt_total > 0)
             {
-                library = "Hunt"; 
+                library = "HUNT"; 
                 hard_copy = "" + hunt_avail;
                 Object[] o = {isbn, title, edition, Author, year, publisher, library, e_copy, hard_copy};
                 d.addRow(o);
             }
             if(hill_total > 0)
             {
-                library = "Hill";
+                library = "HILL";
                 hard_copy = "" + hill_avail;
                 Object[] o = {isbn, title, edition, Author, year, publisher, library, e_copy, hard_copy};
                 d.addRow(o);
@@ -164,7 +166,17 @@ public class BookSelectionForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // FIRE QUERY HERE
+        Books b = new Books();
+        int select = jTable1.getSelectedRow();
+        String isbn = (String) jTable1.getValueAt(select, 0);
+        String library = (String) jTable1.getValueAt(select, 6);
+        
+        b.setIsbn_no(isbn);
+        try {
+            ButtonEvents.checkout_books(b,library);
+        } catch (SQLException ex) {
+            //Logger.getLogger(BookSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.setVisible(false);
         MenuForm.init();
     }//GEN-LAST:event_jButton1ActionPerformed

@@ -212,6 +212,11 @@ public class ResourceForm extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         this.setVisible(false);
         ArrayList <Journals> a = new ArrayList <Journals> ();
+        try {
+            a = ButtonEvents.get_journal();
+        } catch (SQLException ex) {
+            //Logger.getLogger(ResourceForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
         JournalSelectionForm.init(a);
     }//GEN-LAST:event_jButton5ActionPerformed
 
