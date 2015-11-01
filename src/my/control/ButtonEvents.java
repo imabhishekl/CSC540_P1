@@ -437,6 +437,17 @@ public class ButtonEvents {
 
     public static String camera_return() throws SQLException {
         String str = "";
+        Date date = new Date(System.currentTimeMillis());
+        Timestamp tstamp_current = new Timestamp(date.getTime());
+        st = LibrarySystem.connection.prepareStatement("Select * from camera_checkout where patron_id =? and camera_id=?");
+        st.setInt(1, LibrarySystem.patron_id);
+        st.setString(2, LibrarySystem.camera_id);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()){
+            Timestamp tst=rs.getTimestamp("start_time");
+            //tst.getTime()+
+        }
+        
         //calculating the end time
         return str;
     }
