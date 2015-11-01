@@ -334,22 +334,29 @@ public class ButtonEvents {
         return journal_list;
     }
 
-    public static Rooms getRoom(String lib_name, int capacity, String type,Timestamp start, Timestamp end) throws SQLException 
+    public static ArrayList<Rooms> getRoom(String lib_name, int capacity, String type,Timestamp start, Timestamp end) throws SQLException 
     {
         
         Rooms r = new Rooms();
         Reserve_room rr = new Reserve_room();
         PreparedStatement st = LibrarySystem.connection.prepareCall("select * from rooms where capacity= ? and type=? and lib_name= ?  ");
+        
+        ArrayList<Rooms> room = new ArrayList<>();
+        
         st.setInt(1, capacity);
         st.setString(2, type);
 
         st.setString(3, lib_name);
         ResultSet rs = st.executeQuery();      
         while (rs.next()) {
-            
-            System.out.println(rs.getString("room_no"));
+            r.setRoom_no(rs.getString("room_no"));
+            r.setFloor_no(rs.getInt("floor_no"));
+            r.setCapacity(rs.getInt("capacity"));
+            r.setLib_name(rs.getString("lib_name"));
+            r.setType(rs.getString("type"));
+            room.add(r);
         }
-        return r;
+        return room;
 
     }
 
