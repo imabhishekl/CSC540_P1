@@ -188,24 +188,27 @@ public class ButtonEvents {
 
     }
 
-    public static Rooms getRoom(String lib_name, int capacity, String type) throws SQLException {
-
+    public static Rooms getRoom(String lib_name, int capacity, String type,Timestamp start, Timestamp end) throws SQLException {
+        
         Rooms r = new Rooms();
         Reserve_room rr = new Reserve_room();
+        PreparedStatement st = LibrarySystem.connection.prepareCall("select * from rooms where capacity= ? and type=? and lib_name= ?  ");
+        st.setInt(1, capacity);
+        st.setString(2, type);
 
-        PreparedStatement st = LibrarySystem.connection.prepareCall("select room_no from rooms where lib_name= ? and capacity= ? and type=?");
-        st.setString(1, lib_name);
-        st.setInt(2, capacity);
-        st.setString(3, type);
-
-        ResultSet rs = st.executeQuery();
-
+        st.setString(3, lib_name);
+        ResultSet rs = st.executeQuery();      
+        while (rs.next()) {
+            
+            System.out.println(rs.getString("room_no"));
+        }
         return r;
 
     }
 
-    public static String waitlistCamera(String camera_id) throws SQLException {
-        //val can be student_id or faculty_id
+    public static String waitlistCamera(String camera_id, Date date1) throws SQLException {
+
+    //val can be student_id or faculty_id
         //LibrarySystem.login_id = "S1";
         //LibrarySystem.patron_id=5;
         Date date = new Date(System.currentTimeMillis());

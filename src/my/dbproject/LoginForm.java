@@ -116,7 +116,7 @@ public class LoginForm extends javax.swing.JFrame {
                 this.setVisible(false);
                 MenuForm.init();
             }
-            //else
+            else
             {
                 System.out.println("Failed Login");
             }

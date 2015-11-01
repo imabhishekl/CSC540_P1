@@ -6,8 +6,11 @@
 package my.dbproject;
 
 import TableStrcuture.Books;
+import TableStrcuture.Camera;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import my.control.ButtonEvents;
 
 /**
@@ -189,7 +192,15 @@ public class ResourceForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        this.setVisible(false);
+        ArrayList <Camera> c;
+        try {
+            c = ButtonEvents.displayCameras();
+            CameraForm.init(c);
+        } catch (SQLException ex) {
+            //Logger.getLogger(ResourceForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
