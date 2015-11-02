@@ -345,13 +345,17 @@ public class ButtonEvents {
         
         }
     }
+    
+    public static void reserve_room(){}
+    
     public static ArrayList<Rooms> getRoom(String lib_name, int capacity, String type, Timestamp start, Timestamp end) throws SQLException 
     {
         Rooms r = new Rooms();
         Reserve_room rr = new Reserve_room();
         
-        //PreparedStatement stmnt = LibrarySystem.connection.prepareCall("select R.room_no, R.floor_no, R.capacity, R.lib_name, R.type from rooms R where R.capacity= ? and R.type=? and R.lib_name= ? and r.room_no<>r1.room_no ");
-        PreparedStatement stmnt = LibrarySystem.connection.prepareCall("Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.capacity= ? and R.type=? and R.lib_name= ? MINUS (Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.room_no=R1.room_no )");
+        PreparedStatement stmnt = LibrarySystem.connection.prepareCall("Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R where R.capacity= ? and R.type=? and R.lib_name= ? MINUS (Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.room_no=R1.room_no and ((R1.start_time  <= ? and R1.end_time>= ? ) or (R1.start_time  <= ? and R1.end_time>= ? )))");
+        //PreparedStatement stmnt = LibrarySystem.connection.prepareCall("Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.capacity= ? and R.type=? and R.lib_name= ? MINUS (Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.room_no=R1.room_no)");
+               // and (R.start_time  <= ? and R.end_time>=?) or (R.start_time  <= ? and R.end_time>=?)");
       //System.out.println("query");
         ArrayList<Rooms> room = new ArrayList<>();
         
@@ -359,6 +363,11 @@ public class ButtonEvents {
         stmnt.setString(2, type);
 
         stmnt.setString(3, lib_name);
+        stmnt.setTimestamp(4, start);
+        stmnt.setTimestamp(5, start);
+        stmnt.setTimestamp(6, end);
+        stmnt.setTimestamp(7, end);
+        
         ResultSet rs = stmnt.executeQuery();      
           System.out.println("query");
         while (rs.next()) {
