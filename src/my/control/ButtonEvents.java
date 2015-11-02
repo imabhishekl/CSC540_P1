@@ -331,21 +331,30 @@ public class ButtonEvents {
         }
     }
 
-    public static ArrayList<Rooms> getRoom(String lib_name, int capacity, String type, Timestamp start, Timestamp end) throws SQLException {
+    public static void reserve_room(){}
+    
+    public static ArrayList<Rooms> getRoom(String lib_name, int capacity, String type, Timestamp start, Timestamp end) throws SQLException 
+    {
         Rooms r = new Rooms();
         Reserve_room rr = new Reserve_room();
-
-        //PreparedStatement stmnt = LibrarySystem.connection.prepareCall("select R.room_no, R.floor_no, R.capacity, R.lib_name, R.type from rooms R where R.capacity= ? and R.type=? and R.lib_name= ? and r.room_no<>r1.room_no ");
-        PreparedStatement stmnt = LibrarySystem.connection.prepareCall("Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.capacity= ? and R.type=? and R.lib_name= ? MINUS (Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.room_no=R1.room_no )");
-        //System.out.println("query");
+        
+        PreparedStatement stmnt = LibrarySystem.connection.prepareCall("Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R where R.capacity= ? and R.type=? and R.lib_name= ? MINUS (Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.room_no=R1.room_no and ((R1.start_time  <= ? and R1.end_time>= ? ) or (R1.start_time  <= ? and R1.end_time>= ? )))");
+        //PreparedStatement stmnt = LibrarySystem.connection.prepareCall("Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.capacity= ? and R.type=? and R.lib_name= ? MINUS (Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.room_no=R1.room_no)");
+               // and (R.start_time  <= ? and R.end_time>=?) or (R.start_time  <= ? and R.end_time>=?)");
+      //System.out.println("query");
         ArrayList<Rooms> room = new ArrayList<>();
 
         stmnt.setInt(1, capacity);
         stmnt.setString(2, type);
 
         stmnt.setString(3, lib_name);
-        ResultSet rs = stmnt.executeQuery();
-        System.out.println("query");
+        stmnt.setTimestamp(4, start);
+        stmnt.setTimestamp(5, start);
+        stmnt.setTimestamp(6, end);
+        stmnt.setTimestamp(7, end);
+        
+        ResultSet rs = stmnt.executeQuery();      
+          System.out.println("query");
         while (rs.next()) {
             System.out.println(rs.getString("room_no"));
             r.setRoom_no(rs.getString("room_no"));
@@ -487,6 +496,7 @@ public class ButtonEvents {
                 if (w_c.get(0).getId() == LibrarySystem.patron_id) {
 
                     LibrarySystem.camera_id = w_c.get(0).getCamera_id();
+                    return "Ready for Hold";
 
                 } else {
                     return "Res not available between 8 to 10. It might be available between 10 to 12";
@@ -496,6 +506,7 @@ public class ButtonEvents {
                 if (w_c.get(1).getId() == LibrarySystem.patron_id) {
 
                     LibrarySystem.camera_id = w_c.get(1).getCamera_id();
+                    return "Ready for hold";
 
                 } else {
                     return "Res not available between 10 to 12. It wont be available anymore";
@@ -514,7 +525,7 @@ public class ButtonEvents {
 
         //st1 = LibrarySystem.connection.prepareStatement("insert into camera_checkout (patron_id,camera_id, start_time, end_time,checkout)"
         //              +"values ("+id+","+camera_id+","+ts1+","+tstamp1+","+tstamp+")");
-        return str;
+        //return str;s
     }
 
     public static String camera_hold() throws SQLException {
@@ -606,7 +617,9 @@ public class ButtonEvents {
         return str;
     }
 
-    public ArrayList<Camera> camera_resources() throws SQLException {
+
+    public static ArrayList<Camera> camera_resources() throws SQLException 
+    {
         Date date = new Date(System.currentTimeMillis());
         Timestamp tstamp_current = new Timestamp(date.getTime());
         Camera c;
@@ -634,7 +647,8 @@ public class ButtonEvents {
         return cameras;
     }
 
-    public ArrayList<Camera> camera_holdresources() throws SQLException {
+    public static ArrayList<Camera> camera_holdresources() throws SQLException 
+    {
         Date date = new Date(System.currentTimeMillis());
         Timestamp tstamp_current = new Timestamp(date.getTime());
         Camera c;
@@ -656,7 +670,7 @@ public class ButtonEvents {
 
         return cameras;
     }
-
+    
     public static String camera_return(String camera_id) throws SQLException {
         String str = "";
         Date date = new Date(System.currentTimeMillis());
