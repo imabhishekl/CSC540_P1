@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import javax.swing.JOptionPane;
+import my.dbproject.StudyRoomForm;
 
 public class ButtonEvents {
 
@@ -334,21 +336,31 @@ public class ButtonEvents {
         return journal_list;
     }
 
-    public static ArrayList<Rooms> getRoom(String lib_name, int capacity, String type,Timestamp start, Timestamp end) throws SQLException 
-    {
+    public static void validateRoomType(String type){
         
+        if(LibrarySystem.patron_type.equalsIgnoreCase("student")&&type.equalsIgnoreCase("conference")){
+        JOptionPane.showMessageDialog(null, "Students cannot book conference rooms, Please choose another room.");
+        
+        }
+    }
+    public static ArrayList<Rooms> getRoom(String lib_name, int capacity, String type, Timestamp start, Timestamp end) throws SQLException 
+    {
         Rooms r = new Rooms();
         Reserve_room rr = new Reserve_room();
-        PreparedStatement st = LibrarySystem.connection.prepareCall("select * from rooms where capacity= ? and type=? and lib_name= ?  ");
         
+        //PreparedStatement stmnt = LibrarySystem.connection.prepareCall("select R.room_no, R.floor_no, R.capacity, R.lib_name, R.type from rooms R where R.capacity= ? and R.type=? and R.lib_name= ? and r.room_no<>r1.room_no ");
+        PreparedStatement stmnt = LibrarySystem.connection.prepareCall("Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.capacity= ? and R.type=? and R.lib_name= ? MINUS (Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.room_no=R1.room_no )");
+      //System.out.println("query");
         ArrayList<Rooms> room = new ArrayList<>();
         
-        st.setInt(1, capacity);
-        st.setString(2, type);
+        stmnt.setInt(1, capacity);
+        stmnt.setString(2, type);
 
-        st.setString(3, lib_name);
-        ResultSet rs = st.executeQuery();      
+        stmnt.setString(3, lib_name);
+        ResultSet rs = stmnt.executeQuery();      
+          System.out.println("query");
         while (rs.next()) {
+            System.out.println(rs.getString("room_no"));
             r.setRoom_no(rs.getString("room_no"));
             r.setFloor_no(rs.getInt("floor_no"));
             r.setCapacity(rs.getInt("capacity"));
@@ -357,7 +369,6 @@ public class ButtonEvents {
             room.add(r);
         }
         return room;
-
     }
 
     public static String waitlistCamera(String camera_id, Date date1) throws SQLException {
