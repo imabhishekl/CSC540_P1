@@ -6,6 +6,7 @@
 package my.dbproject;
 
 import TableStrcuture.Rooms;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import my.control.ButtonEvents;
@@ -15,7 +16,7 @@ import my.control.ButtonEvents;
  * @author chintanpanchamia
  */
 public class StudyRoomResultForm extends javax.swing.JFrame {
-
+    private static Timestamp start,end;
     /**
      * Creates new form RoomResultForm
      */
@@ -25,10 +26,11 @@ public class StudyRoomResultForm extends javax.swing.JFrame {
     public void populate(ArrayList <Rooms> a)
     {
         String[] schema = {"Room No.", "Floor No.", "Capacity", "Library Name", "Type"};
-        DefaultTableModel d = new DefaultTableModel();
+        DefaultTableModel d = new DefaultTableModel(schema,0);
         for(int i = 0; i < a.size(); i++)
         {
             String room_no = a.get(i).getRoom_no();
+            //System.out.println(room_no);
             int floor_no = a.get(i).getFloor_no();
             int capacity = a.get(i).getCapacity();
             String library = a.get(i).getLib_name();
@@ -37,6 +39,7 @@ public class StudyRoomResultForm extends javax.swing.JFrame {
             Object[] o = {room_no, floor_no, capacity, library, type};
             d.addRow(o);
         }
+        
         jTable1.setModel(d);
     }
 
@@ -121,9 +124,13 @@ public class StudyRoomResultForm extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         int select = jTable1.getSelectedRow();
         String room_no =(String) jTable1.getValueAt(select, 0);
-        String library = (String) jTable1.getValueAt(select, 4);
-        ButtonEvents.reserve_room(room_no,library);
+        String library = (String) jTable1.getValueAt(select, 3);
+        try{
+        ButtonEvents.reserve_room(room_no,library,start,end);}
+        catch(Exception e){}
         this.setVisible(false);
+        start=null;
+        end=null;
         MenuForm.init();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -135,12 +142,10 @@ public class StudyRoomResultForm extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void init(ArrayList <Rooms> a) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    public static void init(ArrayList <Rooms> a, Timestamp s, Timestamp e) {
+       
+        start=s;
+        end=e;
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {

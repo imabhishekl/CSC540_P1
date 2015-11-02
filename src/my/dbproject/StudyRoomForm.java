@@ -5,11 +5,13 @@
  */
 package my.dbproject;
 
+import TableStrcuture.Rooms;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
 import my.control.ButtonEvents;
@@ -101,7 +103,7 @@ public class StudyRoomForm extends javax.swing.JFrame {
 
         jLabel6.setText("Duration");
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "30min", "1 hour", "1 hour 30min", "2 hours", "2 hours 30min", "3 hours", "3 hours 30min", "4 hours", " " }));
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "30min", "1 hour", "1 hour 30min", "2 hours", "2 hours 30min", "3 hours", " " }));
         jComboBox4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox4ActionPerformed(evt);
@@ -327,12 +329,14 @@ public class StudyRoomForm extends javax.swing.JFrame {
        
         end_time=new Timestamp(calendar.getTimeInMillis());
         
-        System.out.println(start_time+" "+end_time);
+        //System.out.println(start_time+" "+end_time);
         
         try {
             //System.out.println(lib_name+" "+capacity+" "+type+" "+start_time+" "+end_time);
             this.setVisible(false);
-            StudyRoomResultForm.init(ButtonEvents.getRoom(lib_name, capacity, type,start_time,end_time));
+            ArrayList <Rooms> a=ButtonEvents.getRoom(lib_name, capacity, type,start_time,end_time);
+            //System.out.print(a);
+            StudyRoomResultForm.init(a,start_time,end_time);
         } catch (Exception e) {
         }
 
