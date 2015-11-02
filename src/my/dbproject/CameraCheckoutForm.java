@@ -37,7 +37,7 @@ boolean b1 = false;
     public void populate(ArrayList <Camera> c1, ArrayList <Camera> c2)
     {
         
-        String[] schema = {"Camera ID","Model", "Check"};
+        String[] schema = {"Camera ID","Model"};
         DefaultTableModel d = new DefaultTableModel(schema,0);
         if(c1.size()!=0)
         {
@@ -48,15 +48,15 @@ boolean b1 = false;
             {
                 String camera_id = c1.get(i).getCamera_id();
                 String model = c1.get(i).getModel();
-                boolean b = Boolean.FALSE;
-                Object[] o = {camera_id, model, b};
+                //boolean b = Boolean.FALSE;
+                Object[] o = {camera_id, model};
                 
                 d.addRow(o);
             }
             jTable1.setModel(d);
             //jTable1.setVisible(true);
         }
-        if(c2.size()!=0 && b1 != false)
+        if(c2.size()!=0)
         {
             
             
@@ -65,9 +65,9 @@ boolean b1 = false;
             {
                 String camera_id = c2.get(i).getCamera_id();
                 String model = c2.get(i).getModel();
-                boolean b = Boolean.FALSE;
+                //boolean b = Boolean.FALSE;
                 
-                Object[] o = {camera_id, model, b};
+                Object[] o = {camera_id, model};
                 
                 d.addRow(o);
             }
