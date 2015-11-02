@@ -9,14 +9,17 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import TableStrcuture.Books;
 import TableStrcuture.Camera;
+import TableStrcuture.CameraCheckout;
 import TableStrcuture.Conf;
 import TableStrcuture.Journals;
-import TableStrcuture.Patron;
 import TableStrcuture.WaitlistCamera;
 import java.util.ArrayList;
 import java.util.Date;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.List;
+import javax.swing.JOptionPane;
+import my.dbproject.StudyRoomForm;
 
 public class ButtonEvents {
 
@@ -138,11 +141,12 @@ public class ButtonEvents {
 
         if (st.execute()) {
             /* Update the checkout_books */
-            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME) values(?,?,?)";
+            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME,LIB_NAME) values(?,?,?,?)";
             st = LibrarySystem.connection.prepareStatement(query);
             st.setInt(1, LibraryAPI.getPubllicationId(book_detail.getIsbn_no()));
-            st.setInt(2, LibraryAPI.getPatronId(LibrarySystem.login_id));
+            st.setInt(2, LibrarySystem.patron_id);
             st.setDate(3, new java.sql.Date(System.currentTimeMillis()));
+            st.setString(4, library_name);
 
             if (st.execute()) {
                 LibrarySystem.connection.commit();
@@ -178,11 +182,12 @@ public class ButtonEvents {
         if(st.execute())
         {
             /* Update the checkout_books */
-            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME) values(?,?,?)";
+            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME,LIB_NAME) values(?,?,?,?)";
             st = LibrarySystem.connection.prepareStatement(query);
             st.setInt(1, LibraryAPI.getPubllicationId(journal_detail.getIssn_no()));
-            st.setInt(2, LibraryAPI.getPatronId(LibrarySystem.login_id));
+            st.setInt(2, LibrarySystem.patron_id);
             st.setDate(3, new java.sql.Date(System.currentTimeMillis()));
+            st.setString(4, library_name);
             
             if(st.execute())
             {
@@ -219,11 +224,12 @@ public class ButtonEvents {
         if(st.execute())
         {
             /* Update the checkout_books */
-            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME) values(?,?,?)";
+            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME,LIB_NAME) values(?,?,?,?)";
             st = LibrarySystem.connection.prepareStatement(query);
             st.setInt(1, LibraryAPI.getPubllicationId(conf_detail.getConfnum()));
             st.setInt(2, LibraryAPI.getPatronId(LibrarySystem.login_id));
             st.setDate(3, new java.sql.Date(System.currentTimeMillis()));
+            st.setString(4, library_name);
             
             if(st.execute())
             {
@@ -334,21 +340,31 @@ public class ButtonEvents {
         return journal_list;
     }
 
-    public static ArrayList<Rooms> getRoom(String lib_name, int capacity, String type,Timestamp start, Timestamp end) throws SQLException 
-    {
+    public static void validateRoomType(String type){
         
+        if(LibrarySystem.patron_type.equalsIgnoreCase("student")&&type.equalsIgnoreCase("conference")){
+        JOptionPane.showMessageDialog(null, "Students cannot book conference rooms, Please choose another room.");
+        
+        }
+    }
+    public static ArrayList<Rooms> getRoom(String lib_name, int capacity, String type, Timestamp start, Timestamp end) throws SQLException 
+    {
         Rooms r = new Rooms();
         Reserve_room rr = new Reserve_room();
-        PreparedStatement st = LibrarySystem.connection.prepareCall("select * from rooms where capacity= ? and type=? and lib_name= ?  ");
         
+        //PreparedStatement stmnt = LibrarySystem.connection.prepareCall("select R.room_no, R.floor_no, R.capacity, R.lib_name, R.type from rooms R where R.capacity= ? and R.type=? and R.lib_name= ? and r.room_no<>r1.room_no ");
+        PreparedStatement stmnt = LibrarySystem.connection.prepareCall("Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.capacity= ? and R.type=? and R.lib_name= ? MINUS (Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.room_no=R1.room_no )");
+      //System.out.println("query");
         ArrayList<Rooms> room = new ArrayList<>();
         
-        st.setInt(1, capacity);
-        st.setString(2, type);
+        stmnt.setInt(1, capacity);
+        stmnt.setString(2, type);
 
-        st.setString(3, lib_name);
-        ResultSet rs = st.executeQuery();      
+        stmnt.setString(3, lib_name);
+        ResultSet rs = stmnt.executeQuery();      
+          System.out.println("query");
         while (rs.next()) {
+            System.out.println(rs.getString("room_no"));
             r.setRoom_no(rs.getString("room_no"));
             r.setFloor_no(rs.getInt("floor_no"));
             r.setCapacity(rs.getInt("capacity"));
@@ -357,7 +373,6 @@ public class ButtonEvents {
             room.add(r);
         }
         return room;
-
     }
 
     public static String waitlistCamera(String camera_id, Date date1) throws SQLException {
@@ -544,12 +559,24 @@ public class ButtonEvents {
 
             st = LibrarySystem.connection.prepareStatement("delete from waitlist_camera where request_time<?");
             st.setTimestamp(1, tstamp);
-            st.executeUpdate();
+            try{
+            st.executeUpdate();}
+            catch (SQLException e) {
+
+                System.out.println(e.getMessage());
+
+            }
 
             st = LibrarySystem.connection.prepareStatement("delete from waitlist_camera where camera_id=? and request_time=?");
             st.setString(1, LibrarySystem.camera_id);
             st.setTimestamp(2, tstamp);
-            st.executeUpdate();
+            try{
+            st.executeUpdate();}
+            catch (SQLException e) {
+
+                System.out.println(e.getMessage());
+
+            }
 
             LibrarySystem.connection.commit();
             LibrarySystem.connection.setAutoCommit(true);
@@ -591,6 +618,59 @@ public class ButtonEvents {
         return str;
     }
 
+    public ArrayList<Camera> camera_resources() throws SQLException 
+    {
+        Date date = new Date(System.currentTimeMillis());
+        Timestamp tstamp_current = new Timestamp(date.getTime());
+        Camera c;
+
+        ArrayList<Camera> cameras = new ArrayList<Camera>();
+
+        st = LibrarySystem.connection.prepareStatement("Select * from camera_checkout where patron_id =? and start_time<?");
+        st.setInt(1, LibrarySystem.patron_id);
+        st.setTimestamp(2,tstamp_current );
+        ResultSet rs = st.executeQuery();
+        Timestamp tst = null;
+        while (rs.next()){
+            c = new Camera();
+            PreparedStatement st1 = LibrarySystem.connection.prepareStatement("Select * from camera where camera_id=?");
+            st1.setString(1,rs.getString("camera_id"));
+            ResultSet rs1=st.executeQuery();
+            if (rs1.next()){
+                c.setCamera_id(rs1.getString("camera_id"));
+                c.setModel(rs1.getString("model"));
+                cameras.add(c);
+            }
+  
+        }
+      
+        return cameras;
+    }
+    public ArrayList<Camera> camera_holdresources() throws SQLException 
+    {
+        Date date = new Date(System.currentTimeMillis());
+        Timestamp tstamp_current = new Timestamp(date.getTime());
+        Camera c;
+
+        ArrayList<Camera> cameras = new ArrayList<Camera>();
+        if (LibrarySystem.camera_id!=null){
+          
+            c = new Camera();
+            PreparedStatement st1 = LibrarySystem.connection.prepareStatement("Select * from camera where camera_id=?");
+            st1.setString(1,LibrarySystem.camera_id);
+            ResultSet rs1=st.executeQuery();
+            if (rs1.next()){
+                c.setCamera_id(rs1.getString("camera_id"));
+                c.setModel(rs1.getString("model"));
+                cameras.add(c);
+            }
+  
+        }
+        
+      
+        return cameras;
+    }
+    
     public static String camera_return() throws SQLException {
         String str = "";
         Date date = new Date(System.currentTimeMillis());
@@ -647,33 +727,106 @@ public class ButtonEvents {
 
     }
     
-    public static int return_resource(String resource_type)throws SQLException
+    public static int return_resource(String resource_type,int p_id,String id,Date start_time)throws SQLException
     {
+        int hours;
+        int late_fee;
+        int fees;
         String query = null;
         String table_name = null;
         String set_clause;
         String where_col = null;
+        String library_name = null;
         LibrarySystem.connection.setAutoCommit(false);
+        int avail_no = 0;
+        Calendar cal = Calendar.getInstance();
         
-        //if()
-        set_clause = "asd";
+        library_name = LibraryAPI.getLibraryName(p_id,LibrarySystem.patron_id); 
+        
+        if (library_name.equals(LibrarySystemConst.HUNT)) 
+        {
+            set_clause = "HUNT_AVAIL_NO";
+        } 
+        else 
+        {
+            set_clause = "HILL_AVAIL_NO";
+        }
         
         switch(resource_type)
         {
             case LibrarySystemConst.BOOK:
-                table_name = "BOOK";
+                table_name = "BOOKS";
+                where_col = "ISBN_NO";
+                avail_no = LibraryAPI.getAvailableBooks(id, set_clause);
                 break;
             case LibrarySystemConst.JOURNAL:
-                table_name = "JOURNAL";
+                table_name = "JOURNALS";
+                where_col = "ISSN_NO";
+                avail_no = LibraryAPI.getAvailableJournals(id, set_clause);
                 break;
             case LibrarySystemConst.CONFERENCE:
-                table_name = "CONFERENCE";
+                table_name = "CONF";
+                where_col = "CONF_NUM";
+                avail_no = LibraryAPI.getAvailableConf(id, set_clause);
                 break;
             default:
                 return -1;
-        }        
+        }                              
+        
         query = "update table " + table_name + " set " + set_clause + " = ? where " + 
-                where_col + " = ?";
+                where_col + " = ? ";
+        
+        st = LibrarySystem.connection.prepareStatement(query);
+        
+        st.setInt(1, avail_no);
+        st.setString(2, id);       
+        
+        if(!st.execute())
+        {
+            return -1;
+        }
+        
+        cal.setTime(start_time);
+        cal.add(Calendar.HOUR,LibraryAPI.getDuration(resource_type, resource_type));
+        Date end_time = new Date(System.currentTimeMillis());
+        
+        /* Update the check out book table */
+        query = "update table checkout set END_TIME = ? where PUBLICATION_ID = ? and PATRON_ID = ?";
+        st = LibrarySystem.connection.prepareStatement(query);
+        st.setDate(1, new java.sql.Date(end_time.getTime()));
+        st.setInt(2, p_id);
+        st.setInt(3, LibrarySystem.patron_id);
+        
+        if(!st.execute())
+        {
+            return -1;
+        }
+        
+        /* Calucate the late fee charge */
+        query = "select FEES,FREQUENCY_HOURS from late_fee where resource_type = ? order by frequency_hours_number asc";
+        st = LibrarySystem.connection.prepareStatement(query);
+        
+        st.setString(1, resource_type);
+        
+        ResultSet rs = st.executeQuery();
+        
+        if(rs.next())
+        {
+            fees = rs.getInt(1);
+            hours = rs.getInt(2);
+        }
+        else
+        {
+            fees = 2;
+            hours = 1;
+        }
+        
+        long diffInMillies = end_time.getTime() - start_time.getTime();
+        long no_of_hours = (diffInMillies)/(1000*60);
+        
+        late_fee = (int)LibraryAPI.getLateFees(hours,fees,no_of_hours);
+        
+        LibraryAPI.updateBalance(getBalance() - late_fee);
         
         return 1;
     }
