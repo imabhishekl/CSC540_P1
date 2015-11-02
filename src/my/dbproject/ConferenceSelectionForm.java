@@ -167,7 +167,7 @@ public class ConferenceSelectionForm extends javax.swing.JFrame {
             Logger.getLogger(ConferenceSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setVisible(false);
-        MenuForm.init();
+        ResourceForm.init();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

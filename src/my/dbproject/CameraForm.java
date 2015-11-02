@@ -193,7 +193,8 @@ public class CameraForm extends javax.swing.JFrame {
             String str = ButtonEvents.waitlistCamera(camera_id, formal_date);
             System.out.println(str);
             JOptionPane.showMessageDialog(null, str);
-            
+            this.setVisible(false);
+            ResourceForm.init();
         
 //SimpleDateFormat s = new SimpleDateFormat("MM-dd-YYYY");
             /*try {
