@@ -18,7 +18,7 @@ public class LibrarySystem
     static Connection connection = null;
     static String login_id;
     static String patron_type;
-    static String camera_id;
+    static String camera_id=null;
     static int patron_id;
     
     public static void setup()

@@ -28,21 +28,28 @@ public class Test {
 =======
         System.out.println(date);
 */
-        LibrarySystem l = new LibrarySystem();
-        l.setup();
+        //LibrarySystem l = new LibrarySystem();
+        //l.setup();
+        
+        
 
+
+        /*try {
+=======
         try {
             //Date date = new Date();
             System.out.println("run");
             //ButtonEvents.getRoom("Hunt", 3, "study");
             
+>>>>>>> 0956107fc2caaaf1c5bbf906b88313c9f7bc326f
             Date date = new Date();
             System.out.println(ButtonEvents.waitlistCamera("CA1", date));
             // ButtonEvents.getRoom("Hunt", 3, "study",);
             //System.out.println("main");
         } catch (Exception e) {
-        }
+        }*/
 
         //System.out.println(d);
+        
     }
 }
