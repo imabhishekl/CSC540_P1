@@ -336,22 +336,29 @@ public class ButtonEvents {
         return journal_list;
     }
 
-    public static Rooms getRoom(String lib_name, int capacity, String type,Timestamp start, Timestamp end) throws SQLException 
+    public static ArrayList<Rooms> getRoom(String lib_name, int capacity, String type,Timestamp start, Timestamp end) throws SQLException 
     {
         
         Rooms r = new Rooms();
         Reserve_room rr = new Reserve_room();
         PreparedStatement st = LibrarySystem.connection.prepareCall("select * from rooms where capacity= ? and type=? and lib_name= ?  ");
+        
+        ArrayList<Rooms> room = new ArrayList<>();
+        
         st.setInt(1, capacity);
         st.setString(2, type);
 
         st.setString(3, lib_name);
         ResultSet rs = st.executeQuery();      
         while (rs.next()) {
-            
-            System.out.println(rs.getString("room_no"));
+            r.setRoom_no(rs.getString("room_no"));
+            r.setFloor_no(rs.getInt("floor_no"));
+            r.setCapacity(rs.getInt("capacity"));
+            r.setLib_name(rs.getString("lib_name"));
+            r.setType(rs.getString("type"));
+            room.add(r);
         }
-        return r;
+        return room;
 
     }
 
@@ -361,18 +368,18 @@ public class ButtonEvents {
         //LibrarySystem.login_id = "S1";
         //LibrarySystem.patron_id=5;
         Date date = new Date(System.currentTimeMillis());
-
+        date=date1;
         Calendar cal = Calendar.getInstance();
 
         cal.setTime(date);
-        cal.set(Calendar.HOUR, 9);
+        cal.set(Calendar.HOUR_OF_DAY, 8);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         Date zeroedDate = cal.getTime();
         Timestamp tstamp = new Timestamp(zeroedDate.getTime());
         String str = "";
-
+        
         st = LibrarySystem.connection.prepareStatement("Select * from waitlist_camera where request_time=? and patron_id=?");
         st.setTimestamp(1, tstamp);
         st.setInt(2, LibrarySystem.patron_id);
@@ -586,7 +593,36 @@ public class ButtonEvents {
 
     public static String camera_return() throws SQLException {
         String str = "";
-        //calculating the end time
+        Date date = new Date(System.currentTimeMillis());
+        Timestamp tstamp_current = new Timestamp(date.getTime());
+                Timestamp end_time;
+
+        st = LibrarySystem.connection.prepareStatement("Select * from camera_checkout where patron_id =? and camera_id=?");
+        st.setInt(1, LibrarySystem.patron_id);
+        st.setString(2, LibrarySystem.camera_id);
+        ResultSet rs = st.executeQuery();
+        Timestamp tst = null;
+        if (rs.next()){
+            tst=rs.getTimestamp("start_time");
+            //tst.getTime()+
+        }
+
+        Calendar cal=Calendar.getInstance();
+        cal.setTimeInMillis(tst.getTime());
+        cal.add(Calendar.DAY_OF_YEAR,6);
+        cal.set(Calendar.HOUR_OF_DAY, 18);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        end_time=new Timestamp(cal.getTimeInMillis());
+        System.out.println(end_time.toString());
+        long hours = (tstamp_current.getTime() - end_time.getTime())/(1000*60*60);
+        
+        st = LibrarySystem.connection.prepareStatement("Select * from late_fee where resource_type =camera");
+        rs = st.executeQuery();
+        if (rs.next()){
+            
+        }
         return str;
     }
 

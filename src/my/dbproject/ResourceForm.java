@@ -7,6 +7,7 @@ package my.dbproject;
 
 import TableStrcuture.Books;
 import TableStrcuture.Camera;
+import TableStrcuture.Journals;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -179,8 +180,8 @@ public class ResourceForm extends javax.swing.JFrame {
         this.setVisible(false);
         try
         {
-            ArrayList<Books> a = ButtonEvents.get_books();
-            BookSelectionForm.init(a);
+            //;
+            BookSelectionForm.init(ButtonEvents.get_books());
         }
         catch(SQLException e){}
         //BookSelectionForm.init();
@@ -209,7 +210,14 @@ public class ResourceForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        this.setVisible(false);
+        ArrayList <Journals> a = new ArrayList <Journals> ();
+        try {
+            a = ButtonEvents.get_journal();
+        } catch (SQLException ex) {
+            //Logger.getLogger(ResourceForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JournalSelectionForm.init(a);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
