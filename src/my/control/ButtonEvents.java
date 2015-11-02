@@ -11,7 +11,6 @@ import TableStrcuture.Books;
 import TableStrcuture.Camera;
 import TableStrcuture.Conf;
 import TableStrcuture.Journals;
-import TableStrcuture.Patron;
 import TableStrcuture.WaitlistCamera;
 import java.util.ArrayList;
 import java.util.Date;
@@ -138,11 +137,12 @@ public class ButtonEvents {
 
         if (st.execute()) {
             /* Update the checkout_books */
-            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME) values(?,?,?)";
+            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME,LIB_NAME) values(?,?,?,?)";
             st = LibrarySystem.connection.prepareStatement(query);
             st.setInt(1, LibraryAPI.getPubllicationId(book_detail.getIsbn_no()));
-            st.setInt(2, LibraryAPI.getPatronId(LibrarySystem.login_id));
+            st.setInt(2, LibrarySystem.patron_id);
             st.setDate(3, new java.sql.Date(System.currentTimeMillis()));
+            st.setString(4, library_name);
 
             if (st.execute()) {
                 LibrarySystem.connection.commit();
@@ -178,11 +178,12 @@ public class ButtonEvents {
         if(st.execute())
         {
             /* Update the checkout_books */
-            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME) values(?,?,?)";
+            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME,LIB_NAME) values(?,?,?,?)";
             st = LibrarySystem.connection.prepareStatement(query);
             st.setInt(1, LibraryAPI.getPubllicationId(journal_detail.getIssn_no()));
-            st.setInt(2, LibraryAPI.getPatronId(LibrarySystem.login_id));
+            st.setInt(2, LibrarySystem.patron_id);
             st.setDate(3, new java.sql.Date(System.currentTimeMillis()));
+            st.setString(4, library_name);
             
             if(st.execute())
             {
@@ -219,11 +220,12 @@ public class ButtonEvents {
         if(st.execute())
         {
             /* Update the checkout_books */
-            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME) values(?,?,?)";
+            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME,LIB_NAME) values(?,?,?,?)";
             st = LibrarySystem.connection.prepareStatement(query);
             st.setInt(1, LibraryAPI.getPubllicationId(conf_detail.getConfnum()));
             st.setInt(2, LibraryAPI.getPatronId(LibrarySystem.login_id));
             st.setDate(3, new java.sql.Date(System.currentTimeMillis()));
+            st.setString(4, library_name);
             
             if(st.execute())
             {
@@ -609,33 +611,106 @@ public class ButtonEvents {
 
     }
     
-    public static int return_resource(String resource_type)throws SQLException
+    public static int return_resource(String resource_type,int p_id,String id,Date start_time)throws SQLException
     {
+        int hours;
+        int late_fee;
+        int fees;
         String query = null;
         String table_name = null;
         String set_clause;
         String where_col = null;
+        String library_name = null;
         LibrarySystem.connection.setAutoCommit(false);
+        int avail_no = 0;
+        Calendar cal = Calendar.getInstance();
         
-        //if()
-        set_clause = "asd";
+        library_name = LibraryAPI.getLibraryName(p_id,LibrarySystem.patron_id); 
+        
+        if (library_name.equals(LibrarySystemConst.HUNT)) 
+        {
+            set_clause = "HUNT_AVAIL_NO";
+        } 
+        else 
+        {
+            set_clause = "HILL_AVAIL_NO";
+        }
         
         switch(resource_type)
         {
             case LibrarySystemConst.BOOK:
-                table_name = "BOOK";
+                table_name = "BOOKS";
+                where_col = "ISBN_NO";
+                avail_no = LibraryAPI.getAvailableBooks(id, set_clause);
                 break;
             case LibrarySystemConst.JOURNAL:
-                table_name = "JOURNAL";
+                table_name = "JOURNALS";
+                where_col = "ISSN_NO";
+                avail_no = LibraryAPI.getAvailableJournals(id, set_clause);
                 break;
             case LibrarySystemConst.CONFERENCE:
-                table_name = "CONFERENCE";
+                table_name = "CONF";
+                where_col = "CONF_NUM";
+                avail_no = LibraryAPI.getAvailableConf(id, set_clause);
                 break;
             default:
                 return -1;
-        }        
+        }                              
+        
         query = "update table " + table_name + " set " + set_clause + " = ? where " + 
-                where_col + " = ?";
+                where_col + " = ? ";
+        
+        st = LibrarySystem.connection.prepareStatement(query);
+        
+        st.setInt(1, avail_no);
+        st.setString(2, id);       
+        
+        if(!st.execute())
+        {
+            return -1;
+        }
+        
+        cal.setTime(start_time);
+        cal.add(Calendar.HOUR,LibraryAPI.getDuration(resource_type, resource_type));
+        Date end_time = new Date(System.currentTimeMillis());
+        
+        /* Update the check out book table */
+        query = "update table checkout set END_TIME = ? where PUBLICATION_ID = ? and PATRON_ID = ?";
+        st = LibrarySystem.connection.prepareStatement(query);
+        st.setDate(1, new java.sql.Date(end_time.getTime()));
+        st.setInt(2, p_id);
+        st.setInt(3, LibrarySystem.patron_id);
+        
+        if(!st.execute())
+        {
+            return -1;
+        }
+        
+        /* Calucate the late fee charge */
+        query = "select FEES,FREQUENCY_HOURS from late_fee where resource_type = ? order by frequency_hours_number asc";
+        st = LibrarySystem.connection.prepareStatement(query);
+        
+        st.setString(1, resource_type);
+        
+        ResultSet rs = st.executeQuery();
+        
+        if(rs.next())
+        {
+            fees = rs.getInt(1);
+            hours = rs.getInt(2);
+        }
+        else
+        {
+            fees = 2;
+            hours = 1;
+        }
+        
+        long diffInMillies = end_time.getTime() - start_time.getTime();
+        long no_of_hours = (diffInMillies)/(1000*60);
+        
+        late_fee = (int)LibraryAPI.getLateFees(hours,fees,no_of_hours);
+        
+        LibraryAPI.updateBalance(getBalance() - late_fee);
         
         return 1;
     }
