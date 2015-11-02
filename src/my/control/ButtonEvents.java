@@ -348,7 +348,10 @@ public class ButtonEvents {
         }
     }
     
-    public static void reserve_room(){}
+    public static void reserve_room()
+    {
+        
+    }
     
     public static ArrayList<Rooms> getRoom(String lib_name, int capacity, String type, Timestamp start, Timestamp end) throws SQLException 
     {
