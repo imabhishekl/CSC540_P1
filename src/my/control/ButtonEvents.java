@@ -489,6 +489,7 @@ public class ButtonEvents {
                 if (w_c.get(0).getId() == LibrarySystem.patron_id) {
 
                     LibrarySystem.camera_id = w_c.get(0).getCamera_id();
+                    return "Ready for Hold";
 
                 } else {
                     return "Res not available between 8 to 10. It might be available between 10 to 12";
@@ -498,6 +499,7 @@ public class ButtonEvents {
                 if (w_c.get(1).getId() == LibrarySystem.patron_id) {
 
                     LibrarySystem.camera_id = w_c.get(1).getCamera_id();
+                    return "Ready for hold";
 
                 } else {
                     return "Res not available between 10 to 12. It wont be available anymore";
@@ -516,7 +518,7 @@ public class ButtonEvents {
 
         //st1 = LibrarySystem.connection.prepareStatement("insert into camera_checkout (patron_id,camera_id, start_time, end_time,checkout)"
         //              +"values ("+id+","+camera_id+","+ts1+","+tstamp1+","+tstamp+")");
-        return str;
+        //return str;s
     }
 
     public static String camera_hold() throws SQLException {

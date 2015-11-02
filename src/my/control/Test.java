@@ -24,17 +24,20 @@ public class Test {
         java.util.Date date = format.parse(string);
         System.out.println(date);
 */
-        LibrarySystem l = new LibrarySystem();
-        l.setup();
+        //LibrarySystem l = new LibrarySystem();
+        //l.setup();
+        
+        
 
-        try {
+        /*try {
             Date date = new Date();
             System.out.println(ButtonEvents.waitlistCamera("CA1", date));
             // ButtonEvents.getRoom("Hunt", 3, "study",);
             //System.out.println("main");
         } catch (Exception e) {
-        }
+        }*/
 
         //System.out.println(d);
+        
     }
 }
