@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import TableStrcuture.Books;
 import TableStrcuture.Camera;
+import TableStrcuture.CameraCheckout;
 import TableStrcuture.Conf;
 import TableStrcuture.Journals;
 import TableStrcuture.Patron;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.List;
 
 public class ButtonEvents {
 
@@ -542,12 +544,24 @@ public class ButtonEvents {
 
             st = LibrarySystem.connection.prepareStatement("delete from waitlist_camera where request_time<?");
             st.setTimestamp(1, tstamp);
-            st.executeUpdate();
+            try{
+            st.executeUpdate();}
+            catch (SQLException e) {
+
+                System.out.println(e.getMessage());
+
+            }
 
             st = LibrarySystem.connection.prepareStatement("delete from waitlist_camera where camera_id=? and request_time=?");
             st.setString(1, LibrarySystem.camera_id);
             st.setTimestamp(2, tstamp);
-            st.executeUpdate();
+            try{
+            st.executeUpdate();}
+            catch (SQLException e) {
+
+                System.out.println(e.getMessage());
+
+            }
 
             LibrarySystem.connection.commit();
             LibrarySystem.connection.setAutoCommit(true);
@@ -589,6 +603,59 @@ public class ButtonEvents {
         return str;
     }
 
+    public ArrayList<Camera> camera_resources() throws SQLException 
+    {
+        Date date = new Date(System.currentTimeMillis());
+        Timestamp tstamp_current = new Timestamp(date.getTime());
+        Camera c;
+
+        ArrayList<Camera> cameras = new ArrayList<Camera>();
+
+        st = LibrarySystem.connection.prepareStatement("Select * from camera_checkout where patron_id =? and start_time<?");
+        st.setInt(1, LibrarySystem.patron_id);
+        st.setTimestamp(2,tstamp_current );
+        ResultSet rs = st.executeQuery();
+        Timestamp tst = null;
+        while (rs.next()){
+            c = new Camera();
+            PreparedStatement st1 = LibrarySystem.connection.prepareStatement("Select * from camera where camera_id=?");
+            st1.setString(1,rs.getString("camera_id"));
+            ResultSet rs1=st.executeQuery();
+            if (rs1.next()){
+                c.setCamera_id(rs1.getString("camera_id"));
+                c.setModel(rs1.getString("model"));
+                cameras.add(c);
+            }
+  
+        }
+      
+        return cameras;
+    }
+    public ArrayList<Camera> camera_holdresources() throws SQLException 
+    {
+        Date date = new Date(System.currentTimeMillis());
+        Timestamp tstamp_current = new Timestamp(date.getTime());
+        Camera c;
+
+        ArrayList<Camera> cameras = new ArrayList<Camera>();
+        if (LibrarySystem.camera_id!=null){
+          
+            c = new Camera();
+            PreparedStatement st1 = LibrarySystem.connection.prepareStatement("Select * from camera where camera_id=?");
+            st1.setString(1,LibrarySystem.camera_id);
+            ResultSet rs1=st.executeQuery();
+            if (rs1.next()){
+                c.setCamera_id(rs1.getString("camera_id"));
+                c.setModel(rs1.getString("model"));
+                cameras.add(c);
+            }
+  
+        }
+        
+      
+        return cameras;
+    }
+    
     public static String camera_return() throws SQLException {
         String str = "";
         Date date = new Date(System.currentTimeMillis());
