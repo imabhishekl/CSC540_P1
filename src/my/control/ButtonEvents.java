@@ -122,34 +122,47 @@ public class ButtonEvents {
         String query = null;
         String set_clause;
 
+        if(book_detail.getE_copy().equalsIgnoreCase("Y"))
+            return 1;
+        
         if (library_name.equals(LibrarySystemConst.HUNT)) {
             set_clause = "HUNT_AVAIL_NO";
         } else {
             set_clause = "HILL_AVAIL_NO";
-        }
+        }        
         LibrarySystem.connection.setAutoCommit(false);
         
         query = "update books set " + set_clause + "= ? where ISBN_NO = ?";
 
         st = LibrarySystem.connection.prepareStatement(query);
-        st.setInt(1, LibraryAPI.getAvailableBooks(book_detail.getIsbn_no(), set_clause));
+        st.setInt(1, LibraryAPI.getAvailableBooks(book_detail.getIsbn_no(), set_clause) - 1);
         st.setString(2, book_detail.getIsbn_no());
-
-        if (st.execute()) {
+            
+        if (st.executeUpdate() != 0) 
+        {
+        
             /* Update the checkout_books */
-            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME,LIB_NAME) values(?,?,?,?)";
+            System.out.println("upadted");
+            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME,LIB_NAME) values (?,?,?,?)";
             st = LibrarySystem.connection.prepareStatement(query);
+            
             st.setInt(1, LibraryAPI.getPubllicationId(book_detail.getIsbn_no()));
             st.setInt(2, LibrarySystem.patron_id);
-            st.setDate(3, new java.sql.Date(System.currentTimeMillis()));
-            st.setString(4, library_name);
-
-            if (st.execute()) {
+            st.setTimestamp(3, new Timestamp(new java.util.Date(System.currentTimeMillis()).getTime()));
+            st.setString(4, library_name);            
+            if (st.executeUpdate() != 0) 
+            {
+                System.out.println("Inserted in checkout");
                 LibrarySystem.connection.commit();
                 LibrarySystem.connection.setAutoCommit(true);
                 return 1;
             }
-        }
+            else
+            {
+                System.out.println("Error while insert into checkout");
+            }        
+        }        
+            
         LibrarySystem.connection.rollback();
         LibrarySystem.connection.setAutoCommit(true);
         return -1;
@@ -159,6 +172,9 @@ public class ButtonEvents {
     {
         String query = null;
         String set_clause;
+        
+        if(journal_detail.getE_copy().equalsIgnoreCase("Y"))
+            return 1;
         
         if(library_name.equals(LibrarySystemConst.HUNT))
         {
@@ -175,7 +191,7 @@ public class ButtonEvents {
         st.setInt(1, LibraryAPI.getAvailableJournals(journal_detail.getIssn_no(), set_clause));
         st.setString(2, journal_detail.getIssn_no());
         
-        if(st.execute())
+        if(st.executeUpdate() != 0)
         {
             /* Update the checkout_books */
             query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME,LIB_NAME) values(?,?,?,?)";
@@ -185,7 +201,7 @@ public class ButtonEvents {
             st.setDate(3, new java.sql.Date(System.currentTimeMillis()));
             st.setString(4, library_name);
             
-            if(st.execute())
+            if(st.executeUpdate() != 0)
             {
                 LibrarySystem.connection.commit();
                 LibrarySystem.connection.setAutoCommit(true);
@@ -202,6 +218,9 @@ public class ButtonEvents {
         String query = null;
         String set_clause;
         
+        if(conf_detail.getE_copy().equalsIgnoreCase("Y"))
+            return 1;
+        
         if(library_name.equals(LibrarySystemConst.HUNT))
         {
             set_clause = "HUNT_AVAIL_NO";
@@ -217,7 +236,7 @@ public class ButtonEvents {
         st.setInt(1, LibraryAPI.getAvailableConf(conf_detail.getConfnum(), set_clause));
         st.setString(2, conf_detail.getConfnum());
         
-        if(st.execute())
+        if(st.executeUpdate() != 0)
         {
             /* Update the checkout_books */
             query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME,LIB_NAME) values(?,?,?,?)";
@@ -227,7 +246,7 @@ public class ButtonEvents {
             st.setDate(3, new java.sql.Date(System.currentTimeMillis()));
             st.setString(4, library_name);
             
-            if(st.execute())
+            if(st.executeUpdate() != 0)
             {
                 LibrarySystem.connection.commit();
                 LibrarySystem.connection.setAutoCommit(true);
@@ -247,8 +266,11 @@ public class ButtonEvents {
         
         ArrayList<Books> bookslist = new ArrayList<>();
         
-        st = LibrarySystem.connection.prepareStatement("Select * from BOOKS where hunt_total_no > 0 or hill_total_no > 0");       
+        st = LibrarySystem.connection.prepareStatement
+        ("select * from books b,courses_books bc where b.isbn_no = bc.isbn_no and (hunt_total_no > 0 or hill_total_no > 0) and bc.course_id IN (select course_id from enrollment where student_id = ?)");       
 
+        st.setString(1, LibrarySystem.login_id);
+        
         try (ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
                 book = new Books();
@@ -677,17 +699,17 @@ public class ButtonEvents {
             case LibrarySystemConst.BOOK:
                 table_name = "BOOKS";
                 where_col = "ISBN_NO";
-                avail_no = LibraryAPI.getAvailableBooks(id, set_clause);
+                avail_no = LibraryAPI.getAvailableBooks(id, set_clause) + 1;
                 break;
             case LibrarySystemConst.JOURNAL:
                 table_name = "JOURNALS";
                 where_col = "ISSN_NO";
-                avail_no = LibraryAPI.getAvailableJournals(id, set_clause);
+                avail_no = LibraryAPI.getAvailableJournals(id, set_clause) + 1;
                 break;
             case LibrarySystemConst.CONFERENCE:
                 table_name = "CONF";
                 where_col = "CONF_NUM";
-                avail_no = LibraryAPI.getAvailableConf(id, set_clause);
+                avail_no = LibraryAPI.getAvailableConf(id, set_clause) + 1;
                 break;
             default:
                 return -1;

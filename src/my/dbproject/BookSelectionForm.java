@@ -170,11 +170,14 @@ public class BookSelectionForm extends javax.swing.JFrame {
         int select = jTable1.getSelectedRow();
         String isbn = (String) jTable1.getValueAt(select, 0);
         String library = (String) jTable1.getValueAt(select, 6);
-        
+        String e_copy = (String) jTable1.getValueAt(select, 7);
         b.setIsbn_no(isbn);
+        b.setE_copy(e_copy);
+        
         try {
-            ButtonEvents.checkout_books(b,library);
+            System.out.println(ButtonEvents.checkout_books(b,library));
         } catch (SQLException ex) {
+            ex.printStackTrace();
             //Logger.getLogger(BookSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setVisible(false);
