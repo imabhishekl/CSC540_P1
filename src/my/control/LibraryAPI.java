@@ -108,4 +108,71 @@ public class LibraryAPI
         }
         return author_list;
     }
+    
+    public static String getLibraryName(int r_id,int login_id)throws SQLException
+    {
+        String query = null;
+        
+        query = "select LIB_NAME from checkout where PUBLICATION_ID = ? and PATRON_ID = ?";
+        
+        PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
+        
+        ps.setInt(1, r_id);
+        ps.setInt(2, login_id);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        if(rs.next())
+        {
+            return rs.getString(1);
+        }
+        return null;
+    }
+    
+    public static int getDuration(String patron_type,String resource_type)throws SQLException
+    {
+        String query = null;
+        
+        query = "select DURATION from checkout_duration where PATRON_TYPE = ? and RESOURCE_TYPE = ?";
+        
+        PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
+        
+        ps.setString(1, patron_type);
+        ps.setString(2, resource_type);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        if(rs.next())
+        {
+            return rs.getInt(1);
+        }
+        return -1;
+    }
+    
+    public static int updateBalance(int balance)throws SQLException
+    {
+        String query = null;
+        
+        query = "update table " + LibrarySystem.patron_type + " set ACCOUNT_BALANCE = ? where " + LibrarySystem.patron_type + "_id = ?";
+        
+        PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
+        
+        ps.setInt(1, balance);
+        ps.setString(2, LibrarySystem.login_id);        
+        
+        if(ps.execute())
+        {
+            return 1;
+        }
+        return -1;
+    }
+    
+    public static double getLateFees(int hours,int fees,long no_of_hours)
+    {
+        double late_fee;
+        
+        late_fee = fees*Math.floor((double)(no_of_hours/hours));
+        
+        return late_fee;
+    }
 }

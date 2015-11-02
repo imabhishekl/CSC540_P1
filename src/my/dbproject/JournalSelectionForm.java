@@ -7,6 +7,7 @@ package my.dbproject;
 
 import TableStrcuture.Journals;
 import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -22,7 +23,53 @@ public class JournalSelectionForm extends javax.swing.JFrame {
     }
     public void populate(ArrayList <Journals> jo)
     {
-        
+        String[] schema = {"ISSN", "Year of Publication", "Authors", "Title", "Library", "e-copy", "Hard Copy"};
+        DefaultTableModel d = new DefaultTableModel(schema,0);
+        System.out.println("Here1"+jo.size());
+        for(int i = 0;i < jo.size(); i++)
+        {
+            System.out.println("Here2");
+            String issn = jo.get(i).getIssn_no();
+            System.out.println(issn);
+            int year = jo.get(i).getYear_of_publication();
+            String author = "";
+            ArrayList <String> al = new ArrayList<>();
+            al = jo.get(i).getAuthor_list();
+            for(int j = 0;j < al.size(); j++)
+            {
+                author += al.get(j)+"";
+            }
+            System.out.println("Here");
+            String title = jo.get(i).getTitle();
+            String e_copy = jo.get(i).getE_copy();
+            int hunt_total = jo.get(i).getHunt_total_no();
+            int hunt_avail = jo.get(i).getHunt_avail_no();
+            int hill_total = jo.get(i).getHill_total_no();
+            int hill_avail = jo.get(i).getHill_avail_no();
+            String library = "", hard_copy = "";
+            if(e_copy.equalsIgnoreCase("Y"))
+            {
+                library = "-"; hard_copy = "-";
+                Object[] o = {issn, year, author, title, library, e_copy, hard_copy};
+                d.addRow(o);
+                
+            }
+            if(hunt_total > 0)
+            {
+                library = "Hunt"; 
+                hard_copy = "" + hunt_avail;
+                Object[] o = {issn, year, author, title, library, e_copy, hard_copy};
+                d.addRow(o);
+            }
+            if(hill_total > 0)
+            {
+                library = "Hill";
+                hard_copy = "" + hill_avail;
+                Object[] o = {issn, year, author, title, library, e_copy, hard_copy};
+                d.addRow(o);
+            }
+        }
+        jTable1.setModel(d);
     }
 
     /**
@@ -131,6 +178,7 @@ public class JournalSelectionForm extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         final ArrayList <Journals> jo1 = jo;
+        System.out.println(jo1.size());
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
