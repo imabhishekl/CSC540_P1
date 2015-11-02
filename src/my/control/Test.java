@@ -22,10 +22,8 @@ public class Test {
         /*String string = "January 2, 2010";
         DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
         java.util.Date date = format.parse(string);
-<<<<<<< HEAD
         //System.out.println(date);
 
-=======
         System.out.println(date);
 */
         LibrarySystem l = new LibrarySystem();
@@ -36,17 +34,20 @@ public class Test {
 
         /*try {
 
+=======
+        //try {
+>>>>>>> ed60ecf33cbdcc0e1ae2dc7f6d2f30c78c5d71ac
         try {
             //Date date = new Date();
             System.out.println("run");
             //ButtonEvents.getRoom("Hunt", 3, "study");
             
             Date date = new Date();
-            System.out.println(ButtonEvents.waitlistCamera("CA1", date));
+            System.out.println(ButtonEvents.camera_resources());
             // ButtonEvents.getRoom("Hunt", 3, "study",);
             //System.out.println("main");
         } catch (Exception e) {
-        }*/
+        }
 
         //System.out.println(d);
         try{
@@ -54,6 +55,6 @@ public class Test {
             ButtonEvents.room_notify();
         }
         catch (Exception e) {
-        }
+        }*/
     }
 }

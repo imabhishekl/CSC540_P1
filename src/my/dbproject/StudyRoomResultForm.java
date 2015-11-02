@@ -128,6 +128,8 @@ public class StudyRoomResultForm extends javax.swing.JFrame {
         try{
         ButtonEvents.reserve_room(room_no,library,start,end);}
         catch(Exception e){}
+
+       // ButtonEvents.reserve_room(room_no,library);
         this.setVisible(false);
         start=null;
         end=null;

@@ -9,17 +9,18 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import TableStrcuture.Books;
 import TableStrcuture.Camera;
-import TableStrcuture.CameraCheckout;
 import TableStrcuture.Conf;
 import TableStrcuture.Journals;
 import TableStrcuture.WaitlistCamera;
 import java.util.ArrayList;
 import java.util.Date;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import my.dbproject.StudyRoomForm;
 
 public class ButtonEvents {
 
@@ -389,7 +390,7 @@ public class ButtonEvents {
     {
         Rooms r = new Rooms();
         Reserve_room rr = new Reserve_room();
-        
+
         PreparedStatement stmnt = LibrarySystem.connection.prepareCall("Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R where R.capacity= ? and R.type=? and R.lib_name= ? MINUS (Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.room_no=R1.room_no and ((R1.start_time  <= ? and R1.end_time>= ? ) or (R1.start_time  <= ? and R1.end_time>= ? )))");
         //PreparedStatement stmnt = LibrarySystem.connection.prepareCall("Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.capacity= ? and R.type=? and R.lib_name= ? MINUS (Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.room_no=R1.room_no)");
         // and (R.start_time  <= ? and R.end_time>=?) or (R.start_time  <= ? and R.end_time>=?)");
@@ -403,9 +404,10 @@ public class ButtonEvents {
         stmnt.setTimestamp(5, start);
         stmnt.setTimestamp(6, end);
         stmnt.setTimestamp(7, end);
-        
-        ResultSet rs = stmnt.executeQuery();      
-        //System.out.println("query");
+
+
+        ResultSet rs = stmnt.executeQuery();
+        System.out.println("query");
         while (rs.next()) {
             r=new Rooms();
             System.out.println(rs.getString("room_no"));
@@ -669,60 +671,73 @@ public class ButtonEvents {
         return str;
     }
 
-
-    public static ArrayList<Camera> camera_resources() throws SQLException 
-    {
+    public static ArrayList<Camera> camera_resources() throws SQLException {
         Date date = new Date(System.currentTimeMillis());
+       
+
         Timestamp tstamp_current = new Timestamp(date.getTime());
         Camera c;
-
+        //System.out.println(tstamp_current.toString());
         ArrayList<Camera> cameras = new ArrayList<Camera>();
-
-        st = LibrarySystem.connection.prepareStatement("Select * from camera_checkout where patron_id =? and start_time<?");
+        //LibrarySystem.patron_id=1;
+        st = LibrarySystem.connection.prepareStatement("Select * from camera_checkout where patron_id = ? and start_time< ?");
         st.setInt(1, LibrarySystem.patron_id);
         st.setTimestamp(2, tstamp_current);
-        ResultSet rs = st.executeQuery();
-        Timestamp tst = null;
-        while (rs.next()) {
-            c = new Camera();
-            PreparedStatement st1 = LibrarySystem.connection.prepareStatement("Select * from camera where camera_id=?");
-            st1.setString(1, rs.getString("camera_id"));
-            ResultSet rs1 = st.executeQuery();
-            if (rs1.next()) {
-                c.setCamera_id(rs1.getString("camera_id"));
-                c.setModel(rs1.getString("model"));
-                cameras.add(c);
+        try {
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+
+                PreparedStatement st1 = LibrarySystem.connection.prepareStatement("Select * from camera where camera_id=?");
+                st1.setString(1, rs.getString("camera_id"));
+                ResultSet rs1 = st1.executeQuery();
+                if (rs1.next()) {
+                    c = new Camera();
+                    
+                    c.setCamera_id(rs1.getString("camera_id"));
+                    c.setModel(rs1.getString("model"));
+                    cameras.add(c);
+                }
+                
+
             }
+            //System.out.println(cameras);
+        } catch (SQLException e) {
+
+            System.out.println(e.getMessage());
 
         }
+        System.out.println(cameras);
 
         return cameras;
     }
 
-    public static ArrayList<Camera> camera_holdresources() throws SQLException 
-    {
+    public static ArrayList<Camera> camera_holdresources() throws SQLException {
         Date date = new Date(System.currentTimeMillis());
         Timestamp tstamp_current = new Timestamp(date.getTime());
         Camera c;
+                    System.out.println(LibrarySystem.camera_id);
 
+System.out.println(tstamp_current.toString());
         ArrayList<Camera> cameras = new ArrayList<Camera>();
         if (LibrarySystem.camera_id != null) {
-
-            c = new Camera();
             PreparedStatement st1 = LibrarySystem.connection.prepareStatement("Select * from camera where camera_id=?");
             st1.setString(1, LibrarySystem.camera_id);
-            ResultSet rs1 = st.executeQuery();
+            ResultSet rs1 = st1.executeQuery();
             if (rs1.next()) {
+                c = new Camera();
+                //System.out.println(rs1.getString("camera_id"));
+
                 c.setCamera_id(rs1.getString("camera_id"));
                 c.setModel(rs1.getString("model"));
                 cameras.add(c);
+                System.out.println(rs1.getString("camera_id"));
             }
 
         }
-
+        System.out.println(" he" +cameras);
         return cameras;
     }
-    
+
     public static String camera_return(String camera_id) throws SQLException {
         String str = "";
         Date date = new Date(System.currentTimeMillis());
@@ -756,7 +771,7 @@ public class ButtonEvents {
         if (rs1.next()) {
             int fees = rs1.getInt("fees");
             int frequency_hours = rs1.getInt("frequency_hours");
-        
+
             if (hours > 0) {
                 st = LibrarySystem.connection.prepareStatement("Select account_balance from " + LibrarySystem.patron_type + " where " + LibrarySystem.patron_type + "_id =?");
                 st.setString(1, LibrarySystem.login_id);
@@ -775,17 +790,16 @@ public class ButtonEvents {
                     }
 
                 }
-            }
-            else{
-                    st = LibrarySystem.connection.prepareStatement("Delete from camera_checkout where camera_id = ?");
-                    st.setString(1, camera_id);
-                    try {
-                        st.executeUpdate();
-                    } catch (SQLException e) {
+            } else {
+                st = LibrarySystem.connection.prepareStatement("Delete from camera_checkout where camera_id = ?");
+                st.setString(1, camera_id);
+                try {
+                    st.executeUpdate();
+                } catch (SQLException e) {
 
-                        System.out.println(e.getMessage());
+                    System.out.println(e.getMessage());
 
-                    }
+                }
             }
         }
         return str;
