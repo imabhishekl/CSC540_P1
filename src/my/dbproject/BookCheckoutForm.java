@@ -6,6 +6,7 @@
 package my.dbproject;
 
 import TableStrcuture.Books;
+import TableStrcuture.CheckOut;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,22 +29,26 @@ public class BookCheckoutForm extends javax.swing.JFrame {
     public BookCheckoutForm() {
         initComponents();
     }
-    public void populate(ArrayList <Books> a)
+    public void populate(ArrayList <CheckOut> a)
     {
-        String[] schema = {"ISBN","Title","Authors"};
+        String[] schema = {"Publication ID","ISBN","Title","Authors","Date of Reservation"};
         DefaultTableModel d = new DefaultTableModel(schema,0);
-        for(int i = 0; i < a.size(); i++)
+        for(int i = 0; i< a.size(); i++)
         {
-            String isbn = a.get(i).getIsbn_no();
-            String title = a.get(i).getTitle();
+            Books b = a.get(i).getBooks_det();
+            int p_id = a.get(i).getPublication_id();
+            String isbn = b.getIsbn_no();
+            String title = b.getTitle();
             String authors = "";
-            ArrayList <String> author = a.get(i).getAuthor_list();
-            for(int j = 0; j < author.size(); j++)
+            Date date = a.get(i).getStart_time();
+            int patron_id = a.get(i).getPatron_id();
+            ArrayList <String> author = b.getAuthor_list();
+            for(int j = 0; j< author.size(); j++)
             {
-                authors += author.get(i) + ",";
+                authors = author.get(i) + ",";
             }
             
-            Object[] o = {isbn, title, authors};
+            Object[] o = {p_id, isbn, title, authors, date};
             d.addRow(o);
         }
         jTable1.setModel(d);
@@ -130,10 +135,11 @@ public class BookCheckoutForm extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.setVisible(false);
         int selected = jTable1.getSelectedRow();
-        String isbn = (String) jTable1.getValueAt(selected, 0);
-        Date d = new Date();
+        String isbn = (String) jTable1.getValueAt(selected, 1);
+        int p_id = Integer.parseInt((String) jTable1.getValueAt(selected, 0));
+        Date date = (Date) jTable1.getValueAt(selected, 4);
         try {
-            ButtonEvents.return_resource(LibrarySystemConst.BOOK, LibrarySystem.patron_id, isbn, d);
+            ButtonEvents.return_resource(LibrarySystemConst.BOOK, p_id, isbn, date);
             this.setVisible(false);
             CheckoutResources.init();
         } catch (SQLException ex) {
@@ -149,7 +155,7 @@ public class BookCheckoutForm extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void init(ArrayList <Books> a) {
+    public static void init(ArrayList <CheckOut> a) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -172,7 +178,7 @@ public class BookCheckoutForm extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(BookCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        final ArrayList <Books> a1 = new ArrayList<Books>();
+        final ArrayList <CheckOut> a1 = new ArrayList <CheckOut>();
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

@@ -5,8 +5,16 @@
  */
 package my.dbproject;
 
+import TableStrcuture.CheckOut;
 import TableStrcuture.Conf;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import my.control.ButtonEvents;
+import my.control.LibrarySystemConst;
 
 /**
  *
@@ -20,9 +28,28 @@ public class ConferenceCheckoutForm extends javax.swing.JFrame {
     public ConferenceCheckoutForm() {
         initComponents();
     }
-    public void populate(ArrayList <Conf> acf)
+    public void populate(ArrayList <CheckOut> acf)
     {
-        String[] schema = {"Conference No.","Title",""};
+        String[] schema = {"Publication ID", "Conference No.", "Title", "Authors", "Date of Reservation"};
+        DefaultTableModel d = new DefaultTableModel(schema,0);
+        for(int i = 0; i < acf.size(); i++)
+        {
+            Conf c = acf.get(i).getCf();
+            int p_id = acf.get(i).getPublication_id();
+            String title = c.getConfname();
+            String conf_num = c.getConfnum();
+            Date date = acf.get(i).getStart_time();
+            ArrayList <String> author = c.getAuthor_list();
+            String authors = "";
+            for(int j = 0; j < author.size(); j++)
+            {
+                authors += author.get(j) + ",";
+            }
+            
+            Object[] o = {p_id, conf_num, title, authors, date};
+            d.addRow(o);
+        }
+        jTable1.setModel(d);
     }
 
     /**
@@ -109,13 +136,23 @@ public class ConferenceCheckoutForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
+        int selected = jTable1.getSelectedRow();
+        String conf_num = (String) jTable1.getValueAt(selected, 1);
+        int p_id = Integer.parseInt((String) jTable1.getValueAt(selected, 0));
+        Date date = (Date) jTable1.getValueAt(selected, 4);
+        try {
+            ButtonEvents.return_resource(LibrarySystemConst.CONFERENCE, p_id, conf_num, date);
+            this.setVisible(false);
+            CheckoutResources.init();
+        } catch (SQLException ex) {
+            Logger.getLogger(ConferenceCheckoutForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void init(ArrayList <Conf> ac) {
+    public static void init(ArrayList <CheckOut> ac) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -138,7 +175,7 @@ public class ConferenceCheckoutForm extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(ConferenceCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        final ArrayList <Conf> ac1 = ac;
+        final ArrayList <CheckOut> ac1 = ac;
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
