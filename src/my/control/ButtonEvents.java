@@ -74,16 +74,15 @@ public class ButtonEvents {
         st.setString(1, faculty_id);
 
         ResultSet rs = st.executeQuery();
-        if(rs.next())
-        {
-        f.setFaculty_id(rs.getString("faculty_id"));
-        f.setFirst_name(rs.getString("first_name"));
-        f.setLast_name(rs.getString("last_name"));
-        f.setNationality(rs.getString("nationality"));
-        f.setDepartment(rs.getString("department"));
-        f.setCategory(rs.getString("category"));
-        f.setAccount_balance(rs.getString("account_balance"));
-        
+        if (rs.next()) {
+            f.setFaculty_id(rs.getString("faculty_id"));
+            f.setFirst_name(rs.getString("first_name"));
+            f.setLast_name(rs.getString("last_name"));
+            f.setNationality(rs.getString("nationality"));
+            f.setDepartment(rs.getString("department"));
+            f.setCategory(rs.getString("category"));
+            f.setAccount_balance(rs.getString("account_balance"));
+
         }
         return f;
 
@@ -1037,9 +1036,9 @@ public class ButtonEvents {
         } else {
             set_clause = "HILL_AVAIL_NO";
         }
-        
+
         System.out.println(resource_type);
-        
+
         switch (resource_type) {
             case LibrarySystemConst.BOOK:
                 table_name = "BOOKS";
@@ -1125,7 +1124,7 @@ public class ButtonEvents {
 
         System.out.println("Duration : " + duration);
         System.out.println("Start Time : " + start_time.toString());
-       
+
         Timestamp start_time_stamp = new Timestamp(start_time.getTime());
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(start_time_stamp.getTime());
@@ -1134,9 +1133,9 @@ public class ButtonEvents {
 
         System.out.println("Allowed : " + allowed_time.getTime());
         System.out.println("ts1" + ts1.getTime());
-        
+
         long hours_left = (long) ((ts1.getTime() - allowed_time.getTime()));
-        
+
         System.out.println("Hours Left:" + hours_left);
 
         if (hours_left <= 0) {
@@ -1225,6 +1224,122 @@ public class ButtonEvents {
             checkout_journal_list.add(co);
         }
         return checkout_journal_list;
+    }
+
+    public static ArrayList<String> pastdue_reminder() throws SQLException {
+        ArrayList<String> string_list = new ArrayList<>();
+        st = LibrarySystem.connection.prepareStatement("Select * from checkout where patron_id=? and end_time is null");
+        st.setInt(1, LibrarySystem.patron_id);
+        Date date = new Date(System.currentTimeMillis());
+        Timestamp t_cur = new Timestamp(date.getTime());
+        ResultSet rs = st.executeQuery();
+
+        while (rs.next()) {
+
+            String str = "";
+
+            Timestamp tst = rs.getTimestamp("start_time");
+
+            PreparedStatement st2 = LibrarySystem.connection.prepareStatement("select publication_type, publication_id from publication where id=?");
+            st2.setInt(1, rs.getInt("publication_id"));
+            //st2.setInt(1, 6);
+            ResultSet rs1 = st2.executeQuery();
+            if (rs1.next()) {
+
+                PreparedStatement st1 = LibrarySystem.connection.prepareStatement("select duration from checkout_duration where resource_type = ? and patron_type=?");
+                st1.setString(1, rs1.getString(1));
+                st1.setString(2, LibrarySystem.patron_type);
+                ResultSet rs2 = st1.executeQuery();
+                if (rs2.next()) {
+                    int duration = rs2.getInt("duration");
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTimeInMillis(tst.getTime());
+                    cal.add(Calendar.HOUR, duration);
+                    Timestamp due_time = new Timestamp(cal.getTimeInMillis());
+                    long hours = (long) ((t_cur.getTime() - due_time.getTime()) / (1000 * 60 * 60));
+
+
+                    if (hours >= (30 * 24) && hours < (60 * 24)) {
+
+                        string_list.add("Your " + rs1.getString(2)+" is already dued for 30 days");
+                    }
+                    if (hours >= (60 * 24) && hours < (90 * 24)) {
+                        string_list.add("Your " + rs1.getString(2)+" is already dued for 60 days");
+                    }
+                    if (hours >= (90 * 24)) {
+                        string_list.add("Your " + rs1.getString(2)+" is already dued for 90 days. Your checkout privileges are revoked");
+                                        PreparedStatement st3 = LibrarySystem.connection.prepareStatement("insert into account_revoke values (?,?)");
+                                        st3.setString(1, LibrarySystem.login_id);
+                                        st3.setString(2, "Y");
+                                        try{
+                                        st3.executeUpdate();
+                                                }
+                                        catch (SQLException e)
+                                        {
+                                            
+                                        }
+
+                    }
+
+                }
+
+            }
+        }
+
+        return string_list;
+    }
+        public static ArrayList<String> predue_reminder() throws SQLException {
+        ArrayList<String> string_list = new ArrayList<>();
+
+        st = LibrarySystem.connection.prepareStatement("Select * from checkout where patron_id=? and end_time is null");
+        st.setInt(1, LibrarySystem.patron_id);
+        Date date = new Date(System.currentTimeMillis());
+        Timestamp t_cur = new Timestamp(date.getTime());
+        ResultSet rs = st.executeQuery();
+
+        while (rs.next()) {
+
+            String str = "";
+
+            Timestamp tst = rs.getTimestamp("start_time");
+
+            PreparedStatement st2 = LibrarySystem.connection.prepareStatement("select publication_type, publication_id from publication where id=?");
+            st2.setInt(1, rs.getInt("publication_id"));
+            ResultSet rs1 = st2.executeQuery();
+            if (rs1.next()) {
+
+                PreparedStatement st1 = LibrarySystem.connection.prepareStatement("select duration from checkout_duration where resource_type = ? and patron_type=?");
+                st1.setString(1, rs1.getString(1));
+                st1.setString(2, LibrarySystem.patron_type);
+                ResultSet rs2 = st1.executeQuery();
+                if (rs2.next()) {
+                    int duration = rs2.getInt("duration");
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTimeInMillis(tst.getTime());
+                    cal.add(Calendar.HOUR, duration);
+                    Timestamp due_time = new Timestamp(cal.getTimeInMillis());
+                    long hours = (long) ((due_time.getTime() - t_cur.getTime()) / (1000 * 60 * 60));
+
+
+                    if (hours <= 24 && hours>=0) {
+
+                        string_list.add("Your " + rs1.getString(2)+" is due in 1 day");
+                    }
+                    if (hours <= (3 * 24) && hours >  24) {
+                        string_list.add("Your " + rs1.getString(2)+" is due in 3 days");
+                    }
+
+                }
+
+            }
+        }
+        for (int i=0;i<string_list.size();i++)
+        {
+            System.out.println(string_list.get(i));
+        }
+
+        return string_list;
     }
 
     public static ArrayList<CheckOut> checkout_conf_list() throws SQLException {

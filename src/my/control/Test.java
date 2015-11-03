@@ -25,12 +25,12 @@ public class Test {
         
         try {            
             LibrarySystem.setup();
-            LibrarySystem.connection.setAutoCommit(true);
-            LibrarySystem.connection.commit();
+            //LibrarySystem.connection.setAutoCommit(true);
+            //LibrarySystem.connection.commit();
             //System.out.println("::" + LibraryAPI.isECopy(27, 1));
             //Date date = new Date();
         //    System.out.println("run");
-            //ButtonEvents.getRoom("Hunt", 3, "study");
+            ButtonEvents.predue_reminder();
             
             //Date date = new Date();
        
@@ -42,7 +42,7 @@ public class Test {
 
         //System.out.println(d);
         try{
-        ButtonEvents.update_checkout_room("R2", new Timestamp(System.currentTimeMillis()));
+        //ButtonEvents.update_checkout_room("R2", new Timestamp(System.currentTimeMillis()));
             //System.out.println("run");
 //            ArrayList<Rooms> a=ButtonEvents.checkout_room();
             
