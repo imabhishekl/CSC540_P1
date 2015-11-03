@@ -144,7 +144,7 @@ public class LibraryAPI
         System.out.println("Checking : " + r_id  + ": " + login_id);
         if(rs.next())
         {
-            System.out.println("Fetch");
+            System.out.println(rs.getString("E_COPY"));
             return rs.getString("E_COPY");
         }
         return null;
