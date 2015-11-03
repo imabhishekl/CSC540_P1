@@ -133,7 +133,7 @@ public class LibraryAPI
     {
         String query = null;
         
-        query = "select * from checkout where PUBLICATION_ID = ? and PATRON_ID = ? and END_TIME is NULL";
+        query = "select * from checkout where PUBLICATION_ID = ? and PATRON_ID = ? and END_TIME is null";
         
         PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
         
@@ -149,8 +149,7 @@ public class LibraryAPI
         }
         return null;
     }
-
-    
+ 
     public static int getDuration(String patron_type,String resource_type)throws SQLException
     {
         String query = null;
@@ -175,7 +174,7 @@ public class LibraryAPI
     {
         String query = null;
         
-        query = "update table " + LibrarySystem.patron_type + " set ACCOUNT_BALANCE = ? where " + LibrarySystem.patron_type + "_id = ?";
+        query = "update " + LibrarySystem.patron_type + " set ACCOUNT_BALANCE = ? where " + LibrarySystem.patron_type + "_id = ?";
         
         PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
         
