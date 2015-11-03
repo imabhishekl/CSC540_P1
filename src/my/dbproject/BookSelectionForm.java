@@ -178,7 +178,7 @@ public class BookSelectionForm extends javax.swing.JFrame {
             //Logger.getLogger(BookSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setVisible(false);
-        MenuForm.init();
+        ResourceForm.init();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

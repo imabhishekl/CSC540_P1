@@ -5,6 +5,9 @@
  */
 package my.dbproject;
 
+import TableStrcuture.Conf;
+import java.util.ArrayList;
+
 /**
  *
  * @author chintanpanchamia
@@ -16,6 +19,10 @@ public class ConferenceCheckoutForm extends javax.swing.JFrame {
      */
     public ConferenceCheckoutForm() {
         initComponents();
+    }
+    public void populate(ArrayList <Conf> acf)
+    {
+        String[] schema = {"Conference No.","Title",""};
     }
 
     /**
@@ -40,8 +47,18 @@ public class ConferenceCheckoutForm extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         jButton1.setText("Back");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Return");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -86,10 +103,19 @@ public class ConferenceCheckoutForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.setVisible(false);
+        CheckoutResources.init();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void init() {
+    public static void init(ArrayList <Conf> ac) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -112,11 +138,14 @@ public class ConferenceCheckoutForm extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(ConferenceCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        final ArrayList <Conf> ac1 = ac;
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ConferenceCheckoutForm().setVisible(true);
+                ConferenceCheckoutForm cf = new ConferenceCheckoutForm();
+                cf.setVisible(true);
+                cf.populate(ac1);
             }
         });
     }

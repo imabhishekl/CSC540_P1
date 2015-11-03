@@ -15,11 +15,11 @@ import my.dbproject.LoginForm;
  */
 public class LibrarySystem 
 {
-    static Connection connection = null;
-    static String login_id;
-    static String patron_type;
-    static String camera_id=null;
-    static int patron_id;
+    public static Connection connection = null;
+    public static String login_id;
+    public static String patron_type;
+    public static String camera_id=null;
+    public static int patron_id;
     
     public static void setup()
     {
