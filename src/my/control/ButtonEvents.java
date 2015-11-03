@@ -364,15 +364,16 @@ public class ButtonEvents {
 
     public static void print() throws Exception{
         
-        PreparedStatement stmnt = LibrarySystem.connection.prepareCall("select * from reserve_room");
-        ResultSet rs = stmnt.executeQuery();      
         System.out.println("print");
-        //System.out.println("query");
-        while (rs.next()) {
-            System.out.println(rs.getString("room_no"));
-            //System.out.println(rs.getString("start_time"));
-        }
-    }
+        PreparedStatement stmnt = LibrarySystem.connection.prepareCall("delete from reserve_room where start_time<= ?");
+        stmnt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+        ResultSet rs = stmnt.executeQuery();      
+             //System.out.println("query");
+        while(rs.next()){
+            System.out.println("hi");
+            //System.out.println(rs.getString("start_time"));}
+        
+    }}
     
     public static void room_notify()throws Exception{
         Timestamp one_hour;
@@ -415,6 +416,30 @@ public class ButtonEvents {
         JOptionPane.showMessageDialog(null, message);
     }
 
+    
+    public static ArrayList<Rooms> checkout_room()throws Exception{
+        ArrayList<Rooms> room = new ArrayList<>();
+        Rooms r = new Rooms();
+        
+        PreparedStatement stmnt = LibrarySystem.connection.prepareCall("Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.room_no=R1.room_no and R1.patron_ID=1");
+        //stmnt.setInt(1, LibrarySystem.patron_id);
+
+        ResultSet rs = stmnt.executeQuery();
+        System.out.println("yes");
+        while (rs.next()) {
+            System.out.println("query");
+            r=new Rooms();
+            
+            System.out.println(rs.getString("room_no"));
+            r.setRoom_no(rs.getString("room_no"));
+            r.setFloor_no(rs.getInt("floor_no"));
+            r.setCapacity(rs.getInt("capacity"));
+            r.setLib_name(rs.getString("lib_name"));
+            r.setType(rs.getString("type"));
+            room.add(r);
+        }
+        return room;
+    }
     
     public static ArrayList<Rooms> getRoom(String lib_name, int capacity, String type, Timestamp start, Timestamp end) throws SQLException 
     {
