@@ -133,7 +133,7 @@ public class LibraryAPI
     {
         String query = null;
         
-        query = "select E_COPY from checkout where PUBLICATION_ID = ? and PATRON_ID = ? and END_TIME is NULL";
+        query = "select * from checkout where PUBLICATION_ID = ? and PATRON_ID = ? and END_TIME is NULL";
         
         PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
         
@@ -141,10 +141,11 @@ public class LibraryAPI
         ps.setInt(2, login_id);
         
         ResultSet rs = ps.executeQuery();
-        
+        System.out.println("Checking : " + r_id  + ": " + login_id);
         if(rs.next())
         {
-            return rs.getString(1);
+            System.out.println("Fetch");
+            return rs.getString("E_COPY");
         }
         return null;
     }
