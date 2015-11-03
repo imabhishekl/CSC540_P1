@@ -1054,7 +1054,7 @@ public class ButtonEvents {
             return -1;
         }
 
-        
+        //
         System.out.println("::" + LibraryAPI.isECopy(p_id, LibrarySystem.patron_id));
         
         if(LibraryAPI.isECopy(p_id, LibrarySystem.patron_id).equalsIgnoreCase("Y"))
