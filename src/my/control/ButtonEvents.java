@@ -285,8 +285,9 @@ public class ButtonEvents {
         Books book;
 
         ArrayList<Books> bookslist = new ArrayList<>();
-
-        st = LibrarySystem.connection.prepareStatement("select * from books b,courses_books bc where b.isbn_no = bc.isbn_no and (b.hunt_avail_no > 0 or b.hill_avail_no > 0) and bc.course_id IN (select course_id from enrollment where student_id = ?)");
+        
+        st = LibrarySystem.connection.prepareStatement
+        ("select * from books b,courses_books bc where b.isbn_no = bc.isbn_no and (b.hunt_avail_no > 0 or b.hill_avail_no > 0) and bc.course_id IN (select course_id from enrollment where student_id = ?)");
 
         st.setString(1, LibrarySystem.login_id);
 
@@ -1008,11 +1009,14 @@ public class ButtonEvents {
         int hours;
         int late_fee;
         int fees;
+        int duration;
         String query = null;
         String table_name = null;
         String set_clause;
         String where_col = null;
-        String library_name = null;
+        String library_name = null;   
+        String is_ecopy = null;
+        Timestamp allowed_time; 
 
         int avail_no = 0;
 
@@ -1060,9 +1064,10 @@ public class ButtonEvents {
             System.out.println("No rows updated");
             LibrarySystem.connection.setAutoCommit(true);
             return -1;
-        }
-        System.out.println("After Executing Update");
-
+        }     
+        System.out.println("::" + LibraryAPI.isECopy(p_id, LibrarySystem.patron_id));
+        is_ecopy = LibraryAPI.isECopy(p_id, LibrarySystem.patron_id);
+        
         Date end_time = new Date(System.currentTimeMillis());
 
         /* Update the check out book table */
@@ -1076,20 +1081,19 @@ public class ButtonEvents {
             LibrarySystem.connection.setAutoCommit(true);
             return -1;
         }
-
-        //
-        System.out.println("::" + LibraryAPI.isECopy(p_id, LibrarySystem.patron_id));
-
-        if (LibraryAPI.isECopy(p_id, LibrarySystem.patron_id).equalsIgnoreCase("Y")) {
+        
+        if(is_ecopy.equalsIgnoreCase("Y"))
+        {
+            System.out.println("ECOPY:" + is_ecopy);
             LibrarySystem.connection.setAutoCommit(true);
             LibrarySystem.connection.commit();
             return 1;
         }
 
         /* Calucate the late fee charge */
-        query = "select FEES,FREQUENCY_HOURS from late_fee where resource_type = ? order by frequency_hours_number asc";
+        query = "select FEES,FREQUENCY_HOURS from late_fee where resource_type = ? order by frequency_hours asc";
         st = LibrarySystem.connection.prepareStatement(query);
-
+        System.out.println("Resource Type:" + resource_type);
         st.setString(1, resource_type);
 
         ResultSet rs = st.executeQuery();
@@ -1097,15 +1101,39 @@ public class ButtonEvents {
         if (rs.next()) {
             fees = rs.getInt(1);
             hours = rs.getInt(2);
-        } else {
+        }
+        else
+        {
+            System.out.println("no entry in late fee");
             LibrarySystem.connection.setAutoCommit(true);
             return -1;
         }
 
-        long diffInMillies = end_time.getTime() - start_time.getTime();
-        long no_of_hours = (diffInMillies) / (1000 * 60);
+        duration = LibraryAPI.getDuration(LibrarySystem.patron_type, resource_type);
+        
+        Timestamp start_time_stamp = new Timestamp(start_time.getTime());
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(start_time_stamp.getTime());
+        cal.set(Calendar.HOUR_OF_DAY, duration);
+        allowed_time = new Timestamp(cal.getTimeInMillis());
+
+        int hours_left = (int) (end_time.getTime() - allowed_time.getTime()) / (1000 * 60 * 60);
+        
+        System.out.println("Hours Left:" + hours_left);
+        
+        if(hours_left <= 0)
+        {
+            LibrarySystem.connection.commit();
+            LibrarySystem.connection.setAutoCommit(true);
+            return 1;
+        }            
+        
+        long diffInMillies = hours_left/(3600);//end_time.getTime() - start_time.getTime();
+        long no_of_hours = (diffInMillies)/(1000);
 
         late_fee = (int) LibraryAPI.getLateFees(hours, fees, no_of_hours);
+        
+        System.out.println("Late Fee:" + late_fee);
 
         LibraryAPI.updateBalance(getBalance() - late_fee);
 
@@ -1122,7 +1150,7 @@ public class ButtonEvents {
 
         String query = null;
 
-        query = "select b.ISBN_NO,b.TITLE,b.GROUP_ID,c.PUBLICATION_ID,c.PATRON_ID,c.START_TIME,c.LIB_NAME from books b,checkout c,publication p where b.isbn_no = p.publication_id and p.id = c.publication_id and c.patron_id = ?";
+        query = "select b.ISBN_NO,b.TITLE,b.GROUP_ID,c.PUBLICATION_ID,c.PATRON_ID,c.START_TIME,c.LIB_NAME from books b,checkout c,publication p where b.isbn_no = p.publication_id and p.id = c.publication_id and c.patron_id = ? and c.END_TIME is NULL";
 
         st = LibrarySystem.connection.prepareStatement(query);
 
@@ -1154,7 +1182,7 @@ public class ButtonEvents {
 
         String query = null;
 
-        query = "select j.ISSN_NO,j.TITLE,j.GROUP_ID,c.PUBLICATION_ID,c.PATRON_ID,c.START_TIME,c.LIB_NAME from journals j,checkout c,publication p where j.ISSN_NO = p.publication_id and p.id = c.publication_id and c.patron_id = ?";
+        query = "select j.ISSN_NO,j.TITLE,j.GROUP_ID,c.PUBLICATION_ID,c.PATRON_ID,c.START_TIME,c.LIB_NAME from journals j,checkout c,publication p where j.ISSN_NO = p.publication_id and p.id = c.publication_id and c.patron_id = ? and c.END_TIME is NULL";
 
         st = LibrarySystem.connection.prepareStatement(query);
 
@@ -1186,7 +1214,7 @@ public class ButtonEvents {
 
         String query = null;
 
-        query = "select cf.CONF_NUM,cf.TITLE,cf.GROUP_ID,c.PUBLICATION_ID,c.PATRON_ID,c.START_TIME,c.LIB_NAME from conf cf,checkout c,publication p where cf.CONF_NUM = p.publication_id and p.id = c.publication_id and c.patron_id = ?";
+        query = "select cf.CONF_NUM,cf.TITLE,cf.GROUP_ID,c.PUBLICATION_ID,c.PATRON_ID,c.START_TIME,c.LIB_NAME from conf cf,checkout c,publication p where cf.CONF_NUM = p.publication_id and p.id = c.publication_id and c.patron_id = ? and c.END_TIME is NULL";
 
         st = LibrarySystem.connection.prepareStatement(query);
 
