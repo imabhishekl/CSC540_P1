@@ -137,7 +137,8 @@ public class BookCheckoutForm extends javax.swing.JFrame {
         this.setVisible(false);
         int selected = jTable1.getSelectedRow();
         String isbn = (String) jTable1.getValueAt(selected, 1);
-        int p_id = Integer.parseInt((String) jTable1.getValueAt(selected, 0));
+        //System.out.println((String) jTable1.getValueAt(selected, 0));
+        int p_id = (int) jTable1.getValueAt(selected, 0);
         Date date = (Date) jTable1.getValueAt(selected, 4);
         try {
             ButtonEvents.return_resource(LibrarySystemConst.BOOK, p_id, isbn, date);

@@ -160,13 +160,14 @@ public class ButtonEvents {
         
             /* Update the checkout_books */
             System.out.println("upadted");
-            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME,LIB_NAME) values (?,?,?,?)";
+            query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME,LIB_NAME,E_COPY) values (?,?,?,?,?)";
             st = LibrarySystem.connection.prepareStatement(query);
             
             st.setInt(1, LibraryAPI.getPubllicationId(book_detail.getIsbn_no()));
             st.setInt(2, LibrarySystem.patron_id);
             st.setTimestamp(3, new Timestamp(new java.util.Date(System.currentTimeMillis()).getTime()));
             st.setString(4, library_name);            
+            st.setString(5, book_detail.getE_copy());
             if (st.executeUpdate() != 0) 
             {
                 System.out.println("Inserted in checkout");
@@ -1021,6 +1022,7 @@ public class ButtonEvents {
         int avail_no = 0;        
         
         library_name = LibraryAPI.getLibraryName(p_id, LibrarySystem.patron_id);
+        System.out.println(":" + library_name);
 
         if (library_name.equals(LibrarySystemConst.HUNT)) {
             set_clause = "HUNT_AVAIL_NO";
@@ -1048,7 +1050,7 @@ public class ButtonEvents {
                 return -1;
         }
 
-        query = "update table " + table_name + " set " + set_clause + " = ? where "
+        query = "update " + table_name + " set " + set_clause + " = ? where "
                 + where_col + " = ? ";
 
         st = LibrarySystem.connection.prepareStatement(query);
@@ -1056,21 +1058,25 @@ public class ButtonEvents {
         st.setInt(1, avail_no);
         st.setString(2, id);
 
-        if (!st.execute()) {
+        if (st.executeUpdate() == 0) {
             return -1;
         }
+        System.out.println("After Executing");
+        
         Date end_time = new Date(System.currentTimeMillis());
 
         /* Update the check out book table */
-        query = "update table checkout set END_TIME = ? where PUBLICATION_ID = ? and PATRON_ID = ?";
+        query = "update checkout set END_TIME = ? where PUBLICATION_ID = ? and PATRON_ID = ?";
         st = LibrarySystem.connection.prepareStatement(query);
         st.setDate(1, new java.sql.Date(end_time.getTime()));
         st.setInt(2, p_id);
         st.setInt(3, LibrarySystem.patron_id);
 
-        if (!st.execute()) {
+        if (st.executeUpdate() == 0) {
             return -1;
         }
+        
+        System.out.println("::" + LibraryAPI.isECopy(p_id, LibrarySystem.patron_id));
         
         if(LibraryAPI.isECopy(p_id, LibrarySystem.patron_id).equalsIgnoreCase("Y"))
         {
