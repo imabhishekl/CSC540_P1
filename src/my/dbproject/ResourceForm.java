@@ -7,6 +7,7 @@ package my.dbproject;
 
 import TableStrcuture.Books;
 import TableStrcuture.Camera;
+import TableStrcuture.Conf;
 import TableStrcuture.Journals;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -221,7 +222,14 @@ public class ResourceForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+        this.setVisible(false);
+        ArrayList <Conf> c = new ArrayList <Conf> ();
+        try {
+            c = ButtonEvents.get_conference();
+        } catch (SQLException ex) {
+            Logger.getLogger(ResourceForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ConferenceSelectionForm.init(c);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     /**

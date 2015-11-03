@@ -5,7 +5,9 @@
  */
 package my.dbproject;
 
+import TableStrcuture.Books;
 import TableStrcuture.Camera;
+import TableStrcuture.Conf;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -203,7 +205,6 @@ public class CheckoutResources extends javax.swing.JFrame {
             
             ButtonEvents.camera_notify();
             b = ButtonEvents.camera_holdresources();
-            //System.out.println(a.get(0).getCamera_id()+" "+b);
             CameraCheckoutForm.init(a,b);
             
         } catch (SQLException ex) {
@@ -215,17 +216,21 @@ public class CheckoutResources extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         this.setVisible(false);
-        BookCheckoutForm.init();
+        ArrayList <Books> a = new ArrayList<Books>();
+        BookCheckoutForm.init(a);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         this.setVisible(false);
-        JournalCheckoutForm.init();
+        ArrayList <Conf> ac = new ArrayList <Conf> ();
+        
+        //JournalCheckoutForm.init(ac);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         this.setVisible(false);
-        ConferenceCheckoutForm.init();
+        ArrayList <Conf> ac = new ArrayList<Conf>();
+        ConferenceCheckoutForm.init(ac);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed

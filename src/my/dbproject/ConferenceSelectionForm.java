@@ -6,23 +6,70 @@
 package my.dbproject;
 
 import TableStrcuture.Conf;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import my.control.ButtonEvents;
 
 /**
  *
  * @author chintanpanchamia
  */
-public class ConferenceCheckoutForm extends javax.swing.JFrame {
+public class ConferenceSelectionForm extends javax.swing.JFrame {
 
     /**
-     * Creates new form ConferenceCheckoutForm
+     * Creates new form ConferenceSelectionForm
      */
-    public ConferenceCheckoutForm() {
+    public ConferenceSelectionForm() {
         initComponents();
     }
-    public void populate(ArrayList <Conf> acf)
+    public void populate(ArrayList <Conf> c)
     {
-        String[] schema = {"Conference No.","Title",""};
+        String[] schema = {"Conference No.", "Name", "Title", "Year", "Authors", "library", "e-Copy", "Hard Copy"};
+        DefaultTableModel d = new DefaultTableModel(schema,0);
+        for(int i = 0; i< c.size(); i++)
+        {
+            String conf_no = c.get(i).getConfnum();
+            String name = c.get(i).getConfname();
+            String title = c.get(i).getTitle();
+            int year = c.get(i).getYear();
+            String author = "";
+            ArrayList <String> authors = c.get(i).getAuthor_list();
+            for(int j = 0; j< authors.size(); j++)
+            {
+                author += authors.get(j) + ",";
+            }
+            String e_copy = c.get(i).getE_copy();
+            String library = "", hard_copy = "";
+            int hunt_total = c.get(i).getHunt_total_no();
+            int hunt_avail = c.get(i).getHunt_avail_no();
+            int hill_total = c.get(i).getHill_total_no();
+            int hill_avail = c.get(i).getHill_avail_no();
+            
+            if(e_copy.equalsIgnoreCase("Y"))
+            {
+                library = "-"; hard_copy = "-";
+                Object[] o = {conf_no, name, title, year, author, library, e_copy, hard_copy};
+                d.addRow(o);
+                
+            }
+            if(hunt_total > 0)
+            {
+                library = "HUNT"; 
+                hard_copy = "" + hunt_avail;
+                Object[] o = {conf_no, name, title, year, author, library, e_copy, hard_copy};
+                d.addRow(o);
+            }
+            if(hill_total > 0)
+            {
+                library = "HILL";
+                hard_copy = "" + hill_avail;
+                Object[] o = {conf_no, name, title, year, author, library, e_copy, hard_copy};
+                d.addRow(o);
+            }
+        }
     }
 
     /**
@@ -42,7 +89,7 @@ public class ConferenceCheckoutForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Checkout Conference Proceedings"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Select a Conference Proceeding"));
 
         jScrollPane1.setViewportView(jTable1);
 
@@ -53,7 +100,7 @@ public class ConferenceCheckoutForm extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Return");
+        jButton2.setText("Checkout");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -64,23 +111,23 @@ public class ConferenceCheckoutForm extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
+                .addGap(51, 51, 51)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton2)
-                .addGap(55, 55, 55))
+                .addGap(65, 65, 65))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addGap(68, 68, 68))
+                .addGap(79, 79, 79))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -105,17 +152,28 @@ public class ConferenceCheckoutForm extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.setVisible(false);
-        CheckoutResources.init();
+        ResourceForm.init();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
+        int select = jTable1.getSelectedRow();
+        Conf c = new Conf();
+        String conf_no = (String) jTable1.getValueAt(select, 0);
+        c.setConfnum(conf_no);
+        String library = (String) jTable1.getValueAt(select, 5);
+        try {
+            ButtonEvents.checkout_conf(c, library);
+        } catch (SQLException ex) {
+            Logger.getLogger(ConferenceSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.setVisible(false);
+        ResourceForm.init();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void init(ArrayList <Conf> ac) {
+    public static void init(ArrayList <Conf> c) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -129,23 +187,23 @@ public class ConferenceCheckoutForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ConferenceCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConferenceSelectionForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ConferenceCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConferenceSelectionForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ConferenceCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConferenceSelectionForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ConferenceCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConferenceSelectionForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        final ArrayList <Conf> ac1 = ac;
+        final ArrayList <Conf> c1 = c;
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ConferenceCheckoutForm cf = new ConferenceCheckoutForm();
-                cf.setVisible(true);
-                cf.populate(ac1);
+                ConferenceSelectionForm csf = new ConferenceSelectionForm();
+                csf.setVisible(true);
+                csf.populate(c1);
             }
         });
     }

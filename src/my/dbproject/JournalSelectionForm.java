@@ -6,8 +6,12 @@
 package my.dbproject;
 
 import TableStrcuture.Journals;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
+import my.control.ButtonEvents;
 
 /**
  *
@@ -56,14 +60,14 @@ public class JournalSelectionForm extends javax.swing.JFrame {
             }
             if(hunt_total > 0)
             {
-                library = "Hunt"; 
+                library = "HUNT"; 
                 hard_copy = "" + hunt_avail;
                 Object[] o = {issn, year, author, title, library, e_copy, hard_copy};
                 d.addRow(o);
             }
             if(hill_total > 0)
             {
-                library = "Hill";
+                library = "HILL";
                 hard_copy = "" + hill_avail;
                 Object[] o = {issn, year, author, title, library, e_copy, hard_copy};
                 d.addRow(o);
@@ -101,6 +105,11 @@ public class JournalSelectionForm extends javax.swing.JFrame {
         });
 
         jButton2.setText("Reserve");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -149,6 +158,21 @@ public class JournalSelectionForm extends javax.swing.JFrame {
         this.setVisible(false);
         ResourceForm.init();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int select = jTable1.getSelectedRow();
+        String issn = (String) jTable1.getValueAt(select, 0);
+        Journals j = new Journals();
+        j.setIssn_no(issn);
+        String library = (String) jTable1.getValueAt(select, 4);
+        try {
+            ButtonEvents.checkout_journal(j, library);
+        } catch (SQLException ex) {
+            Logger.getLogger(JournalSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.setVisible(false);
+        ResourceForm.init();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

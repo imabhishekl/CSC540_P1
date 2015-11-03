@@ -62,7 +62,7 @@ public class LibraryAPI
     {
         String query;
         
-        query = "select id from publication where where publication_id = ?";
+        query = "select id from publication where publication_id = ?";
         PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
         ps.setString(1, isbn);
         
