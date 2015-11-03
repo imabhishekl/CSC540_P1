@@ -403,13 +403,14 @@ public class ButtonEvents {
         
     }}
     
-    public static void room_notify()throws Exception{
+    public static String room_notify()throws Exception{
         Timestamp one_hour;
         PreparedStatement stmnt = LibrarySystem.connection.prepareCall("select * from reserve_room where patron_ID=? and start_time<=? and end_time>=?");
         stmnt.setInt(1, LibrarySystem.patron_id);
         stmnt.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
         stmnt.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-        ResultSet rs = stmnt.executeQuery();      
+        ResultSet rs = stmnt.executeQuery(); 
+        String notice=null;
         while(rs.next()){
             /*Calendar calendar=Calendar.getInstance();
             calendar.setTimeInMillis(rs.getTimestamp("start_time").getTime());
@@ -417,16 +418,18 @@ public class ButtonEvents {
        
             one_hour=new Timestamp(calendar.getTimeInMillis());*/
             if(System.currentTimeMillis()-rs.getTimestamp("start_time").getTime()>=(60*60*1000)){
-                JOptionPane.showMessageDialog(null, "Sorry your room is gone, try next time");
-                return;
+                JOptionPane.showMessageDialog(null, "Sorry your room "+rs.getString("room_no")+ " is gone, try next time");
+                return null;
             }
             System.out.println(rs.getString("room_no"));
             System.out.println(rs.getString("lib_name"));
             System.out.println(rs.getString("start_time"));
             System.out.println(rs.getString("end_time"));
             
-    }
-
+             notice="Your room "+rs.getString("room_no")+" at "+ rs.getString("lib_name")+" library is ready to be checked out starting at "+ rs.getTimestamp("start_time").toString();
+            
+        }
+        return notice;
     }
 
     public static void reserve_room(String room_no, String library,Timestamp start,Timestamp end) throws Exception{
@@ -445,7 +448,7 @@ public class ButtonEvents {
     }
 
     
-    public static ArrayList<Rooms> checkout_room()throws Exception{
+    /*public static ArrayList<Rooms> checkout_room()throws Exception{
         ArrayList<Rooms> room = new ArrayList<>();
         Rooms r = new Rooms();
         
@@ -468,6 +471,41 @@ public class ButtonEvents {
         }
         return room;
     }
+    */
+    
+    public static ArrayList<Rooms> checkout_room() throws Exception{
+        Timestamp one_hour;
+        PreparedStatement stmnt = LibrarySystem.connection.prepareCall("select * from reserve_room where patron_ID=? and start_time<=? and end_time>=?");
+        stmnt.setInt(1, LibrarySystem.patron_id);
+        stmnt.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+        stmnt.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+        ResultSet rs = stmnt.executeQuery(); 
+        //String notice=null;
+                Rooms r = new Rooms();
+                ArrayList<Rooms> room = new ArrayList<>();
+
+                
+        while(rs.next()){
+            
+            if(System.currentTimeMillis()-rs.getTimestamp("start_time").getTime()>=(60*60*1000)){
+                //JOptionPane.showMessageDialog(null, "Sorry your room "+rs.getString("room_no")+ " is gone, try next time");
+                return null;
+            }
+            r=new Rooms();
+            System.out.println(rs.getString("room_no"));
+            r.setRoom_no(rs.getString("room_no"));
+            r.setFloor_no(rs.getInt("floor_no"));
+            r.setCapacity(rs.getInt("capacity"));
+            r.setLib_name(rs.getString("lib_name"));
+            r.setType(rs.getString("type"));
+            room.add(r);
+            
+             
+            
+        }
+        return room;
+    }
+    
     
     public static ArrayList<Rooms> getRoom(String lib_name, int capacity, String type, Timestamp start, Timestamp end) throws SQLException 
     {
