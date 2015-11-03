@@ -69,6 +69,7 @@ public class BookCheckoutForm extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,6 +91,13 @@ public class BookCheckoutForm extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("Renew");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -99,6 +107,8 @@ public class BookCheckoutForm extends javax.swing.JFrame {
                 .addGap(74, 74, 74)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
                 .addGap(83, 83, 83))
         );
@@ -109,7 +119,8 @@ public class BookCheckoutForm extends javax.swing.JFrame {
                 .addGap(84, 84, 84)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
                 .addGap(0, 83, Short.MAX_VALUE))
         );
 
@@ -156,6 +167,21 @@ public class BookCheckoutForm extends javax.swing.JFrame {
         CheckoutResources.init();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        int selected = jTable1.getSelectedRow();
+        int p_id = (int) jTable1.getValueAt(selected, 0);
+        String isbn = (String) jTable1.getValueAt(selected, 1);
+        Date date = (Date) jTable1.getValueAt(selected, 4);
+        
+        try {
+            ButtonEvents.renew_resource(LibrarySystemConst.BOOK, p_id, isbn, date);
+            this.setVisible(false);
+            CheckoutResources.init();
+        } catch (SQLException ex) {
+            Logger.getLogger(BookCheckoutForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -197,6 +223,7 @@ public class BookCheckoutForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
