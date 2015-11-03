@@ -9,6 +9,7 @@ import TableStrcuture.Books;
 import TableStrcuture.Camera;
 import TableStrcuture.CheckOut;
 import TableStrcuture.Conf;
+import TableStrcuture.Reserve_room;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -255,7 +256,13 @@ public class CheckoutResources extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         this.setVisible(false);
-        RoomCheckoutForm.init();
+        try {
+            ArrayList <Reserve_room> ar = ButtonEvents.checkout_room();
+            RoomCheckoutForm.init(ar);
+        } catch (Exception ex) {
+            Logger.getLogger(CheckoutResources.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
