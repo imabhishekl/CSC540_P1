@@ -8,8 +8,10 @@ package my.dbproject;
 import TableStrcuture.Reserve_room;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
-import oracle.sql.TIMESTAMP;
+import my.control.ButtonEvents;
 
 /**
  *
@@ -32,8 +34,12 @@ public class RoomCheckoutForm extends javax.swing.JFrame {
             String room_no = a.get(i).getRoom_no();
             String library = a.get(i).getLib_name();
             Timestamp start = a.get(i).getStart_time();
-            Timestamp end = a.get(i).get
+            Timestamp end = a.get(i).getEnd_time();
+            
+            Object[] o = {room_no, library, start, end};
+            d.addRow(o);
         }
+        jTable1.setModel(d);
     }
 
     /**
@@ -65,6 +71,11 @@ public class RoomCheckoutForm extends javax.swing.JFrame {
         });
 
         jButton2.setText("Checkout");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -112,6 +123,20 @@ public class RoomCheckoutForm extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int selected = jTable1.getSelectedRow();
+        String room = (String) jTable1.getValueAt(selected, 0);
+        Timestamp start = (Timestamp) jTable1.getValueAt(selected, 2);
+        try {
+            ButtonEvents.update_checkout_room(room, start);
+            this.setVisible(false);
+            CheckoutResources.init();
+        } catch (Exception ex) {
+            Logger.getLogger(RoomCheckoutForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
