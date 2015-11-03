@@ -68,7 +68,6 @@ boolean b1 = false;
                 String camera_id = c2.get(i).getCamera_id();
                 String model = c2.get(i).getModel();
                 //boolean b = Boolean.FALSE;
-                
                 Object[] o = {camera_id, model};
                 
                 d.addRow(o);

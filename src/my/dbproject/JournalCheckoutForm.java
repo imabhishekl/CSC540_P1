@@ -5,6 +5,17 @@
  */
 package my.dbproject;
 
+import TableStrcuture.CheckOut;
+import TableStrcuture.Journals;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import my.control.ButtonEvents;
+import my.control.LibrarySystemConst;
+
 /**
  *
  * @author chintanpanchamia
@@ -16,6 +27,29 @@ public class JournalCheckoutForm extends javax.swing.JFrame {
      */
     public JournalCheckoutForm() {
         initComponents();
+    }
+    public void populate(ArrayList <CheckOut> aj)
+    {
+        String[] schema = {"Publication ID", "ISSN", "Title", "Authors", "Date of Reservation"};
+        DefaultTableModel d = new DefaultTableModel(schema,0);
+        for(int i = 0;i < aj.size();i++)
+        {
+            Journals j = aj.get(i).getJr();
+            int p_id = aj.get(i).getPublication_id();
+            String issn = j.getIssn_no();
+            String title = j.getTitle();
+            Date date = aj.get(i).getStart_time();
+            ArrayList <String> author = j.getAuthor_list();
+            String authors = "";
+            for(int j1 = 0; j1 < author.size(); j1++)
+            {
+                authors += author.get(i) + ",";
+            }
+            
+            Object[] o = {p_id, issn, title, authors, date};
+            d.addRow(o);
+        }
+        jTable1.setModel(d);
     }
 
     /**
@@ -47,6 +81,11 @@ public class JournalCheckoutForm extends javax.swing.JFrame {
         });
 
         jButton2.setText("Return");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -92,13 +131,29 @@ public class JournalCheckoutForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        this.setVisible(false);
+        CheckoutResources.init();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int selected = jTable1.getSelectedRow();
+        String issn = (String) jTable1.getValueAt(selected,1);
+        int p_id = Integer.parseInt((String) jTable1.getValueAt(selected, 0));
+        Date date = (Date) jTable1.getValueAt(selected, 4);
+        this.setVisible(false);
+        try {
+            ButtonEvents.return_resource(LibrarySystemConst.JOURNAL, p_id, issn, date);
+            CheckoutResources.init();
+        } catch (SQLException ex) {
+            Logger.getLogger(JournalCheckoutForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void init() {
+    public static void init(ArrayList <CheckOut> aj) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -121,11 +176,14 @@ public class JournalCheckoutForm extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(JournalCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        final ArrayList <CheckOut> aj1 = aj;
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JournalCheckoutForm().setVisible(true);
+                JournalCheckoutForm jc = new JournalCheckoutForm();
+                jc.setVisible(true);
+                jc.populate(aj1);
             }
         });
     }
