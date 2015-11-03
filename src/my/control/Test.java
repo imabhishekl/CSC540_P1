@@ -40,7 +40,7 @@ public class Test {
             //ButtonEvents.getRoom("Hunt", 3, "study");
             
             //Date date = new Date();
-            //System.out.println(ButtonEvents.camera_notify());
+            System.out.println(ButtonEvents.camera_pickup());
             // ButtonEvents.getRoom("Hunt", 3, "study",);
             //System.out.println("main");
         } catch (Exception e) {
