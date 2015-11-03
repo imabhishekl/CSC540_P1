@@ -96,8 +96,8 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jComboBox1" min="-2" pref="56" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jComboBox2" min="-2" pref="44" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="jComboBox2" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jComboBox3" min="-2" pref="62" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
@@ -195,7 +195,7 @@
         <Component class="javax.swing.JSlider" name="jSlider1">
           <Properties>
             <Property name="majorTickSpacing" type="int" value="1"/>
-            <Property name="maximum" type="int" value="10"/>
+            <Property name="maximum" type="int" value="5"/>
             <Property name="minimum" type="int" value="3"/>
             <Property name="paintLabels" type="boolean" value="true"/>
           </Properties>
@@ -304,16 +304,14 @@
         <Component class="javax.swing.JComboBox" name="jComboBox4">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="9">
+              <StringArray count="7">
                 <StringItem index="0" value="30min"/>
                 <StringItem index="1" value="1 hour"/>
                 <StringItem index="2" value="1 hour 30min"/>
                 <StringItem index="3" value="2 hours"/>
                 <StringItem index="4" value="2 hours 30min"/>
                 <StringItem index="5" value="3 hours"/>
-                <StringItem index="6" value="3 hours 30min"/>
-                <StringItem index="7" value="4 hours"/>
-                <StringItem index="8" value=" "/>
+                <StringItem index="6" value=" "/>
               </StringArray>
             </Property>
           </Properties>
@@ -338,11 +336,17 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Study Rooms"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton3ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="jRadioButton4">
           <Properties>
             <Property name="text" type="java.lang.String" value="Conference Rooms"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton4ActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

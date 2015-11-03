@@ -18,7 +18,7 @@ public class LibrarySystem
     static Connection connection = null;
     static String login_id;
     static String patron_type;
-    static String camera_id;
+    static String camera_id=null;
     static int patron_id;
     
     public static void setup()
@@ -39,7 +39,7 @@ public class LibrarySystem
     public static void render_login()
     {
         LoginForm.init();
-        System.out.println("render login");
+        //System.out.println("render login");
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new LoginForm().setVisible(true);

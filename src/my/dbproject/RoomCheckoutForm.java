@@ -5,75 +5,17 @@
  */
 package my.dbproject;
 
-import TableStrcuture.Journals;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.table.DefaultTableModel;
-import my.control.ButtonEvents;
-
 /**
  *
  * @author chintanpanchamia
  */
-public class JournalSelectionForm extends javax.swing.JFrame {
+public class RoomCheckoutForm extends javax.swing.JFrame {
 
     /**
-     * Creates new form PublicationSelectionForm
+     * Creates new form RoomCheckoutForm
      */
-    public JournalSelectionForm() {
+    public RoomCheckoutForm() {
         initComponents();
-    }
-    public void populate(ArrayList <Journals> jo)
-    {
-        String[] schema = {"ISSN", "Year of Publication", "Authors", "Title", "Library", "e-copy", "Hard Copy"};
-        DefaultTableModel d = new DefaultTableModel(schema,0);
-        System.out.println("Here1"+jo.size());
-        for(int i = 0;i < jo.size(); i++)
-        {
-            System.out.println("Here2");
-            String issn = jo.get(i).getIssn_no();
-            System.out.println(issn);
-            int year = jo.get(i).getYear_of_publication();
-            String author = "";
-            ArrayList <String> al = new ArrayList<>();
-            al = jo.get(i).getAuthor_list();
-            for(int j = 0;j < al.size(); j++)
-            {
-                author += al.get(j)+"";
-            }
-            System.out.println("Here");
-            String title = jo.get(i).getTitle();
-            String e_copy = jo.get(i).getE_copy();
-            int hunt_total = jo.get(i).getHunt_total_no();
-            int hunt_avail = jo.get(i).getHunt_avail_no();
-            int hill_total = jo.get(i).getHill_total_no();
-            int hill_avail = jo.get(i).getHill_avail_no();
-            String library = "", hard_copy = "";
-            if(e_copy.equalsIgnoreCase("Y"))
-            {
-                library = "-"; hard_copy = "-";
-                Object[] o = {issn, year, author, title, library, e_copy, hard_copy};
-                d.addRow(o);
-                
-            }
-            if(hunt_total > 0)
-            {
-                library = "HUNT"; 
-                hard_copy = "" + hunt_avail;
-                Object[] o = {issn, year, author, title, library, e_copy, hard_copy};
-                d.addRow(o);
-            }
-            if(hill_total > 0)
-            {
-                library = "HILL";
-                hard_copy = "" + hill_avail;
-                Object[] o = {issn, year, author, title, library, e_copy, hard_copy};
-                d.addRow(o);
-            }
-        }
-        jTable1.setModel(d);
     }
 
     /**
@@ -93,7 +35,7 @@ public class JournalSelectionForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Select a Publication"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Checkout Room"));
 
         jScrollPane1.setViewportView(jTable1);
 
@@ -104,34 +46,29 @@ public class JournalSelectionForm extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Reserve");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jButton2.setText("Checkout");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(67, 67, 67)
+                .addGap(37, 37, 37)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton2)
-                .addGap(78, 78, 78))
+                .addGap(50, 50, 50))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addGap(0, 58, Short.MAX_VALUE))
+                .addGap(75, 75, 75))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -155,29 +92,13 @@ public class JournalSelectionForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        this.setVisible(false);
-        ResourceForm.init();
+        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        int select = jTable1.getSelectedRow();
-        String issn = (String) jTable1.getValueAt(select, 0);
-        Journals j = new Journals();
-        j.setIssn_no(issn);
-        String library = (String) jTable1.getValueAt(select, 4);
-        try {
-            ButtonEvents.checkout_journal(j, library);
-        } catch (SQLException ex) {
-            Logger.getLogger(JournalSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        this.setVisible(false);
-        ResourceForm.init();
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void init(ArrayList <Journals> jo) {
+    public static void init() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -191,25 +112,20 @@ public class JournalSelectionForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JournalSelectionForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RoomCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JournalSelectionForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RoomCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JournalSelectionForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RoomCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JournalSelectionForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RoomCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        final ArrayList <Journals> jo1 = jo;
-        System.out.println(jo1.size());
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                JournalSelectionForm j = new JournalSelectionForm();
-                j.populate(jo1);
-                j.setVisible(true);
-                
+                new RoomCheckoutForm().setVisible(true);
             }
         });
     }

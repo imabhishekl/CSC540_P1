@@ -5,11 +5,13 @@
  */
 package my.dbproject;
 
+import TableStrcuture.Rooms;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
 import my.control.ButtonEvents;
@@ -83,7 +85,7 @@ public class StudyRoomForm extends javax.swing.JFrame {
         jLabel2.setText("Capacity");
 
         jSlider1.setMajorTickSpacing(1);
-        jSlider1.setMaximum(10);
+        jSlider1.setMaximum(5);
         jSlider1.setMinimum(3);
         jSlider1.setPaintLabels(true);
 
@@ -101,7 +103,7 @@ public class StudyRoomForm extends javax.swing.JFrame {
 
         jLabel6.setText("Duration");
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "30min", "1 hour", "1 hour 30min", "2 hours", "2 hours 30min", "3 hours", "3 hours 30min", "4 hours", " " }));
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "30min", "1 hour", "1 hour 30min", "2 hours", "2 hours 30min", "3 hours", " " }));
         jComboBox4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox4ActionPerformed(evt);
@@ -118,8 +120,18 @@ public class StudyRoomForm extends javax.swing.JFrame {
         jLabel7.setText("Type");
 
         jRadioButton3.setText("Study Rooms");
+        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton3ActionPerformed(evt);
+            }
+        });
 
         jRadioButton4.setText("Conference Rooms");
+        jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -162,8 +174,8 @@ public class StudyRoomForm extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel4)
@@ -238,10 +250,14 @@ public class StudyRoomForm extends javax.swing.JFrame {
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
         // TODO add your handling code here:
+        jRadioButton2.setSelected(false);
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
+   
+   
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
         // TODO add your handling code here:
+         jRadioButton1.setSelected(false);
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -313,11 +329,14 @@ public class StudyRoomForm extends javax.swing.JFrame {
        
         end_time=new Timestamp(calendar.getTimeInMillis());
         
-        System.out.println(start_time+" "+end_time);
+        //System.out.println(start_time+" "+end_time);
         
         try {
             //System.out.println(lib_name+" "+capacity+" "+type+" "+start_time+" "+end_time);
-            ButtonEvents.getRoom(lib_name, capacity, type,start_time,end_time);
+            this.setVisible(false);
+            ArrayList <Rooms> a=ButtonEvents.getRoom(lib_name, capacity, type,start_time,end_time);
+            //System.out.print(a);
+            StudyRoomResultForm.init(a,start_time,end_time);
         } catch (Exception e) {
         }
 
@@ -327,6 +346,17 @@ public class StudyRoomForm extends javax.swing.JFrame {
     private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox4ActionPerformed
+
+    private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
+        // TODO add your handling code here:
+        ButtonEvents.validateRoomType("conference");
+         jRadioButton3.setSelected(false);
+    }//GEN-LAST:event_jRadioButton4ActionPerformed
+
+    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
+        // TODO add your handling code here:
+        jRadioButton4.setSelected(false);
+    }//GEN-LAST:event_jRadioButton3ActionPerformed
 
     public static void init() {
         /* Set the Nimbus look and feel */

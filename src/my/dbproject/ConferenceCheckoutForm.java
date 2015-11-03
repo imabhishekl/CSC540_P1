@@ -5,42 +5,17 @@
  */
 package my.dbproject;
 
-import TableStrcuture.Rooms;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import javax.swing.table.DefaultTableModel;
-import my.control.ButtonEvents;
-
 /**
  *
  * @author chintanpanchamia
  */
-public class StudyRoomResultForm extends javax.swing.JFrame {
-    private static Timestamp start,end;
+public class ConferenceCheckoutForm extends javax.swing.JFrame {
+
     /**
-     * Creates new form RoomResultForm
+     * Creates new form ConferenceCheckoutForm
      */
-    public StudyRoomResultForm() {
+    public ConferenceCheckoutForm() {
         initComponents();
-    }
-    public void populate(ArrayList <Rooms> a)
-    {
-        String[] schema = {"Room No.", "Floor No.", "Capacity", "Library Name", "Type"};
-        DefaultTableModel d = new DefaultTableModel(schema,0);
-        for(int i = 0; i < a.size(); i++)
-        {
-            String room_no = a.get(i).getRoom_no();
-            //System.out.println(room_no);
-            int floor_no = a.get(i).getFloor_no();
-            int capacity = a.get(i).getCapacity();
-            String library = a.get(i).getLib_name();
-            String type = a.get(i).getType();
-            
-            Object[] o = {room_no, floor_no, capacity, library, type};
-            d.addRow(o);
-        }
-        
-        jTable1.setModel(d);
     }
 
     /**
@@ -60,45 +35,35 @@ public class StudyRoomResultForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Study Rooms"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Checkout Conference Proceedings"));
 
         jScrollPane1.setViewportView(jTable1);
 
         jButton1.setText("Back");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
-        jButton2.setText("Reserve");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jButton2.setText("Return");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(54, 54, 54)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41)
+                .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton2)
-                .addGap(61, 61, 61))
+                .addGap(55, 55, 55))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addGap(0, 62, Short.MAX_VALUE))
+                .addGap(68, 68, 68))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -121,33 +86,15 @@ public class StudyRoomResultForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        int select = jTable1.getSelectedRow();
-        String room_no =(String) jTable1.getValueAt(select, 0);
-        String library = (String) jTable1.getValueAt(select, 3);
-        try{
-        ButtonEvents.reserve_room(room_no,library,start,end);}
-        catch(Exception e){}
-
-       // ButtonEvents.reserve_room(room_no,library);
-        this.setVisible(false);
-        start=null;
-        end=null;
-        ResourceForm.init();
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        this.setVisible(false);
-        StudyRoomForm.init();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     /**
      * @param args the command line arguments
      */
-    public static void init(ArrayList <Rooms> a, Timestamp s, Timestamp e) {
-       
-        start=s;
-        end=e;
+    public static void init() {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -156,24 +103,20 @@ public class StudyRoomResultForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StudyRoomResultForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConferenceCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StudyRoomResultForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConferenceCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StudyRoomResultForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConferenceCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(StudyRoomResultForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConferenceCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        final ArrayList <Rooms> r = a;
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                StudyRoomResultForm s = new StudyRoomResultForm();
-                s.setVisible(true);
-                s.populate(r);
+                new ConferenceCheckoutForm().setVisible(true);
             }
         });
     }

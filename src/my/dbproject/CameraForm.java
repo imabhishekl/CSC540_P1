@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import my.control.ButtonEvents;
@@ -188,8 +189,12 @@ public class CameraForm extends javax.swing.JFrame {
         Date formal_date;
         formal_date = new Date(Integer.parseInt(temp_date[2])-1900, Integer.parseInt(temp_date[0])-1, Integer.parseInt(temp_date[1]), 0,0,0);
         try {
-            ButtonEvents.waitlistCamera(camera_id, formal_date);
-//System.out.println(formal_date);
+            
+            String str = ButtonEvents.waitlistCamera(camera_id, formal_date);
+            System.out.println(str);
+            JOptionPane.showMessageDialog(null, str);
+            this.setVisible(false);
+            ResourceForm.init();
         
 //SimpleDateFormat s = new SimpleDateFormat("MM-dd-YYYY");
             /*try {
