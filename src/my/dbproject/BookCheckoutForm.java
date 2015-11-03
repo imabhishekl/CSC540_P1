@@ -31,6 +31,7 @@ public class BookCheckoutForm extends javax.swing.JFrame {
     }
     public void populate(ArrayList <CheckOut> a)
     {
+        System.out.println(a.size());
         String[] schema = {"Publication ID","ISBN","Title","Authors","Date of Reservation"};
         DefaultTableModel d = new DefaultTableModel(schema,0);
         for(int i = 0; i< a.size(); i++)
@@ -45,7 +46,7 @@ public class BookCheckoutForm extends javax.swing.JFrame {
             ArrayList <String> author = b.getAuthor_list();
             for(int j = 0; j< author.size(); j++)
             {
-                authors = author.get(i) + ",";
+                authors = author.get(j) + ",";
             }
             
             Object[] o = {p_id, isbn, title, authors, date};
@@ -178,7 +179,7 @@ public class BookCheckoutForm extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(BookCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        final ArrayList <CheckOut> a1 = new ArrayList <CheckOut>();
+        final ArrayList <CheckOut> a1 = a;
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

@@ -220,6 +220,7 @@ public class CheckoutResources extends javax.swing.JFrame {
         ArrayList <CheckOut> a;
         try {
             a = ButtonEvents.checkout_book_list();
+            System.out.println(a.size());
             BookCheckoutForm.init(a);
         } catch (SQLException ex) {
             Logger.getLogger(CheckoutResources.class.getName()).log(Level.SEVERE, null, ex);
