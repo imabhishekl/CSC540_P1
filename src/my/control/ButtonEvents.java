@@ -14,6 +14,7 @@ import TableStrcuture.Conf;
 import TableStrcuture.Journals;
 import TableStrcuture.WaitlistCamera;
 import java.awt.print.Book;
+import java.sql.CallableStatement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.sql.Timestamp;
@@ -987,7 +988,7 @@ public class ButtonEvents {
 
         query = "update table " + table_name + " set " + set_clause + " = ? where "
                 + where_col + " = ? ";
-
+System.out.println(table_name);
         st = LibrarySystem.connection.prepareStatement(query);
 
         st.setInt(1, avail_no);
@@ -1142,4 +1143,10 @@ public class ButtonEvents {
         }
         return checkout_conf_list;
     }
+    
+    public static void getNotification()
+    {
+        
+        
+    }           
 }
