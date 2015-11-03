@@ -42,8 +42,6 @@ public class ButtonEvents {
         if (rs.next()) {
             PreparedStatement st1 = LibrarySystem.connection.prepareStatement("Select * from classification where classification_id=?");
             st1.setInt(1, rs.getInt("classification_id"));
-                            System.out.println("hello");
-
             ResultSet rs1 = st1.executeQuery();
             if (rs1.next()) {
                 s.setClassification_name(rs1.getString("classification_name"));
