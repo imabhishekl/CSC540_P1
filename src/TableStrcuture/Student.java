@@ -11,8 +11,8 @@ import java.util.Date;
  *
  * @author abhishek
  */
-public class Student 
-{
+public class Student {
+
     private String student_id;
     private String first_name;
     private String last_name;
@@ -26,10 +26,13 @@ public class Student
     private Date dob;
     private String nationality;
     private String department;
-    private String classification_id;
+    private int classification_id;
     private String account_balance;
     private String user_id;
     private String password;
+    private String classification_name;
+    private String degree_program;
+    private int year;
 
     /**
      * @return the student_id
@@ -104,8 +107,6 @@ public class Student
     /**
      * @return the addr_street
      */
-    
-
     /**
      * @return the dob
      */
@@ -150,8 +151,9 @@ public class Student
 
     /**
      * @return the classfication_id
-     
-    /**
+     *
+     * /
+     **
      * @return the account_balance
      */
     public String getAccount_balance() {
@@ -196,15 +198,15 @@ public class Student
     /**
      * @return the classification_id
      */
-    public String getClassification_id() {
+    public int getClassification_id() {
         return classification_id;
     }
 
     /**
      * @param classification_id the classification_id to set
      */
-    public void setClassification_id(String classification_id) {
-        this.classification_id = classification_id;
+    public void setClassification_id(int classification_id) {
+        this.setClassification_id(classification_id);
     }
 
     /**
@@ -275,5 +277,47 @@ public class Student
      */
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    /**
+     * @return the classification_name
+     */
+    public String getClassification_name() {
+        return classification_name;
+    }
+
+    /**
+     * @param classification_name the classification_name to set
+     */
+    public void setClassification_name(String classification_name) {
+        this.classification_name = classification_name;
+    }
+
+    /**
+     * @return the degree_program
+     */
+    public String getDegree_program() {
+        return degree_program;
+    }
+
+    /**
+     * @param degree_program the degree_program to set
+     */
+    public void setDegree_program(String degree_program) {
+        this.degree_program = degree_program;
+    }
+
+    /**
+     * @return the year
+     */
+    public int getYear() {
+        return year;
+    }
+
+    /**
+     * @param year the year to set
+     */
+    public void setYear(int year) {
+        this.year = year;
     }
 }

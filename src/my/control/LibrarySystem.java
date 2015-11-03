@@ -20,6 +20,7 @@ public class LibrarySystem
     public static String patron_type;
     public static String camera_id=null;
     public static int patron_id;
+    public static int hold=0;
     
     public static void setup()
     {

@@ -41,6 +41,14 @@ public class ButtonEvents {
 
         ResultSet rs = st.executeQuery();
         if (rs.next()) {
+            PreparedStatement st1 = LibrarySystem.connection.prepareStatement("Select * from classification where classification_id=?");
+            st1.setInt(1, rs.getInt("classification_id"));
+            ResultSet rs1 = st1.executeQuery();
+            if (rs1.next()) {
+                s.setClassification_name(rs1.getString("classification_name"));
+                s.setDegree_program(rs1.getString("degree_program"));
+                s.setYear(rs1.getInt("year"));
+            }
 
             s.setStudent_id(rs.getString("student_id"));
             s.setFirst_name(rs.getString("first_name"));
@@ -55,7 +63,6 @@ public class ButtonEvents {
             s.setDob(rs.getDate("dob"));
             s.setNationality(rs.getString("nationality"));
             s.setDepartment(rs.getString("department"));
-            s.setClassification_id(rs.getString("classification_id"));
             s.setAccount_balance(rs.getString("account_balance"));
         }
 
@@ -132,13 +139,12 @@ public class ButtonEvents {
         Boolean flag = false;
 
         /*if(book_detail.getE_copy().equalsIgnoreCase("Y"))
-            return 1;*/
-        
+         return 1;*/
         if (library_name.equals(LibrarySystemConst.HUNT)) {
             set_clause = "HUNT_AVAIL_NO";
         } else {
             set_clause = "HILL_AVAIL_NO";
-        }        
+        }
         LibrarySystem.connection.setAutoCommit(false);
 
         query = "update books set " + set_clause + "= ? where ISBN_NO = ?";
@@ -146,23 +152,19 @@ public class ButtonEvents {
         st = LibrarySystem.connection.prepareStatement(query);
         st.setInt(1, LibraryAPI.getAvailableBooks(book_detail.getIsbn_no(), set_clause) - 1);
         st.setString(2, book_detail.getIsbn_no());
-            
-        if(book_detail.getE_copy().equalsIgnoreCase("Y"))
-        {
+
+        if (book_detail.getE_copy().equalsIgnoreCase("Y")) {
             flag = true;
-        }
-        else
-        {
+        } else {
             flag = (st.executeUpdate() != 0);
         }
-        
-        if (flag) 
-        {        
+
+        if (flag) {
             /* Update the checkout_books */
             System.out.println("upadted");
             query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME,LIB_NAME,E_COPY) values (?,?,?,?,?)";
             st = LibrarySystem.connection.prepareStatement(query);
-            
+
             st.setInt(1, LibraryAPI.getPubllicationId(book_detail.getIsbn_no()));
             st.setInt(2, LibrarySystem.patron_id);
             st.setTimestamp(3, new Timestamp(new java.util.Date(System.currentTimeMillis()).getTime()));
@@ -174,13 +176,11 @@ public class ButtonEvents {
                 LibrarySystem.connection.commit();
                 LibrarySystem.connection.setAutoCommit(true);
                 return 1;
-            }
-            else
-            {
+            } else {
                 System.out.println("Error while insert into checkout");
-            }        
-        }        
-            
+            }
+        }
+
         LibrarySystem.connection.rollback();
         LibrarySystem.connection.setAutoCommit(true);
         return -1;
@@ -190,12 +190,12 @@ public class ButtonEvents {
         String query = null;
         String set_clause;
         boolean flag;
-        
-        if(journal_detail.getE_copy().equalsIgnoreCase("Y"))
-            return 1;        
 
-        if (library_name.equals(LibrarySystemConst.HUNT)) 
-        {
+        if (journal_detail.getE_copy().equalsIgnoreCase("Y")) {
+            return 1;
+        }
+
+        if (library_name.equals(LibrarySystemConst.HUNT)) {
             set_clause = "HUNT_AVAIL_NO";
         } else {
             set_clause = "HILL_AVAIL_NO";
@@ -206,18 +206,14 @@ public class ButtonEvents {
         st = LibrarySystem.connection.prepareStatement(query);
         st.setInt(1, LibraryAPI.getAvailableJournals(journal_detail.getIssn_no() , set_clause) - 1);
         st.setString(2, journal_detail.getIssn_no());
-        
-        if(journal_detail.getE_copy().equalsIgnoreCase("Y"))
-        {
+
+        if (journal_detail.getE_copy().equalsIgnoreCase("Y")) {
             flag = true;
-        }
-        else
-        {
+        } else {
             flag = (st.executeUpdate() != 0);
         }
-        
-        if(flag)
-        {      
+
+        if (flag) {
             /* Update the checkout_books */
             query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME,LIB_NAME,E_COPY) values(?,?,?,?,?)";
             st = LibrarySystem.connection.prepareStatement(query);
@@ -225,10 +221,9 @@ public class ButtonEvents {
             st.setInt(2, LibrarySystem.patron_id);
             st.setDate(3, new java.sql.Date(System.currentTimeMillis()));
             st.setString(4, library_name);
-            st.setString(5, journal_detail.getE_copy());
-            
-            if(st.executeUpdate() != 0)
-            {
+            st.setString(5, journal_detail.getE_copy());            
+
+            if (st.executeUpdate() != 0) {
                 LibrarySystem.connection.commit();
                 LibrarySystem.connection.setAutoCommit(true);
                 return 1;
@@ -243,12 +238,12 @@ public class ButtonEvents {
         String query = null;
         String set_clause;
         boolean flag;
-        
-        if(conf_detail.getE_copy().equalsIgnoreCase("Y"))
-            return 1;               
 
-        if (library_name.equals(LibrarySystemConst.HUNT)) 
-        {
+        if (conf_detail.getE_copy().equalsIgnoreCase("Y")) {
+            return 1;
+        }
+
+        if (library_name.equals(LibrarySystemConst.HUNT)) {
             set_clause = "HUNT_AVAIL_NO";
         } else {
             set_clause = "HILL_AVAIL_NO";
@@ -259,18 +254,14 @@ public class ButtonEvents {
         st = LibrarySystem.connection.prepareStatement(query);
         st.setInt(1, LibraryAPI.getAvailableConf(conf_detail.getConfnum(), set_clause) - 1);
         st.setString(2, conf_detail.getConfnum());
-        
-        if(conf_detail.getE_copy().equalsIgnoreCase("Y"))
-        {
+
+        if (conf_detail.getE_copy().equalsIgnoreCase("Y")) {
             flag = true;
-        }
-        else
-        {
+        } else {
             flag = (st.executeUpdate() != 0);
         }
-        
-        if(st.executeUpdate() != 0)
-        {
+
+        if (st.executeUpdate() != 0) {
             /* Update the checkout_books */
             query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME,LIB_NAME,E_COPY) values(?,?,?,?,?)";
             st = LibrarySystem.connection.prepareStatement(query);
@@ -302,7 +293,7 @@ public class ButtonEvents {
         ("select * from books b,courses_books bc where b.isbn_no = bc.isbn_no and (b.hunt_avail_no > 0 or b.hill_avail_no > 0) and bc.course_id IN (select course_id from enrollment where student_id = ?)");       
 
         st.setString(1, LibrarySystem.login_id);
-        
+
         try (ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
                 book = new Books();
@@ -393,50 +384,51 @@ public class ButtonEvents {
         }
     }
 
-    public static void print() throws Exception{
-        
+    public static void print() throws Exception {
+
         System.out.println("print");
         PreparedStatement stmnt = LibrarySystem.connection.prepareCall("delete from reserve_room where start_time<= ?");
         stmnt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
-        ResultSet rs = stmnt.executeQuery();      
-             //System.out.println("query");
-        while(rs.next()){
+        ResultSet rs = stmnt.executeQuery();
+        //System.out.println("query");
+        while (rs.next()) {
             System.out.println("hi");
             //System.out.println(rs.getString("start_time"));}
-        
-    }}
-    
-    public static String room_notify()throws Exception{
+
+        }
+    }
+
+    public static String room_notify() throws Exception {
         Timestamp one_hour;
         PreparedStatement stmnt = LibrarySystem.connection.prepareCall("select * from reserve_room where patron_ID=? and start_time<=? and end_time>=?");
         stmnt.setInt(1, LibrarySystem.patron_id);
         stmnt.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
         stmnt.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-        ResultSet rs = stmnt.executeQuery(); 
-        String notice=null;
-        while(rs.next()){
+        ResultSet rs = stmnt.executeQuery();
+        String notice = null;
+        while (rs.next()) {
             /*Calendar calendar=Calendar.getInstance();
-            calendar.setTimeInMillis(rs.getTimestamp("start_time").getTime());
-            calendar.add(Calendar.HOUR,1);
+             calendar.setTimeInMillis(rs.getTimestamp("start_time").getTime());
+             calendar.add(Calendar.HOUR,1);
        
-            one_hour=new Timestamp(calendar.getTimeInMillis());*/
-            if(System.currentTimeMillis()-rs.getTimestamp("start_time").getTime()>=(60*60*1000)){
-                JOptionPane.showMessageDialog(null, "Sorry your room "+rs.getString("room_no")+ " is gone, try next time");
+             one_hour=new Timestamp(calendar.getTimeInMillis());*/
+            if (System.currentTimeMillis() - rs.getTimestamp("start_time").getTime() >= (60 * 60 * 1000)) {
+                JOptionPane.showMessageDialog(null, "Sorry your room " + rs.getString("room_no") + " is gone, try next time");
                 return null;
             }
             System.out.println(rs.getString("room_no"));
             System.out.println(rs.getString("lib_name"));
             System.out.println(rs.getString("start_time"));
             System.out.println(rs.getString("end_time"));
-            
-             notice="Your room "+rs.getString("room_no")+" at "+ rs.getString("lib_name")+" library is ready to be checked out starting at "+ rs.getTimestamp("start_time").toString();
-            
+
+            notice = "Your room " + rs.getString("room_no") + " at " + rs.getString("lib_name") + " library is ready to be checked out starting at " + rs.getTimestamp("start_time").toString();
+
         }
         return notice;
     }
 
-    public static void reserve_room(String room_no, String library,Timestamp start,Timestamp end) throws Exception{
-        
+    public static void reserve_room(String room_no, String library, Timestamp start, Timestamp end) throws Exception {
+
         //System.out.println(LibrarySystem.patron_id+" "+room_no+" "+library+" "+" "+start+" "+end);
         PreparedStatement stmnt = LibrarySystem.connection.prepareCall("insert into reserve_room(patron_ID,room_no,lib_name,start_time,end_time) values(?,?,?,?,?)");
         stmnt.setInt(1, LibrarySystem.patron_id);
@@ -445,70 +437,60 @@ public class ButtonEvents {
         stmnt.setTimestamp(4, start);
         stmnt.setTimestamp(5, end);
         ResultSet rs = stmnt.executeQuery();
-        String message="Congratulations! You have booked room "+room_no+" for "+start.toString()+" at the "+library+" library. Login at the start time to checkout!";
+        String message = "Congratulations! You have booked room " + room_no + " for " + start.toString() + " at the " + library + " library. Login at the start time to checkout!";
         //System.out.println("Done! Pooja you rock!!");
         JOptionPane.showMessageDialog(null, message);
     }
 
-    
-    /*public static ArrayList<Rooms> checkout_room()throws Exception{
-        ArrayList<Rooms> room = new ArrayList<>();
-        Rooms r = new Rooms();
-        
-        PreparedStatement stmnt = LibrarySystem.connection.prepareCall("Select R.room_no, R.floor_no, R.type, R.capacity,R.lib_name from rooms R, reserve_room R1 where R.room_no=R1.room_no and R1.patron_ID=1");
-        //stmnt.setInt(1, LibrarySystem.patron_id);
-
-        ResultSet rs = stmnt.executeQuery();
-        System.out.println("yes");
-        while (rs.next()) {
-            System.out.println("query");
-            r=new Rooms();
-            
-            System.out.println(rs.getString("room_no"));
-            r.setRoom_no(rs.getString("room_no"));
-            r.setFloor_no(rs.getInt("floor_no"));
-            r.setCapacity(rs.getInt("capacity"));
-            r.setLib_name(rs.getString("lib_name"));
-            r.setType(rs.getString("type"));
-            room.add(r);
-        }
-        return room;
-    }
-    */
-    
-    public static ArrayList<Reserve_room> checkout_room() throws Exception{
+    public static ArrayList<Reserve_room> checkout_room() throws Exception {
         Timestamp one_hour;
         PreparedStatement stmnt = LibrarySystem.connection.prepareCall("select * from reserve_room where patron_ID=? and start_time<=? and end_time>=?");
         stmnt.setInt(1, LibrarySystem.patron_id);
         stmnt.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
         stmnt.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-        ResultSet rs = stmnt.executeQuery(); 
+        ResultSet rs = stmnt.executeQuery();
         //String notice=null;
-                Reserve_room r = new Reserve_room();
-                ArrayList<Reserve_room> room = new ArrayList<>();
+        Reserve_room r = new Reserve_room();
+        ArrayList<Reserve_room> room = new ArrayList<>();
 
-                
-        while(rs.next()){
-            
-            if(System.currentTimeMillis()-rs.getTimestamp("start_time").getTime()>=(60*60*1000)){
+        while (rs.next()) {
+
+            if (System.currentTimeMillis() - rs.getTimestamp("start_time").getTime() >= (60 * 60 * 1000)) {
                 //JOptionPane.showMessageDialog(null, "Sorry your room "+rs.getString("room_no")+ " is gone, try next time");
                 return null;
             }
-            r=new Reserve_room();
+            r = new Reserve_room();
             System.out.println(rs.getString("room_no"));
             r.setRoom_no(rs.getString("room_no"));
             r.setLib_name(rs.getString("lib_name"));
             r.setStart_time(rs.getTimestamp("start_time"));
             room.add(r);
-            
+
         }
         return room;
     }
     
-    //public static void 
+    public static void update_checkout_room(String room_no, Timestamp start) throws Exception{
+        PreparedStatement stmnt = LibrarySystem.connection.prepareCall("update reserve_room set checkout= ? where room_no= ? and patron_ID= ? and start_time= ? ");
+         stmnt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+         stmnt.setString(2, room_no);
+         stmnt.setInt(3, LibrarySystem.patron_id);
+         stmnt.setTimestamp(4, start);
+         try{
+                      stmnt.executeUpdate();
+
+         }
+         catch (SQLException e)
+         {
+         
+         }
+         System.out.println("runs");
+         
+    }
     
-    public static ArrayList<Rooms> getRoom(String lib_name, int capacity, String type, Timestamp start, Timestamp end) throws SQLException 
-    {
+    
+
+    public static ArrayList<Rooms> getRoom(String lib_name, int capacity, String type, Timestamp start, Timestamp end) throws SQLException {
         Rooms r = new Rooms();
         Reserve_room rr = new Reserve_room();
 
@@ -526,11 +508,10 @@ public class ButtonEvents {
         stmnt.setTimestamp(6, end);
         stmnt.setTimestamp(7, end);
 
-
         ResultSet rs = stmnt.executeQuery();
         System.out.println("query");
         while (rs.next()) {
-            r=new Rooms();
+            r = new Rooms();
             System.out.println(rs.getString("room_no"));
             r.setRoom_no(rs.getString("room_no"));
             r.setFloor_no(rs.getInt("floor_no"));
@@ -635,7 +616,7 @@ public class ButtonEvents {
         Timestamp tstamp_tocheck = new Timestamp(zeroedDate.getTime());
         Timestamp tstamp_current = new Timestamp(date.getTime());
         Timestamp tstamp_8 = tstamp_tocheck;
-        
+
         cal = Calendar.getInstance();
         cal.setTime(date);
         cal.set(Calendar.HOUR_OF_DAY, 10);
@@ -663,7 +644,7 @@ public class ButtonEvents {
         ResultSet rs = st.executeQuery();
         while (rs.next()) {
             status = 1;
-            
+
             WaitlistCamera wc = new WaitlistCamera();
             wc.setRequest_time(rs.getTimestamp("request_time"));
             wc.setCamera_id(rs.getString("camera_id"));
@@ -716,7 +697,7 @@ public class ButtonEvents {
     public static String camera_hold() throws SQLException {
         Date date = new Date(System.currentTimeMillis());
         Timestamp tstamp1 = new Timestamp(date.getTime());
-        
+
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.set(Calendar.HOUR_OF_DAY, 12);
@@ -735,16 +716,11 @@ public class ButtonEvents {
         //cal.setTime(date);
         zeroedDate = cal.getTime();
         Timestamp tstamp_8 = new Timestamp(zeroedDate.getTime());
-                String str = "";
+        String str = "";
 
-            if (tstamp1.after(tstamp_8) && tstamp1.before(tstamp_12)) {
+        if (tstamp1.after(tstamp_8) && tstamp1.before(tstamp_12)) {
 
-        st = LibrarySystem.connection.prepareStatement("insert into camera_checkout (patron_id,camera_id, checkout) values (?,?,?)");
-        st.setInt(1, LibrarySystem.patron_id);
-        st.setString(2, LibrarySystem.camera_id);
-        st.setTimestamp(3, tstamp1);
-//        System.out.println();
-        if (st.executeUpdate() == 1) {
+            LibrarySystem.hold = 1;
             cal = Calendar.getInstance();
             cal.setTime(date);
             cal.set(Calendar.HOUR_OF_DAY, 8);
@@ -758,10 +734,10 @@ public class ButtonEvents {
             st = LibrarySystem.connection.prepareStatement("delete from waitlist_camera  where request_time < ?");
             st.setTimestamp(1, tstamp);
             System.out.println(tstamp.toString());
-            try {                              
+            try {
 
                 //System.out.println(
-                        st.executeUpdate();
+                st.executeUpdate();
 
             } catch (SQLException e) {
 
@@ -780,11 +756,12 @@ public class ButtonEvents {
                 System.out.println(e.getMessage());
 
             }
-        }
-           
-        }
-            else if (tstamp1.after(tstamp_12)){
-                st = LibrarySystem.connection.prepareStatement("delete from waitlist_camera where request_time<?");
+            LibrarySystem.connection.commit();
+            LibrarySystem.connection.setAutoCommit(true);
+            return "camera is on hold, pick it up before 12";
+
+        } else if (tstamp1.after(tstamp_12)) {
+            st = LibrarySystem.connection.prepareStatement("delete from waitlist_camera where request_time<?");
             st.setTimestamp(1, tstamp_12);
             try {
                 st.executeUpdate();
@@ -793,11 +770,13 @@ public class ButtonEvents {
                 System.out.println(e.getMessage());
 
             }
-            }
-            
- LibrarySystem.connection.commit();
+            LibrarySystem.connection.commit();
             LibrarySystem.connection.setAutoCommit(true);
-        str = "Camera is on hold. Pick it up before 12";
+            return "camera cant be on hold anymore";
+        }
+
+        LibrarySystem.connection.commit();
+        LibrarySystem.connection.setAutoCommit(true);
         return str;
     }
 
@@ -810,7 +789,6 @@ public class ButtonEvents {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        cal.setTime(date);
         Date zeroedDate = cal.getTime();
 
         Timestamp tstamp12 = new Timestamp(zeroedDate.getTime());
@@ -821,26 +799,35 @@ public class ButtonEvents {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        cal.setTime(date);
         zeroedDate = cal.getTime();
         Timestamp tstamp8 = new Timestamp(zeroedDate.getTime());
-        if (tstamp_current.after(tstamp8) && tstamp_current.before(tstamp12)) {
+        /*LibrarySystem.hold=1;
+         LibrarySystem.patron_id=1;
+         LibrarySystem.camera_id="CA1";
+         System.out.println(tstamp_current.toString());
+         System.out.println(tstamp8.toString());
+         System.out.println(tstamp12.toString());*/
 
-            st = LibrarySystem.connection.prepareStatement("update camera_checkout set start_time = ? where patron_id =? and camera_id = ?");
-            st.setInt(2, LibrarySystem.patron_id);
-            st.setString(3, LibrarySystem.camera_id);
-            st.setTimestamp(1, tstamp_current);
+        if (tstamp_current.after(tstamp8) && tstamp_current.before(tstamp12) && LibrarySystem.hold == 1) {
+            st = LibrarySystem.connection.prepareStatement("insert into camera_checkout (patron_id,camera_id,start_time, checkout) values (?,?,?,?)");
+            st.setInt(1, LibrarySystem.patron_id);
+            st.setString(2, LibrarySystem.camera_id);
+            st.setTimestamp(3, tstamp8);
+            st.setTimestamp(4, tstamp_current);
             try {
+
                 st.executeUpdate();
             } catch (SQLException e) {
 
                 System.out.println(e.getMessage());
 
             }
-            
-        }
-        else if (tstamp_current.after(tstamp12)){
-                st = LibrarySystem.connection.prepareStatement("delete from waitlist_camera where request_time<?");
+            LibrarySystem.connection.commit();
+            LibrarySystem.connection.setAutoCommit(true);
+            return "camera is checked out";
+
+        } else if (tstamp_current.after(tstamp12)) {
+            st = LibrarySystem.connection.prepareStatement("delete from waitlist_camera where request_time<?");
             st.setTimestamp(1, tstamp12);
             try {
                 st.executeUpdate();
@@ -849,17 +836,20 @@ public class ButtonEvents {
                 System.out.println(e.getMessage());
 
             }
-            
-        LibrarySystem.camera_id = null;
-        }
-        LibrarySystem.connection.commit();
+            LibrarySystem.connection.commit();
             LibrarySystem.connection.setAutoCommit(true);
+            return "camera cant be checked out anymore";
+
+        }
+        LibrarySystem.camera_id = null;
+        LibrarySystem.hold = 0;
+        LibrarySystem.connection.commit();
+        LibrarySystem.connection.setAutoCommit(true);
         return str;
     }
 
     public static ArrayList<Camera> camera_resources() throws SQLException {
         Date date = new Date(System.currentTimeMillis());
-       
 
         Timestamp tstamp_current = new Timestamp(date.getTime());
         Camera c;
@@ -878,12 +868,11 @@ public class ButtonEvents {
                 ResultSet rs1 = st1.executeQuery();
                 if (rs1.next()) {
                     c = new Camera();
-                    
+
                     c.setCamera_id(rs1.getString("camera_id"));
                     c.setModel(rs1.getString("model"));
                     cameras.add(c);
                 }
-                
 
             }
             //System.out.println(cameras);
@@ -948,7 +937,7 @@ public class ButtonEvents {
         cal.set(Calendar.MILLISECOND, 0);
         end_time = new Timestamp(cal.getTimeInMillis());
         int hours = (int) (tstamp_current.getTime() - end_time.getTime()) / (1000 * 60 * 60);
-                    System.out.println(hours);
+        System.out.println(hours);
 
         PreparedStatement st1 = LibrarySystem.connection.prepareStatement("Select * from late_fee where resource_type = ?");
         st1.setString(1, "CAMERA");
@@ -963,13 +952,13 @@ public class ButtonEvents {
                 rs = st.executeQuery();
                 if (rs.next()) {
                     System.out.println(fees);
-                    int val = (int ) (rs.getInt(1) - fees * ( Math.floor((double) (hours / frequency_hours))));
+                    int val = (int) (rs.getInt(1) - fees * (Math.floor((double) (hours / frequency_hours))));
                     st = LibrarySystem.connection.prepareStatement("Update " + LibrarySystem.patron_type + " set account_balance = ? where " + LibrarySystem.patron_type + "_id =?");
                     st.setInt(1, val);
                     st.setString(2, LibrarySystem.login_id);
                     try {
-                    System.out.println(val);
-                        
+                        System.out.println(val);
+
                         st.executeUpdate();
                     } catch (SQLException e) {
 
@@ -978,23 +967,23 @@ public class ButtonEvents {
                     }
 
                 }
-            } 
-            
-                st = LibrarySystem.connection.prepareStatement("Delete from camera_checkout where camera_id = ? and patron_id=? and start_time=?");
-                st.setString(1, camera_id);
-                st.setInt(2, LibrarySystem.patron_id);
-                st.setTimestamp(3, tst);
-                try {
-                    st.executeUpdate();
-                } catch (SQLException e) {
+            }
 
-                    System.out.println(e.getMessage());
+            st = LibrarySystem.connection.prepareStatement("Delete from camera_checkout where camera_id = ? and patron_id=? and start_time=?");
+            st.setString(1, camera_id);
+            st.setInt(2, LibrarySystem.patron_id);
+            st.setTimestamp(3, tst);
+            try {
+                st.executeUpdate();
+            } catch (SQLException e) {
 
-                }
-            
+                System.out.println(e.getMessage());
+
+            }
+
         }
-         LibrarySystem.connection.commit();
-         LibrarySystem.connection.setAutoCommit(true);
+        LibrarySystem.connection.commit();
+        LibrarySystem.connection.setAutoCommit(true);
         return str;
     }
 
@@ -1019,8 +1008,7 @@ public class ButtonEvents {
 
     }
 
-    public static int return_resource(String resource_type, int p_id, String id, Date start_time) throws SQLException 
-    {
+    public static int return_resource(String resource_type, int p_id, String id, Date start_time) throws SQLException {
         int hours;
         int late_fee;
         int fees;
@@ -1034,6 +1022,7 @@ public class ButtonEvents {
         
         LibrarySystem.connection.setAutoCommit(false);
         
+
         library_name = LibraryAPI.getLibraryName(p_id, LibrarySystem.patron_id);
         System.out.println(":" + library_name);
 
@@ -1093,7 +1082,8 @@ System.out.println(table_name + ":" + where_col);
             LibrarySystem.connection.setAutoCommit(true);
             return -1;
         }
-        
+
+        //
         System.out.println("::" + LibraryAPI.isECopy(p_id, LibrarySystem.patron_id));
         
         if(LibraryAPI.isECopy(p_id, LibrarySystem.patron_id).equalsIgnoreCase("Y"))
@@ -1133,25 +1123,23 @@ System.out.println(table_name + ":" + where_col);
 
         return 1;
     }
-    
-    public static ArrayList<CheckOut> checkout_book_list()throws SQLException
-    {
+
+    public static ArrayList<CheckOut> checkout_book_list() throws SQLException {
         ArrayList<CheckOut> checkout_book_list = new ArrayList<>();
         CheckOut co;
         Books bk;
-        
+
         String query = null;
-        
+
         query = "select b.ISBN_NO,b.TITLE,b.GROUP_ID,c.PUBLICATION_ID,c.PATRON_ID,c.START_TIME,c.LIB_NAME from books b,checkout c,publication p where b.isbn_no = p.publication_id and p.id = c.publication_id and c.patron_id = ?";
-    
+
         st = LibrarySystem.connection.prepareStatement(query);
-        
+
         st.setInt(1, LibrarySystem.patron_id);
-        
+
         ResultSet rs = st.executeQuery();
-        
-        while(rs.next())
-        {
+
+        while (rs.next()) {
             co = new CheckOut();
             bk = new Books();
             bk.setIsbn_no(rs.getString("ISBN_NO"));
@@ -1162,30 +1150,28 @@ System.out.println(table_name + ":" + where_col);
             co.setPatron_id(rs.getInt("PATRON_ID"));
             co.setStart_time(rs.getDate("START_TIME"));
             co.setLib_name(rs.getString("LIB_NAME"));
-            co.setBooks_det(bk);            
+            co.setBooks_det(bk);
             checkout_book_list.add(co);
         }
         return checkout_book_list;
     }
-    
-    public static ArrayList<CheckOut> checkout_journal_list()throws SQLException
-    {
+
+    public static ArrayList<CheckOut> checkout_journal_list() throws SQLException {
         ArrayList<CheckOut> checkout_journal_list = new ArrayList<>();
         CheckOut co;
         Journals jr;
-        
+
         String query = null;
-        
+
         query = "select j.ISSN_NO,j.TITLE,j.GROUP_ID,c.PUBLICATION_ID,c.PATRON_ID,c.START_TIME,c.LIB_NAME from journals j,checkout c,publication p where j.ISSN_NO = p.publication_id and p.id = c.publication_id and c.patron_id = ?";
-    
+
         st = LibrarySystem.connection.prepareStatement(query);
-        
+
         st.setInt(1, LibrarySystem.patron_id);
-        
+
         ResultSet rs = st.executeQuery();
-        
-        while(rs.next())
-        {
+
+        while (rs.next()) {
             co = new CheckOut();
             jr = new Journals();
             jr.setIssn_no(rs.getString("ISSN_NO"));
@@ -1201,29 +1187,27 @@ System.out.println(table_name + ":" + where_col);
         }
         return checkout_journal_list;
     }
-    
-    public static ArrayList<CheckOut> checkout_conf_list()throws SQLException
-    {
+
+    public static ArrayList<CheckOut> checkout_conf_list() throws SQLException {
         ArrayList<CheckOut> checkout_conf_list = new ArrayList<>();
         CheckOut co;
         Conf cf;
-        
+
         String query = null;
-        
+
         query = "select cf.CONF_NUM,cf.TITLE,cf.GROUP_ID,c.PUBLICATION_ID,c.PATRON_ID,c.START_TIME,c.LIB_NAME from conf cf,checkout c,publication p where cf.CONF_NUM = p.publication_id and p.id = c.publication_id and c.patron_id = ?";
-    
+
         st = LibrarySystem.connection.prepareStatement(query);
-        
+
         st.setInt(1, LibrarySystem.patron_id);
-        
+
         ResultSet rs = st.executeQuery();
-        
-        while(rs.next())
-        {
+
+        while (rs.next()) {
             co = new CheckOut();
             cf = new Conf();
             cf.setConfnum(rs.getString("ISSN_NO"));
-            cf.setTitle(rs.getString("TITLE"));            
+            cf.setTitle(rs.getString("TITLE"));
             cf.setGroup_id(rs.getInt("GROUP_ID"));
             cf.setAuthor_list(LibraryAPI.getAuthorList(cf.getGroup_id()));
             co.setPublication_id(rs.getInt("PUBLICATION_ID"));
