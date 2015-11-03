@@ -6,6 +6,7 @@
 package my.control;
 
 import TableStrcuture.Rooms;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,8 +49,8 @@ public class Test {
 
         //System.out.println(d);
         try{
-        //ButtonEvents.print();
-            System.out.println("run");
+        ButtonEvents.update_checkout_room("R2", new Timestamp(System.currentTimeMillis()));
+            //System.out.println("run");
 //            ArrayList<Rooms> a=ButtonEvents.checkout_room();
             
             
