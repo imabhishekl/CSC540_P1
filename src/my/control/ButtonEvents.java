@@ -168,10 +168,9 @@ public class ButtonEvents {
             st.setInt(1, LibraryAPI.getPubllicationId(book_detail.getIsbn_no()));
             st.setInt(2, LibrarySystem.patron_id);
             st.setTimestamp(3, new Timestamp(new java.util.Date(System.currentTimeMillis()).getTime()));
-            st.setString(4, library_name);            
+            st.setString(4, library_name);
             st.setString(5, book_detail.getE_copy());
-            if (st.executeUpdate() != 0) 
-            {
+            if (st.executeUpdate() != 0) {
                 System.out.println("Inserted in checkout");
                 LibrarySystem.connection.commit();
                 LibrarySystem.connection.setAutoCommit(true);
@@ -204,7 +203,7 @@ public class ButtonEvents {
 
         query = "update journals set " + set_clause + "= ? where ISSN_NO = ?";
         st = LibrarySystem.connection.prepareStatement(query);
-        st.setInt(1, LibraryAPI.getAvailableJournals(journal_detail.getIssn_no() , set_clause) - 1);
+        st.setInt(1, LibraryAPI.getAvailableJournals(journal_detail.getIssn_no(), set_clause) - 1);
         st.setString(2, journal_detail.getIssn_no());
 
         if (journal_detail.getE_copy().equalsIgnoreCase("Y")) {
@@ -221,7 +220,7 @@ public class ButtonEvents {
             st.setInt(2, LibrarySystem.patron_id);
             st.setDate(3, new java.sql.Date(System.currentTimeMillis()));
             st.setString(4, library_name);
-            st.setString(5, journal_detail.getE_copy());            
+            st.setString(5, journal_detail.getE_copy());
 
             if (st.executeUpdate() != 0) {
                 LibrarySystem.connection.commit();
@@ -270,9 +269,8 @@ public class ButtonEvents {
             st.setDate(3, new java.sql.Date(System.currentTimeMillis()));
             st.setString(4, library_name);
             st.setString(5, conf_detail.getE_copy());
-            
-            if(st.executeUpdate() != 0)
-            {
+
+            if (st.executeUpdate() != 0) {
                 LibrarySystem.connection.commit();
                 LibrarySystem.connection.setAutoCommit(true);
                 return 1;
@@ -283,14 +281,12 @@ public class ButtonEvents {
         return -1;
     }
 
-    public static ArrayList<Books> get_books() throws SQLException 
-    {
+    public static ArrayList<Books> get_books() throws SQLException {
         Books book;
 
         ArrayList<Books> bookslist = new ArrayList<>();
-        
-        st = LibrarySystem.connection.prepareStatement
-        ("select * from books b,courses_books bc where b.isbn_no = bc.isbn_no and (b.hunt_avail_no > 0 or b.hill_avail_no > 0) and bc.course_id IN (select course_id from enrollment where student_id = ?)");       
+
+        st = LibrarySystem.connection.prepareStatement("select * from books b,courses_books bc where b.isbn_no = bc.isbn_no and (b.hunt_avail_no > 0 or b.hill_avail_no > 0) and bc.course_id IN (select course_id from enrollment where student_id = ?)");
 
         st.setString(1, LibrarySystem.login_id);
 
@@ -437,6 +433,8 @@ public class ButtonEvents {
         stmnt.setTimestamp(4, start);
         stmnt.setTimestamp(5, end);
         ResultSet rs = stmnt.executeQuery();
+        LibrarySystem.connection.commit();
+        LibrarySystem.connection.setAutoCommit(true);
         String message = "Congratulations! You have booked room " + room_no + " for " + start.toString() + " at the " + library + " library. Login at the start time to checkout!";
         //System.out.println("Done! Pooja you rock!!");
         JOptionPane.showMessageDialog(null, message);
@@ -469,26 +467,24 @@ public class ButtonEvents {
         }
         return room;
     }
-    
-    public static void update_checkout_room(String room_no, Timestamp start) throws Exception{
-        PreparedStatement stmnt = LibrarySystem.connection.prepareCall("update reserve_room set checkout= ? where room_no= ? and patron_ID= ? and start_time= ? ");
-         stmnt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
-         stmnt.setString(2, room_no);
-         stmnt.setInt(3, LibrarySystem.patron_id);
-         stmnt.setTimestamp(4, start);
-         try{
-                      stmnt.executeUpdate();
 
-         }
-         catch (SQLException e)
-         {
-         
-         }
-         System.out.println("runs");
-         
+    public static void update_checkout_room(String room_no, Timestamp start) throws Exception {
+        PreparedStatement stmnt = LibrarySystem.connection.prepareCall("update reserve_room set checkout= ? where room_no= ? and patron_ID= ? and start_time= ? ");
+        stmnt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+        stmnt.setString(2, room_no);
+        stmnt.setInt(3, LibrarySystem.patron_id);
+        stmnt.setTimestamp(4, start);
+        try {
+            stmnt.executeUpdate();
+
+        } catch (SQLException e) {
+
+        }
+        System.out.println("runs");
+        LibrarySystem.connection.commit();
+        LibrarySystem.connection.setAutoCommit(true);
+
     }
-    
-    
 
     public static ArrayList<Rooms> getRoom(String lib_name, int capacity, String type, Timestamp start, Timestamp end) throws SQLException {
         Rooms r = new Rooms();
@@ -1016,13 +1012,11 @@ public class ButtonEvents {
         String table_name = null;
         String set_clause;
         String where_col = null;
-        String library_name = null;        
+        String library_name = null;
 
-        int avail_no = 0;        
-        
-        LibrarySystem.connection.setAutoCommit(false);
-        
+        int avail_no = 0;
 
+        //LibrarySystem.connection.setAutoCommit(false);
         library_name = LibraryAPI.getLibraryName(p_id, LibrarySystem.patron_id);
         System.out.println(":" + library_name);
 
@@ -1056,19 +1050,19 @@ public class ButtonEvents {
 
         query = "update " + table_name + " set " + set_clause + " = ? where "
                 + where_col + " = ? ";
-System.out.println(table_name + ":" + where_col);
+        System.out.println(table_name + ":" + where_col);
         st = LibrarySystem.connection.prepareStatement(query);
 
         st.setInt(1, avail_no);
         st.setString(2, id);
-
+        System.out.println(st.executeUpdate());
         if (st.executeUpdate() == 0) {
             System.out.println("No rows updated");
             LibrarySystem.connection.setAutoCommit(true);
             return -1;
         }
         System.out.println("After Executing Update");
-        
+
         Date end_time = new Date(System.currentTimeMillis());
 
         /* Update the check out book table */
@@ -1085,9 +1079,8 @@ System.out.println(table_name + ":" + where_col);
 
         //
         System.out.println("::" + LibraryAPI.isECopy(p_id, LibrarySystem.patron_id));
-        
-        if(LibraryAPI.isECopy(p_id, LibrarySystem.patron_id).equalsIgnoreCase("Y"))
-        {
+
+        if (LibraryAPI.isECopy(p_id, LibrarySystem.patron_id).equalsIgnoreCase("Y")) {
             LibrarySystem.connection.setAutoCommit(true);
             LibrarySystem.connection.commit();
             return 1;
@@ -1104,9 +1097,7 @@ System.out.println(table_name + ":" + where_col);
         if (rs.next()) {
             fees = rs.getInt(1);
             hours = rs.getInt(2);
-        }
-        else
-        {
+        } else {
             LibrarySystem.connection.setAutoCommit(true);
             return -1;
         }
@@ -1117,7 +1108,7 @@ System.out.println(table_name + ":" + where_col);
         late_fee = (int) LibraryAPI.getLateFees(hours, fees, no_of_hours);
 
         LibraryAPI.updateBalance(getBalance() - late_fee);
-                
+
         LibrarySystem.connection.setAutoCommit(true);
         LibrarySystem.connection.commit();
 
@@ -1219,11 +1210,8 @@ System.out.println(table_name + ":" + where_col);
         }
         return checkout_conf_list;
     }
-    
-    public static void getNotification()
-    {
-        
-        
-    }           
+
+    public static void getNotification() {
+
+    }
 }
-    
