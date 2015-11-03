@@ -3,17 +3,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/home/amrit/CSC540_P1/src/my/control/Test.java</file>
-            <file>file:/home/amrit/CSC540_P1/src/TableStrcuture/CameraCheckout.java</file>
-            <file>file:/home/amrit/CSC540_P1/src/my/control/ButtonEvents.java</file>
-            <file>file:/home/amrit/CSC540_P1/src/my/dbproject/CameraCheckoutForm.java</file>
-=======
-            <file>file:/C:/Users/Pooja%20Asher/CSC540_P1/src/my/dbproject/StudyRoomForm.java</file>
-            <file>file:/C:/Users/Pooja%20Asher/CSC540_P1/src/my/control/ButtonEvents.java</file>
-            <file>file:/C:/Users/Pooja%20Asher/CSC540_P1/src/my/control/Test.java</file>
-            <file>file:/C:/Users/Pooja%20Asher/CSC540_P1/src/TableStrcuture/Reserve_room.java</file>
->>>>>>> b523494c799d1e24ce900e792d0283a06ec9e4b0
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/TableStrcuture/CheckOut.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/JournalCheckoutForm.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/ResourceForm.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/ConferenceCheckoutForm.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/control/ButtonEvents.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/RoomCheckoutForm.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/StudyRoomForm.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/StudentProfileForm.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/BookCheckoutForm.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/CheckoutResources.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/StudyRoomResultForm.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/CameraForm.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/control/LibraryAPI.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/BookSelectionForm.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/TableStrcuture/Journals.java</file>
         </group>
     </open-files>
 </project-private>
