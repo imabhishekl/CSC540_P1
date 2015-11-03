@@ -63,4 +63,32 @@ public class Reserve_room {
      public Timestamp getStart_time(){
         return start_time;
     }
+
+    /**
+     * @return the end_time
+     */
+    public Timestamp getEnd_time() {
+        return end_time;
+    }
+
+    /**
+     * @param end_time the end_time to set
+     */
+    public void setEnd_time(Timestamp end_time) {
+        this.end_time = end_time;
+    }
+
+    /**
+     * @return the checkout
+     */
+    public Timestamp getCheckout() {
+        return checkout;
+    }
+
+    /**
+     * @param checkout the checkout to set
+     */
+    public void setCheckout(Timestamp checkout) {
+        this.checkout = checkout;
+    }
 }

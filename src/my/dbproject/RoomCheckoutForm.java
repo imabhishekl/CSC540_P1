@@ -5,6 +5,14 @@
  */
 package my.dbproject;
 
+import TableStrcuture.Reserve_room;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import my.control.ButtonEvents;
+
 /**
  *
  * @author chintanpanchamia
@@ -16,6 +24,22 @@ public class RoomCheckoutForm extends javax.swing.JFrame {
      */
     public RoomCheckoutForm() {
         initComponents();
+    }
+    public void populate(ArrayList <Reserve_room> a)
+    {
+        String[] schema = {"Room No.", "Library Name", "Start Time", "End Time"};
+        DefaultTableModel d = new DefaultTableModel(schema,0);
+        for(int i = 0; i < a.size(); i++)
+        {
+            String room_no = a.get(i).getRoom_no();
+            String library = a.get(i).getLib_name();
+            Timestamp start = a.get(i).getStart_time();
+            Timestamp end = a.get(i).getEnd_time();
+            
+            Object[] o = {room_no, library, start, end};
+            d.addRow(o);
+        }
+        jTable1.setModel(d);
     }
 
     /**
@@ -47,6 +71,11 @@ public class RoomCheckoutForm extends javax.swing.JFrame {
         });
 
         jButton2.setText("Checkout");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -95,10 +124,24 @@ public class RoomCheckoutForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int selected = jTable1.getSelectedRow();
+        String room = (String) jTable1.getValueAt(selected, 0);
+        Timestamp start = (Timestamp) jTable1.getValueAt(selected, 2);
+        try {
+            ButtonEvents.update_checkout_room(room, start);
+            this.setVisible(false);
+            CheckoutResources.init();
+        } catch (Exception ex) {
+            Logger.getLogger(RoomCheckoutForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void init() {
+    public static void init(ArrayList <Reserve_room> arr) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -121,11 +164,14 @@ public class RoomCheckoutForm extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(RoomCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        final ArrayList <Reserve_room> a = arr;
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RoomCheckoutForm().setVisible(true);
+                RoomCheckoutForm r1 = new RoomCheckoutForm();
+                r1.setVisible(true);
+                r1.populate(a);
             }
         });
     }

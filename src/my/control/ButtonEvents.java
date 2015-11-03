@@ -464,8 +464,27 @@ public class ButtonEvents {
         }
         return room;
     }
+    
+    public static void update_checkout_room(String room_no, Timestamp start) throws Exception{
+        PreparedStatement stmnt = LibrarySystem.connection.prepareCall("update reserve_room set checkout= ? where room_no= ? and patron_ID= ? and start_time= ? ");
+         stmnt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+         stmnt.setString(2, room_no);
+         stmnt.setInt(3, LibrarySystem.patron_id);
+         stmnt.setTimestamp(4, start);
+         try{
+                      stmnt.executeUpdate();
 
-    //public static void 
+         }
+         catch (SQLException e)
+         {
+         
+         }
+         System.out.println("runs");
+         
+    }
+    
+    
+
     public static ArrayList<Rooms> getRoom(String lib_name, int capacity, String type, Timestamp start, Timestamp end) throws SQLException {
         Rooms r = new Rooms();
         Reserve_room rr = new Reserve_room();
