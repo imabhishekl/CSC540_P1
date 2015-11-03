@@ -19,65 +19,61 @@ import my.control.ButtonEvents;
  * @author chintanpanchamia
  */
 public class CameraCheckoutForm extends javax.swing.JFrame {
-boolean b1 = false;
+
+    boolean b1 = false;
+
     /**
      * Creates new form CameraCheckoutForm
      */
     public CameraCheckoutForm() {
         initComponents();
     }
-    public void visibility()
-    {
+
+    public void visibility() {
         jTable1.setVisible(false);
         jTable2.setVisible(false);
         jButton1.setVisible(false);
         jButton2.setVisible(false);
         jButton3.setVisible(false);
     }
-    public void populate(ArrayList <Camera> c1, ArrayList <Camera> c2)
-    {
-        
-        String[] schema = {"Camera ID","Model"};
-        DefaultTableModel d = new DefaultTableModel(schema,0);
 
-        if(c1.size()!=0)
-        {
+    public void populate(ArrayList<Camera> c1, ArrayList<Camera> c2) {
+
+        String[] schema = {"Camera ID", "Model"};
+        DefaultTableModel d = new DefaultTableModel(schema, 0);
+
+        if (c1.size() != 0) {
             jTable1.setVisible(true);
-            
+
             jButton1.setVisible(true);
-            for(int i = 0; i < c1.size(); i++)
-            {
+            for (int i = 0; i < c1.size(); i++) {
                 String camera_id = c1.get(i).getCamera_id();
                 String model = c1.get(i).getModel();
                 //boolean b = Boolean.FALSE;
                 Object[] o = {camera_id, model};
-                
+
                 d.addRow(o);
             }
             jTable1.setModel(d);
             //jTable1.setVisible(true);
         }
-        if(c2.size()!=0)
-        {
-            
-            d = new DefaultTableModel(schema,0);
+        if (c2.size() != 0) {
+
+            d = new DefaultTableModel(schema, 0);
             jButton3.setVisible(true);
-            for(int i = 0; i < c2.size(); i++)
-            {
+            for (int i = 0; i < c2.size(); i++) {
 
                 String camera_id = c2.get(i).getCamera_id();
                 String model = c2.get(i).getModel();
                 //boolean b = Boolean.FALSE;
-                
                 Object[] o = {camera_id, model};
-                
+
                 d.addRow(o);
             }
             jTable2.setModel(d);
             jTable2.setVisible(true);
         }
-        
-        
+
     }
 
     /**
@@ -191,15 +187,16 @@ boolean b1 = false;
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         int select = jTable2.getSelectedRow();
-    try {
-        ButtonEvents.camera_pickup();
-        DefaultTableModel d = (DefaultTableModel) jTable2.getModel();
-        d.removeRow(select);
-        jTable2.setModel(d);
-        
-    } catch (SQLException ex) {
-        Logger.getLogger(CameraCheckoutForm.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        try {
+            String str = ButtonEvents.camera_pickup();
+            DefaultTableModel d = (DefaultTableModel) jTable2.getModel();
+            d.removeRow(select);
+            jTable2.setModel(d);
+            JOptionPane.showMessageDialog(null, str);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CameraCheckoutForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -214,6 +211,8 @@ boolean b1 = false;
             DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
             d.removeRow(select);
             jTable1.setModel(d);
+            JOptionPane.showMessageDialog(null, "Camera is returned");
+
         } catch (SQLException ex) {
             Logger.getLogger(CameraCheckoutForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -222,7 +221,9 @@ boolean b1 = false;
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         int select = jTable2.getSelectedRow();
         try {
-            ButtonEvents.camera_hold();
+            String str = ButtonEvents.camera_hold();
+            JOptionPane.showMessageDialog(null, str);
+
             b1 = true;
             jButton3.setVisible(false);
             jButton2.setVisible(true);
@@ -234,7 +235,7 @@ boolean b1 = false;
     /**
      * @param args the command line arguments
      */
-    public static void init(ArrayList <Camera> c, ArrayList <Camera> c1) {
+    public static void init(ArrayList<Camera> c, ArrayList<Camera> c1) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -257,8 +258,8 @@ boolean b1 = false;
             java.util.logging.Logger.getLogger(CameraCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        final ArrayList <Camera> c2 = c;
-        final ArrayList <Camera> c3 = c1;
+        final ArrayList<Camera> c2 = c;
+        final ArrayList<Camera> c3 = c1;
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -266,7 +267,7 @@ boolean b1 = false;
                 CameraCheckoutForm c = new CameraCheckoutForm();
                 c.setVisible(true);
                 c.visibility();
-                c.populate(c2,c3);
+                c.populate(c2, c3);
             }
         });
     }
