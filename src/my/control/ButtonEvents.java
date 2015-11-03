@@ -128,9 +128,10 @@ public class ButtonEvents {
     public static int checkout_books(Books book_detail, String library_name) throws SQLException {
         String query = null;
         String set_clause;
+        Boolean flag = false;
 
-        if(book_detail.getE_copy().equalsIgnoreCase("Y"))
-            return 1;
+        /*if(book_detail.getE_copy().equalsIgnoreCase("Y"))
+            return 1;*/
         
         if (library_name.equals(LibrarySystemConst.HUNT)) {
             set_clause = "HUNT_AVAIL_NO";
@@ -145,7 +146,16 @@ public class ButtonEvents {
         st.setInt(1, LibraryAPI.getAvailableBooks(book_detail.getIsbn_no(), set_clause) - 1);
         st.setString(2, book_detail.getIsbn_no());
             
-        if (st.executeUpdate() != 0) 
+        if(book_detail.getE_copy().equalsIgnoreCase("Y"))
+        {
+            flag = true;
+        }
+        else
+        {
+            flag = (st.executeUpdate() != 0);
+        }
+        
+        if (flag) 
         {
         
             /* Update the checkout_books */
@@ -178,6 +188,7 @@ public class ButtonEvents {
     public static int checkout_journal(Journals journal_detail, String library_name) throws SQLException {
         String query = null;
         String set_clause;
+        boolean flag;
         
         if(journal_detail.getE_copy().equalsIgnoreCase("Y"))
             return 1;        
@@ -195,7 +206,16 @@ public class ButtonEvents {
         st.setInt(1, LibraryAPI.getAvailableJournals(journal_detail.getIssn_no(), set_clause));
         st.setString(2, journal_detail.getIssn_no());
         
-        if(st.executeUpdate() != 0)
+        if(journal_detail.getE_copy().equalsIgnoreCase("Y"))
+        {
+            flag = true;
+        }
+        else
+        {
+            flag = (st.executeUpdate() != 0);
+        }
+        
+        if(flag)
         {      
             /* Update the checkout_books */
             query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME,LIB_NAME) values(?,?,?,?)";
@@ -220,6 +240,7 @@ public class ButtonEvents {
     public static int checkout_conf(Conf conf_detail, String library_name) throws SQLException {
         String query = null;
         String set_clause;
+        boolean flag;
         
         if(conf_detail.getE_copy().equalsIgnoreCase("Y"))
             return 1;               
@@ -236,6 +257,15 @@ public class ButtonEvents {
         st = LibrarySystem.connection.prepareStatement(query);
         st.setInt(1, LibraryAPI.getAvailableConf(conf_detail.getConfnum(), set_clause));
         st.setString(2, conf_detail.getConfnum());
+        
+        if(conf_detail.getE_copy().equalsIgnoreCase("Y"))
+        {
+            flag = true;
+        }
+        else
+        {
+            flag = (st.executeUpdate() != 0);
+        }
         
         if(st.executeUpdate() != 0)
         {
@@ -259,9 +289,8 @@ public class ButtonEvents {
         return -1;
     }
 
-    public static ArrayList<Books> get_books() throws SQLException {
-        int status;
-
+    public static ArrayList<Books> get_books() throws SQLException 
+    {
         Books book;
 
         ArrayList<Books> bookslist = new ArrayList<>();
@@ -274,7 +303,6 @@ public class ButtonEvents {
         try (ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
                 book = new Books();
-
                 book.setIsbn_no(rs.getString("isbn_no"));
                 book.setTitle(rs.getString("title"));
                 book.setEdition(rs.getString("edition"));
@@ -980,6 +1008,11 @@ public class ButtonEvents {
         if (!st.execute()) {
             return -1;
         }
+        
+        if(LibraryAPI.isECopy(p_id, LibrarySystem.patron_id).equalsIgnoreCase("Y"))
+        {
+            return 1;
+        }
 
         /* Calucate the late fee charge */
         query = "select FEES,FREQUENCY_HOURS from late_fee where resource_type = ? order by frequency_hours_number asc";
@@ -1031,11 +1064,12 @@ public class ButtonEvents {
             bk.setIsbn_no(rs.getString("ISBN_NO"));
             bk.setTitle(rs.getString("TITLE"));
             bk.setGroup_id(rs.getInt("GROUP_ID"));
+            bk.setAuthor_list(LibraryAPI.getAuthorList(bk.getGroup_id()));
             co.setPublication_id(rs.getInt("PUBLICATION_ID"));
             co.setPatron_id(rs.getInt("PATRON_ID"));
             co.setStart_time(rs.getDate("START_TIME"));
             co.setLib_name(rs.getString("LIB_NAME"));
-            co.setBooks_det(bk);
+            co.setBooks_det(bk);            
             checkout_book_list.add(co);
         }
         return checkout_book_list;
@@ -1064,6 +1098,7 @@ public class ButtonEvents {
             jr.setIssn_no(rs.getString("ISSN_NO"));
             jr.setTitle(rs.getString("TITLE"));
             jr.setGroup_id(rs.getInt("GROUP_ID"));
+            jr.setAuthor_list(LibraryAPI.getAuthorList(jr.getGroup_id()));
             co.setPublication_id(rs.getInt("PUBLICATION_ID"));
             co.setPatron_id(rs.getInt("PATRON_ID"));
             co.setStart_time(rs.getDate("START_TIME"));
@@ -1095,8 +1130,9 @@ public class ButtonEvents {
             co = new CheckOut();
             cf = new Conf();
             cf.setConfnum(rs.getString("ISSN_NO"));
-            cf.setTitle(rs.getString("TITLE"));
+            cf.setTitle(rs.getString("TITLE"));            
             cf.setGroup_id(rs.getInt("GROUP_ID"));
+            cf.setAuthor_list(LibraryAPI.getAuthorList(cf.getGroup_id()));
             co.setPublication_id(rs.getInt("PUBLICATION_ID"));
             co.setPatron_id(rs.getInt("PATRON_ID"));
             co.setStart_time(rs.getDate("START_TIME"));
