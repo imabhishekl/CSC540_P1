@@ -55,4 +55,12 @@ public class Reserve_room {
     public void setLib_name(String lib_name) {
         this.lib_name=lib_name;
     }
+    
+    public void setStart_time(Timestamp start_time){
+        this.start_time=start_time;
+    }
+    
+     public Timestamp getStart_time(){
+        return start_time;
+    }
 }
