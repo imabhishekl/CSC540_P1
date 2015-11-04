@@ -138,6 +138,12 @@ public class ButtonEvents {
         String set_clause;
         Boolean flag = false;
 
+        if(LibraryAPI.isBookAlreadyCheckedOut(LibrarySystem.patron_id,LibraryAPI.getPubllicationId(book_detail.getIsbn_no())))
+        {
+            System.out.println("Already CheckedOut");
+            return -2;
+        }
+        
         /*if(book_detail.getE_copy().equalsIgnoreCase("Y"))
          return 1;*/
         if (library_name.equals(LibrarySystemConst.HUNT)) {
@@ -190,10 +196,12 @@ public class ButtonEvents {
         String set_clause;
         boolean flag;
 
-        if (journal_detail.getE_copy().equalsIgnoreCase("Y")) {
-            return 1;
+        if(LibraryAPI.isAlreadyCheckedOut(LibrarySystem.patron_id,LibraryAPI.getPubllicationId(journal_detail.getIssn_no())))
+        {
+            System.out.println("Already CheckedOut");
+            return -2;
         }
-
+        System.out.println("Reached 1");
         if (library_name.equals(LibrarySystemConst.HUNT)) {
             set_clause = "HUNT_AVAIL_NO";
         } else {
@@ -206,6 +214,8 @@ public class ButtonEvents {
         st.setInt(1, LibraryAPI.getAvailableJournals(journal_detail.getIssn_no(), set_clause) - 1);
         st.setString(2, journal_detail.getIssn_no());
 
+        System.out.println(journal_detail.getE_copy());
+        
         if (journal_detail.getE_copy().equalsIgnoreCase("Y")) {
             flag = true;
         } else {
@@ -286,8 +296,17 @@ public class ButtonEvents {
 
         ArrayList<Books> bookslist = new ArrayList<>();
         
-        st = LibrarySystem.connection.prepareStatement
-        ("select * from books b,courses_books bc where b.isbn_no = bc.isbn_no and (b.hunt_avail_no > 0 or b.hill_avail_no > 0) and bc.course_id IN (select course_id from enrollment where student_id = ?)");
+        
+        if(LibrarySystem.patron_type.equalsIgnoreCase(LibrarySystemConst.STUDENT))
+        {
+            st = LibrarySystem.connection.prepareStatement
+            ("select * from books b,courses_books bc where b.isbn_no = bc.isbn_no and (b.hunt_avail_no > 0 or b.hill_avail_no > 0) and bc.course_id IN (select course_id from enrollment where student_id = ?)");
+        }
+        else
+        {
+            st = LibrarySystem.connection.prepareStatement
+            ("select * from books b where b.hunt_avail_no > 0 or b.hill_avail_no > 0");
+        }
 
         st.setString(1, LibrarySystem.login_id);
 
@@ -1051,7 +1070,16 @@ public class ButtonEvents {
                 LibrarySystem.connection.setAutoCommit(true);
                 return -1;
         }
-
+        is_ecopy = LibraryAPI.isECopy(p_id, LibrarySystem.patron_id);
+        if(is_ecopy.equalsIgnoreCase("Y"))
+        {
+            avail_no = avail_no;
+        }
+        else
+        {
+            avail_no++;
+        }
+        
         query = "update " + table_name + " set " + set_clause + " = ? where "
                 + where_col + " = ? ";
         System.out.println(table_name + ":" + where_col);
@@ -1065,8 +1093,7 @@ public class ButtonEvents {
             LibrarySystem.connection.setAutoCommit(true);
             return -1;
         }     
-        System.out.println("::" + LibraryAPI.isECopy(p_id, LibrarySystem.patron_id));
-        is_ecopy = LibraryAPI.isECopy(p_id, LibrarySystem.patron_id);
+        System.out.println("::" + LibraryAPI.isECopy(p_id, LibrarySystem.patron_id));        
         
         Date end_time = new Date(System.currentTimeMillis());
 
