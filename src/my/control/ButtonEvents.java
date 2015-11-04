@@ -94,7 +94,7 @@ public class ButtonEvents {
     public static int validate_login(String id, String password) throws SQLException {
 
         student_id = id;
-        st = LibrarySystem.connection.prepareStatement("Select STUDENT_ID from student where student_id = ? and password = ?");
+        st = LibrarySystem.connection.prepareStatement("Select STUDENT_ID from student where user_id = ? and password = ?");
         st.setString(1, id);
         st.setString(2, password);
 
@@ -111,7 +111,7 @@ public class ButtonEvents {
             }
             return 1;
         } else {
-            st = LibrarySystem.connection.prepareCall("Select FACULTY_ID from faculty where faculty_id = ? and password = ?");
+            st = LibrarySystem.connection.prepareCall("Select FACULTY_ID from faculty where user_id = ? and password = ?");
             st.setString(1, id);
             st.setString(2, password);
 

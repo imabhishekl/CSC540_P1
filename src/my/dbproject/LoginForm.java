@@ -33,7 +33,7 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Faculty/Student ID");
+        jLabel1.setText("User ID");
 
         jLabel2.setText("Password");
 
