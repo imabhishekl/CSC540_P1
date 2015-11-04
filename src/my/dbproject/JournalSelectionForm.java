@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import my.control.ButtonEvents;
 
@@ -29,7 +30,6 @@ public class JournalSelectionForm extends javax.swing.JFrame {
     {
         String[] schema = {"ISSN", "Year of Publication", "Authors", "Title", "Library", "e-copy", "Hard Copy"};
         DefaultTableModel d = new DefaultTableModel(schema,0);
-        System.out.println("Here1"+jo.size());
         for(int i = 0;i < jo.size(); i++)
         {
             System.out.println("Here2");
@@ -58,16 +58,16 @@ public class JournalSelectionForm extends javax.swing.JFrame {
                 d.addRow(o);
                 
             }
-            if(hunt_total > 0)
+            if(hunt_avail > 0)
             {
-                library = "HUNT"; 
+                library = "HUNT"; e_copy="-";
                 hard_copy = "" + hunt_avail;
                 Object[] o = {issn, year, author, title, library, e_copy, hard_copy};
                 d.addRow(o);
             }
-            if(hill_total > 0)
+            if(hill_avail > 0)
             {
-                library = "HILL";
+                library = "HILL"; e_copy="-";
                 hard_copy = "" + hill_avail;
                 Object[] o = {issn, year, author, title, library, e_copy, hard_copy};
                 d.addRow(o);
@@ -164,9 +164,19 @@ public class JournalSelectionForm extends javax.swing.JFrame {
         String issn = (String) jTable1.getValueAt(select, 0);
         Journals j = new Journals();
         j.setIssn_no(issn);
+        j.setE_copy((String) jTable1.getValueAt(select, 5));
         String library = (String) jTable1.getValueAt(select, 4);
         try {
-            ButtonEvents.checkout_journal(j, library);
+            int ret = ButtonEvents.checkout_journal(j, library);
+            if(ret == -2)
+            {
+                JOptionPane.showMessageDialog(null, "Sorry, you've already checked out this resource.");
+            }
+            else
+            {
+                this.setVisible(false);
+        ResourceForm.init();
+            }
         } catch (SQLException ex) {
             Logger.getLogger(JournalSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
         }

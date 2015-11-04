@@ -5,10 +5,12 @@
  */
 package my.dbproject;
 
+import TableStrcuture.Faculty;
 import TableStrcuture.Student;
 import java.sql.SQLException;
 import my.control.ButtonEvents;
 import my.control.LibrarySystem;
+import my.control.LibrarySystemConst;
 
 
 public class MenuForm extends javax.swing.JFrame {
@@ -175,13 +177,20 @@ public class MenuForm extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try
         {
-            if(ButtonEvents.s == null)
+            if (LibrarySystem.patron_type.equalsIgnoreCase(LibrarySystemConst.STUDENT))
             {
-                System.out.println("NULL");
-            }
+                
+            
             Student s = ButtonEvents.getProfileStudent(ButtonEvents.student_id);
             this.setVisible(false);
             StudentProfileForm.init(s);
+            }
+            else if (LibrarySystem.patron_type.equalsIgnoreCase(LibrarySystemConst.FACULTY))
+            {
+                Faculty f = ButtonEvents.getProfileFaculty(ButtonEvents.student_id);
+            this.setVisible(false);
+            FacultyProfileForm.init(f);
+            }
         }
         catch(SQLException e)
         {
