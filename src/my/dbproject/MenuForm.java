@@ -8,6 +8,7 @@ package my.dbproject;
 import TableStrcuture.Faculty;
 import TableStrcuture.Student;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import my.control.ButtonEvents;
 import my.control.LibrarySystem;
 import my.control.LibrarySystemConst;
@@ -206,7 +207,8 @@ public class MenuForm extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         this.setVisible(false);
-        NotificationsForm.init();
+        ArrayList<String> notifs = new ArrayList<String>();
+        NotificationsForm.init(notifs);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
