@@ -27,7 +27,6 @@ public class ConferenceSelectionForm extends javax.swing.JFrame {
     }
     public void populate(ArrayList <Conf> c)
     {
-        System.out.println(c.get(0).getGroup_id());
         String[] schema = {"Conference No.", "Name", "Title", "Year", "Authors", "library", "e-Copy", "Hard Copy"};
         DefaultTableModel d = new DefaultTableModel(schema,0);
         for(int i = 0; i< c.size(); i++)
@@ -56,16 +55,16 @@ public class ConferenceSelectionForm extends javax.swing.JFrame {
                 d.addRow(o);
                 
             }
-            if(hunt_total > 0)
+            if(hunt_avail > 0)
             {
-                library = "HUNT"; 
+                library = "HUNT"; e_copy="-"; 
                 hard_copy = "" + hunt_avail;
                 Object[] o = {conf_no, name, title, year, author, library, e_copy, hard_copy};
                 d.addRow(o);
             }
-            if(hill_total > 0)
+            if(hill_avail > 0)
             {
-                library = "HILL";
+                library = "HILL"; e_copy="-";
                 hard_copy = "" + hill_avail;
                 Object[] o = {conf_no, name, title, year, author, library, e_copy, hard_copy};
                 d.addRow(o);
@@ -163,7 +162,11 @@ public class ConferenceSelectionForm extends javax.swing.JFrame {
         Conf c = new Conf();
         String conf_no = (String) jTable1.getValueAt(select, 0);
         c.setConfnum(conf_no);
+                String e_copy = (String) jTable1.getValueAt(select, 6);
+        c.setE_copy(e_copy);
+
         String library = (String) jTable1.getValueAt(select, 5);
+        
         try {
             ButtonEvents.checkout_conf(c, library);
         } catch (SQLException ex) {

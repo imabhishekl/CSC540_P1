@@ -66,16 +66,16 @@ public class BookSelectionForm extends javax.swing.JFrame {
                 d.addRow(o);
                 
             }
-            if(hunt_total > 0)
+            if(hunt_avail > 0)
             {
-                library = "HUNT"; 
+                library = "HUNT"; e_copy = "-";
                 hard_copy = "" + hunt_avail;
                 Object[] o = {isbn, title, edition, Author, year, publisher, library, e_copy, hard_copy};
                 d.addRow(o);
             }
-            if(hill_total > 0)
+            if(hill_avail > 0)
             {
-                library = "HILL";
+                library = "HILL"; e_copy = "-";
                 hard_copy = "" + hill_avail;
                 Object[] o = {isbn, title, edition, Author, year, publisher, library, e_copy, hard_copy};
                 d.addRow(o);
