@@ -29,7 +29,6 @@ public class JournalSelectionForm extends javax.swing.JFrame {
     {
         String[] schema = {"ISSN", "Year of Publication", "Authors", "Title", "Library", "e-copy", "Hard Copy"};
         DefaultTableModel d = new DefaultTableModel(schema,0);
-        System.out.println("Here1"+jo.size());
         for(int i = 0;i < jo.size(); i++)
         {
             System.out.println("Here2");
@@ -58,16 +57,16 @@ public class JournalSelectionForm extends javax.swing.JFrame {
                 d.addRow(o);
                 
             }
-            if(hunt_total > 0)
+            if(hunt_avail > 0)
             {
-                library = "HUNT"; 
+                library = "HUNT"; e_copy="-";
                 hard_copy = "" + hunt_avail;
                 Object[] o = {issn, year, author, title, library, e_copy, hard_copy};
                 d.addRow(o);
             }
-            if(hill_total > 0)
+            if(hill_avail > 0)
             {
-                library = "HILL";
+                library = "HILL"; e_copy="-";
                 hard_copy = "" + hill_avail;
                 Object[] o = {issn, year, author, title, library, e_copy, hard_copy};
                 d.addRow(o);
