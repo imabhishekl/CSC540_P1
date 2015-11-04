@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import my.control.ButtonEvents;
@@ -175,7 +176,16 @@ public class BookSelectionForm extends javax.swing.JFrame {
         b.setE_copy(e_copy);
         
         try {
-            System.out.println(ButtonEvents.checkout_books(b,library));
+            int ret = ButtonEvents.checkout_books(b,library);
+            if(ret == -2)
+            {
+                JOptionPane.showMessageDialog(null, "Sorry, you've already checked out this resource.");
+            }
+            else
+            {
+                this.setVisible(false);
+                ResourceForm.init();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
             //Logger.getLogger(BookSelectionForm.class.getName()).log(Level.SEVERE, null, ex);

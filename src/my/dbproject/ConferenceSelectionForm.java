@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import my.control.ButtonEvents;
 
@@ -168,12 +169,21 @@ public class ConferenceSelectionForm extends javax.swing.JFrame {
         String library = (String) jTable1.getValueAt(select, 5);
         
         try {
-            ButtonEvents.checkout_conf(c, library);
+            int ret = ButtonEvents.checkout_conf(c, library);
+            if(ret == -2)
+            {
+                JOptionPane.showMessageDialog(null, "Sorry, you've already checked out this resource.");
+            }
+            else
+            {
+                this.setVisible(false);
+        ResourceForm.init();
+            }
+            
         } catch (SQLException ex) {
             Logger.getLogger(ConferenceSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.setVisible(false);
-        ResourceForm.init();
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

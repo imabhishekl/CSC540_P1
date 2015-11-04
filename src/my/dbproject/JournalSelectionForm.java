@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import my.control.ButtonEvents;
 
@@ -166,7 +167,16 @@ public class JournalSelectionForm extends javax.swing.JFrame {
         j.setE_copy((String) jTable1.getValueAt(select, 5));
         String library = (String) jTable1.getValueAt(select, 4);
         try {
-            ButtonEvents.checkout_journal(j, library);
+            int ret = ButtonEvents.checkout_journal(j, library);
+            if(ret == -2)
+            {
+                JOptionPane.showMessageDialog(null, "Sorry, you've already checked out this resource.");
+            }
+            else
+            {
+                this.setVisible(false);
+        ResourceForm.init();
+            }
         } catch (SQLException ex) {
             Logger.getLogger(JournalSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
         }

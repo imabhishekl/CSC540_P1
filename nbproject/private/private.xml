@@ -7,6 +7,13 @@
 =======
         <group>
 <<<<<<< HEAD
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/CheckoutResources.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/control/ButtonEvents.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/RoomCheckoutForm.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/TableStrcuture/Reserve_room.java</file>
+            <file>file:/Users/chintanpanchamia/NetBeansProjects/DBProject/src/my/dbproject/NotificationsForm.java</file>
+=======
+<<<<<<< HEAD
             <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/my/control/ButtonEvents.java</file>
             <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/my/dbproject/DBConnect.java</file>
             <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/my/control/LibrarySystem.java</file>
@@ -18,6 +25,7 @@
 =======
             <file>file:/home/amrit/CSC540_P1/src/my/control/ButtonEvents.java</file>
 >>>>>>> d840fb975bb32f82f567970fcaa9433af047a7e3
+>>>>>>> fa4f3d887cf094b8951be8e219099c86f69c10c3
         </group>
 >>>>>>> c055ac8eac1a34a37bd9abefdee9dbc1e680ad60
     </open-files>
