@@ -9,6 +9,8 @@ import TableStrcuture.Faculty;
 import TableStrcuture.Student;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import my.control.ButtonEvents;
 import my.control.LibrarySystem;
 import my.control.LibrarySystemConst;
@@ -207,8 +209,14 @@ public class MenuForm extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         this.setVisible(false);
-        ArrayList<String> notifs = new ArrayList<String>();
-        NotificationsForm.init(notifs);
+        ArrayList<String> notifs;
+        try {
+            notifs = ButtonEvents.getNotification();
+            NotificationsForm.init(notifs);
+        } catch (SQLException ex) {
+            Logger.getLogger(MenuForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed

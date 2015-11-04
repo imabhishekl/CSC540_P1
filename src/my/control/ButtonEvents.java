@@ -31,7 +31,7 @@ public class ButtonEvents {
 
         s.setStudent_id(student_id);
         //Statement st = LibrarySystem.connection.createStatement();
-        st = LibrarySystem.connection.prepareStatement("Select * from student where student_id = ?");
+        st = LibrarySystem.connection.prepareStatement("Select * from student where user_id = ?");
         st.setString(1, student_id);
 
         ResultSet rs = st.executeQuery();
