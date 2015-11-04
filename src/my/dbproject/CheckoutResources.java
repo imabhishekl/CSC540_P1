@@ -233,7 +233,7 @@ public class CheckoutResources extends javax.swing.JFrame {
         this.setVisible(false);
         ArrayList <CheckOut> ac;
         try {
-            ac = ButtonEvents.checkout_conf_list();
+            ac = ButtonEvents.checkout_journal_list();
             JournalCheckoutForm.init(ac);
         } catch (SQLException ex) {
             Logger.getLogger(CheckoutResources.class.getName()).log(Level.SEVERE, null, ex);
@@ -246,7 +246,7 @@ public class CheckoutResources extends javax.swing.JFrame {
         this.setVisible(false);
         ArrayList <CheckOut> ac;
         try {
-            ac = ButtonEvents.checkout_journal_list();
+            ac = ButtonEvents.checkout_conf_list();
             ConferenceCheckoutForm.init(ac);
         } catch (SQLException ex) {
             Logger.getLogger(CheckoutResources.class.getName()).log(Level.SEVERE, null, ex);

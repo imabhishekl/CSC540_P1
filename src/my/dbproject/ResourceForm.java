@@ -181,10 +181,12 @@ public class ResourceForm extends javax.swing.JFrame {
         this.setVisible(false);
         try
         {
+            System.out.println("dss");
             //;
             BookSelectionForm.init(ButtonEvents.get_books());
         }
-        catch(SQLException e){}
+        catch(SQLException e){
+        e.printStackTrace();}
         //BookSelectionForm.init();
     }//GEN-LAST:event_jButton1ActionPerformed
 

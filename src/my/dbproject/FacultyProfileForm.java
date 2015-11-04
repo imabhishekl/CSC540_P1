@@ -5,6 +5,8 @@
  */
 package my.dbproject;
 
+import TableStrcuture.Faculty;
+
 /**
  *
  * @author chintanpanchamia
@@ -157,7 +159,7 @@ public class FacultyProfileForm extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void init() {
+    public static void init(Faculty f) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -180,6 +182,7 @@ public class FacultyProfileForm extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(FacultyProfileForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

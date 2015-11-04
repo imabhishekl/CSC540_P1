@@ -138,8 +138,12 @@ public class JournalCheckoutForm extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         int selected = jTable1.getSelectedRow();
         String issn = (String) jTable1.getValueAt(selected,1);
-        int p_id = Integer.parseInt((String) jTable1.getValueAt(selected, 0));
+        System.out.println(issn);
+        int p_id = (int) jTable1.getValueAt(selected, 0);
+        System.out.println(p_id);
         Date date = (Date) jTable1.getValueAt(selected, 4);
+                System.out.println(date);
+
         this.setVisible(false);
         try {
             ButtonEvents.return_resource(LibrarySystemConst.JOURNAL, p_id, issn, date);
