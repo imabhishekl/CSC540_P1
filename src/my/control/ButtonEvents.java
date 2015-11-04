@@ -125,6 +125,17 @@ public class ButtonEvents {
                 if (rs.next()) {
                     LibrarySystem.patron_id = rs.getInt(1);
                 }
+                st = LibrarySystem.connection.prepareStatement("select student_id from account_revoke where login_id = ?"); 
+                st.setString(1, LibrarySystem.login_id);
+                ResultSet rs1 = st.executeQuery();
+                if(rs1.next())
+                {
+                    LibrarySystem.revoked_ind = 1;
+                }
+                else
+                {
+                    LibrarySystem.revoked_ind = 0;
+                }
                 return 1;
             }
         }
@@ -295,7 +306,7 @@ public class ButtonEvents {
         if(LibrarySystem.patron_type.equalsIgnoreCase(LibrarySystemConst.STUDENT))
         {
             st = LibrarySystem.connection.prepareStatement
-            ("select B.* from books B where B.isbn_no not in ( select R.isbn_no from reserve R, Courses_books C where R.isbn_no = C.isbn_no and C.course_id not in ( select E.course_id from enrollment E where E.student_id = ?) );");            
+            ("select B.* from books B where B.isbn_no not in ( select R.isbn_no from reserve R, Courses_books C where R.isbn_no = C.isbn_no and C.course_id not in ( select E.course_id from enrollment E where E.student_id = ?) )");
             st.setString(1, LibrarySystem.login_id);
         }
         else
@@ -1034,6 +1045,7 @@ public class ButtonEvents {
         LibrarySystem.connection.setAutoCommit(false);
         
         is_ecopy = LibraryAPI.isECopy(p_id, LibrarySystem.patron_id);
+        System.out.println("COPY:" + is_ecopy);
         Date end_time = new Date(System.currentTimeMillis());
         Timestamp ts1 = new Timestamp(end_time.getTime());
         /* Update the check out book table */
@@ -1057,12 +1069,11 @@ public class ButtonEvents {
             st.setString(4, library_name);
             st.setString(5, is_ecopy);
             if (st.executeUpdate() != 0) {
-                System.out.println("Inserted in checkout");
-                LibrarySystem.connection.commit();
-                LibrarySystem.connection.setAutoCommit(true);
-                return 1;
+                System.out.println("Inserted in checkout");                
             } else {
+                LibrarySystem.connection.setAutoCommit(true);
                 System.out.println("Error while insert into checkout");
+                return 1;                
             }
         if (is_ecopy.equalsIgnoreCase("Y")) {
             System.out.println("ECOPY:" + is_ecopy);
@@ -1419,4 +1430,14 @@ public class ButtonEvents {
         }
         return notification_text;
     }    
+    
+    public static ArrayList<Books> get_non_available_book()
+    {
+        ArrayList<Books> w_book_list = new ArrayList<>();
+        String query = null;
+        
+        query = "select * from books where hunt_avail_no = 0 and hill_avail_no = 0";
+        
+        return w_book_list;
+    }
 }

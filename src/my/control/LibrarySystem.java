@@ -21,6 +21,7 @@ public class LibrarySystem
     public static String camera_id=null;
     public static int patron_id;
     public static int hold=0;
+    public static int revoked_ind;
     
     public static void setup()
     {
