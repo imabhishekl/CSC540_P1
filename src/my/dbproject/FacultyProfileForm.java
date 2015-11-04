@@ -23,6 +23,7 @@ public class FacultyProfileForm extends javax.swing.JFrame {
     {
         jLabel8.setText(f.getFaculty_id());
         jLabel9.setText(f.getFirst_name());
+        System.out.println(f.getFirst_name());
         jLabel10.setText(f.getLast_name());
         jLabel11.setText(f.getCategory());
         jLabel12.setText(f.getNationality());
