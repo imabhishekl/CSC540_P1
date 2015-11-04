@@ -22,29 +22,22 @@ public class Test {
 
     public static void main(String arg[]) throws ParseException {
 
-        /*String string = "January 2, 2010";
-        DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
-        java.util.Date date = format.parse(string);
-        //System.out.println(date);
-
-        System.out.println(date);
-*/
-        LibrarySystem l = new LibrarySystem();
-        l.setup();
         
-        
-
-
-        try {
+        try {            
+            LibrarySystem.setup();
+            LibrarySystem.connection.setAutoCommit(true);
+            LibrarySystem.connection.commit();
+            //System.out.println("::" + LibraryAPI.isECopy(27, 1));
             //Date date = new Date();
         //    System.out.println("run");
             //ButtonEvents.getRoom("Hunt", 3, "study");
             
             //Date date = new Date();
-            System.out.println(ButtonEvents.camera_pickup());
+       
             // ButtonEvents.getRoom("Hunt", 3, "study",);
             //System.out.println("main");
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         //System.out.println(d);
