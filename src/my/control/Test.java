@@ -25,8 +25,9 @@ public class Test {
         
         try {            
             LibrarySystem.setup();
-            LibrarySystem.connection.setAutoCommit(true);
-            LibrarySystem.connection.commit();
+            LibrarySystem.patron_id = 2;
+            System.out.println("Size:" + ButtonEvents.getNotification().size());
+            
             //System.out.println("::" + LibraryAPI.isECopy(27, 1));
             //Date date = new Date();
         //    System.out.println("run");

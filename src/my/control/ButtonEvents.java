@@ -13,6 +13,7 @@ import TableStrcuture.CheckOut;
 import TableStrcuture.Conf;
 import TableStrcuture.Journals;
 import TableStrcuture.WaitlistCamera;
+import java.sql.CallableStatement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.sql.Timestamp;
@@ -289,15 +290,19 @@ public class ButtonEvents {
     public static ArrayList<Books> get_books() throws SQLException {
         Books book;
 
-        ArrayList<Books> bookslist = new ArrayList<>();
-
-        if (LibrarySystem.patron_type.equalsIgnoreCase(LibrarySystemConst.STUDENT)) {
-            st = LibrarySystem.connection.prepareStatement("select * from books b,courses_books bc where b.isbn_no = bc.isbn_no and (b.hunt_avail_no > 0 or b.hill_avail_no > 0) and bc.course_id IN (select course_id from enrollment where student_id = ?)");
+        ArrayList<Books> bookslist = new ArrayList<>();        
+        
+        if(LibrarySystem.patron_type.equalsIgnoreCase(LibrarySystemConst.STUDENT))
+        {
+            st = LibrarySystem.connection.prepareStatement
+            ("select B.* from books B where B.isbn_no not in ( select R.isbn_no from reserve R, Courses_books C where R.isbn_no = C.isbn_no and C.course_id not in ( select E.course_id from enrollment E where E.student_id = ?) );");            
             st.setString(1, LibrarySystem.login_id);
-
-        } else {
-            st = LibrarySystem.connection.prepareStatement("select * from books b where b.hunt_avail_no > 0 or b.hill_avail_no > 0");
         }
+        else
+        {
+            st = LibrarySystem.connection.prepareStatement
+            ("select * from books b where b.hunt_avail_no > 0 or b.hill_avail_no > 0");
+        }        
 
         try (ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
@@ -403,7 +408,7 @@ public class ButtonEvents {
         }
     }
 
-    public static String room_notify() throws Exception {
+    public static String room_notify() throws SQLException {
         Timestamp one_hour;
         PreparedStatement stmnt = LibrarySystem.connection.prepareCall("select * from reserve_room where patron_ID=? and start_time<=? and end_time>=?");
         stmnt.setInt(1, LibrarySystem.patron_id);
@@ -605,8 +610,7 @@ public class ButtonEvents {
             }
         }
         return cameras;
-
-    }
+    }   
 
     public static String camera_notify() throws SQLException {
         //friday - add waitlist
@@ -1075,7 +1079,7 @@ public class ButtonEvents {
 
         st.setInt(1, avail_no);
         st.setString(2, id);
-        System.out.println(st.executeUpdate());
+        //System.out.println(st.executeUpdate());
         if (st.executeUpdate() == 0) {
             System.out.println("No rows updated");
             LibrarySystem.connection.setAutoCommit(true);
@@ -1259,7 +1263,51 @@ public class ButtonEvents {
         return checkout_conf_list;
     }
 
-    public static void getNotification() {
-
+    public static ArrayList<String> getNotification() throws SQLException
+    {
+        ArrayList<String> notification_text = new ArrayList<>();
+        String room_notif = null;
+        String camera_notif = null;
+        String query = null;
+        
+        room_notif = room_notify();
+        camera_notif = camera_notify();
+        
+        notification_text.add(room_notif);
+        notification_text.add(camera_notif);
+        
+        CallableStatement pl_exec = LibrarySystem.connection.prepareCall( "begin insert_into_reminder(?); end;" ); 
+        pl_exec.setInt(1, LibrarySystem.patron_id );              // set value of first function parameter "... javatest( ?, ..."
+        if(pl_exec.executeUpdate() == 0)
+        {
+            System.out.println("Some errr in running PLSQL");
+        }
+        
+        query = "select TEXT from REMINDER where PATRON_ID = ? and SEEN_IND = ?";
+        
+        st = LibrarySystem.connection.prepareStatement(query);
+        st.setInt(1, LibrarySystem.patron_id);
+        st.setString(2, "N");
+        
+        ResultSet rs = st.executeQuery();
+        
+        while(rs.next())
+        {
+            System.out.println("Inside");
+            notification_text.add(rs.getString(1));
+        }
+        
+        query = "update REMINDER set SEEN_IND = ? where PATRON_ID = ?";
+        
+        st = LibrarySystem.connection.prepareStatement(query);
+        st.setString(1, "Y");
+        st.setInt(2, LibrarySystem.patron_id);
+ 
+        if(st.executeUpdate() == 0)
+        {
+            System.out.println("No Rows Updated");
+            return null;
+        }
+        return notification_text;
     }
 }
