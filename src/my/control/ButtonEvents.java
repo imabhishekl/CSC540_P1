@@ -138,6 +138,12 @@ public class ButtonEvents {
         String set_clause;
         Boolean flag = false;
 
+        if(LibraryAPI.isBookAlreadyCheckedOut(LibrarySystem.patron_id,LibraryAPI.getPubllicationId(book_detail.getIsbn_no())))
+        {
+            System.out.println("Already CheckedOut");
+            return -2;
+        }
+        
         /*if(book_detail.getE_copy().equalsIgnoreCase("Y"))
          return 1;*/
         if (library_name.equals(LibrarySystemConst.HUNT)) {

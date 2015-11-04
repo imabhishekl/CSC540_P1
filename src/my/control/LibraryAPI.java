@@ -188,6 +188,32 @@ public class LibraryAPI
         return -1;
     }
     
+    public static boolean isBookAlreadyCheckedOut(int patron_id,int publication_id)throws SQLException
+    {
+        boolean flag = false;
+        
+        String query = null;
+        
+        query = "select * from checkout where patron_id = ? and publication_id = ? and end_time is null";
+
+        PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
+        ps.setInt(1, patron_id);
+        ps.setInt(2, publication_id);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        if(rs.next())
+        {
+            flag = true;
+        }
+        else
+        {
+            flag = false;
+        }
+        
+        return flag;
+    }
+    
     public static double getLateFees(int hours,int fees,long no_of_hours)
     {
         double late_fee;
