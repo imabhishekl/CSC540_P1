@@ -13,16 +13,10 @@ import TableStrcuture.CheckOut;
 import TableStrcuture.Conf;
 import TableStrcuture.Journals;
 import TableStrcuture.WaitlistCamera;
-import java.awt.print.Book;
-import java.sql.CallableStatement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class ButtonEvents {
@@ -1040,7 +1034,9 @@ public class ButtonEvents {
         } else {
             set_clause = "HILL_AVAIL_NO";
         }
-
+        
+        System.out.println(resource_type);
+        
         switch (resource_type) {
             case LibrarySystemConst.BOOK:
                 table_name = "BOOKS";
@@ -1124,14 +1120,20 @@ public class ButtonEvents {
 
         duration = LibraryAPI.getDuration(LibrarySystem.patron_type, resource_type);
 
+        System.out.println("Duration : " + duration);
+        System.out.println("Start Time : " + start_time.toString());
+       
         Timestamp start_time_stamp = new Timestamp(start_time.getTime());
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(start_time_stamp.getTime());
-        cal.set(Calendar.HOUR_OF_DAY, duration);
+        cal.add(Calendar.HOUR, duration);
         allowed_time = new Timestamp(cal.getTimeInMillis());
 
-        int hours_left = (int) (ts1.getTime() - allowed_time.getTime()) / (1000 * 60 * 60);
-
+        System.out.println("Allowed : " + allowed_time.getTime());
+        System.out.println("ts1" + ts1.getTime());
+        
+        long hours_left = (long) ((ts1.getTime() - allowed_time.getTime()));
+        
         System.out.println("Hours Left:" + hours_left);
 
         if (hours_left <= 0) {
@@ -1142,7 +1144,7 @@ public class ButtonEvents {
 
         long diffInMillies = hours_left / (3600);//end_time.getTime() - start_time.getTime();
         long no_of_hours = (diffInMillies) / (1000);
-
+        System.out.println("no_of_hours : " + no_of_hours);
         late_fee = (int) LibraryAPI.getLateFees(hours, fees, no_of_hours);
 
         System.out.println("Late Fee:" + late_fee);

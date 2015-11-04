@@ -43,7 +43,7 @@ public class JournalCheckoutForm extends javax.swing.JFrame {
             String authors = "";
             for(int j1 = 0; j1 < author.size(); j1++)
             {
-                authors += author.get(i) + ",";
+                authors += author.get(j1) + ",";
             }
             
             Object[] o = {p_id, issn, title, authors, date};
