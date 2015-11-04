@@ -70,11 +70,12 @@ public class ButtonEvents {
 
         f.setFaculty_id(faculty_id);
         //Statement st = LibrarySystem.connection.createStatement();
-        PreparedStatement st = LibrarySystem.connection.prepareCall("Select * from faculty where faculty_id = ?");
+        PreparedStatement st = LibrarySystem.connection.prepareCall("Select * from faculty where user_id = ?");
         st.setString(1, faculty_id);
 
         ResultSet rs = st.executeQuery();
-
+        if(rs.next())
+        {
         f.setFaculty_id(rs.getString("faculty_id"));
         f.setFirst_name(rs.getString("first_name"));
         f.setLast_name(rs.getString("last_name"));
@@ -82,6 +83,8 @@ public class ButtonEvents {
         f.setDepartment(rs.getString("department"));
         f.setCategory(rs.getString("category"));
         f.setAccount_balance(rs.getString("account_balance"));
+        
+        }
         return f;
 
     }
