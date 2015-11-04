@@ -141,10 +141,12 @@ public class BookCheckoutForm extends javax.swing.JFrame {
         int p_id = (int) jTable1.getValueAt(selected, 0);
         Date date = (Date) jTable1.getValueAt(selected, 4);
         try {
+            System.out.println(LibrarySystemConst.BOOK);
             ButtonEvents.return_resource(LibrarySystemConst.BOOK, p_id, isbn, date);
-            this.setVisible(false);
+            System.out.println("false");
+            //this.setVisible(false);
             CheckoutResources.init();
-        } catch (SQLException ex) {
+        } catch (SQLException ex) {            
             Logger.getLogger(BookCheckoutForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton2ActionPerformed

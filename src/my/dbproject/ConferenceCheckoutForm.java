@@ -138,7 +138,7 @@ public class ConferenceCheckoutForm extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         int selected = jTable1.getSelectedRow();
         String conf_num = (String) jTable1.getValueAt(selected, 1);
-        int p_id = Integer.parseInt((String) jTable1.getValueAt(selected, 0));
+        int p_id = (int) jTable1.getValueAt(selected, 0);
         Date date = (Date) jTable1.getValueAt(selected, 4);
         try {
             ButtonEvents.return_resource(LibrarySystemConst.CONFERENCE, p_id, conf_num, date);

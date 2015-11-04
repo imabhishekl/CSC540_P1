@@ -133,7 +133,7 @@ public class LibraryAPI
     {
         String query = null;
         
-        query = "select * from checkout where PUBLICATION_ID = ? and PATRON_ID = ? and END_TIME is NULL";
+        query = "select * from checkout where PUBLICATION_ID = ? and PATRON_ID = ? and END_TIME is null";
         
         PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
         
@@ -144,13 +144,12 @@ public class LibraryAPI
         System.out.println("Checking : " + r_id  + ": " + login_id);
         if(rs.next())
         {
-            System.out.println("Fetch");
+            System.out.println(rs.getString("E_COPY"));
             return rs.getString("E_COPY");
         }
         return null;
     }
-
-    
+ 
     public static int getDuration(String patron_type,String resource_type)throws SQLException
     {
         String query = null;
@@ -175,7 +174,7 @@ public class LibraryAPI
     {
         String query = null;
         
-        query = "update table " + LibrarySystem.patron_type + " set ACCOUNT_BALANCE = ? where " + LibrarySystem.patron_type + "_id = ?";
+        query = "update " + LibrarySystem.patron_type + " set ACCOUNT_BALANCE = ? where " + LibrarySystem.patron_type + "_id = ?";
         
         PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
         
@@ -189,6 +188,58 @@ public class LibraryAPI
         return -1;
     }
     
+    public static boolean isBookAlreadyCheckedOut(int patron_id,int publication_id)throws SQLException
+    {
+        boolean flag = false;
+        
+        String query = null;
+        
+        query = "select * from checkout where patron_id = ? and publication_id = ? and end_time is null";
+
+        PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
+        ps.setInt(1, patron_id);
+        ps.setInt(2, publication_id);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        if(rs.next())
+        {
+            flag = true;
+        }
+        else
+        {
+            flag = false;
+        }
+        
+        return flag;
+    }
+    
+    
+    public static boolean isAlreadyCheckedOut(int patron_id,int publication_id)throws SQLException
+    {
+        boolean flag = false;
+        
+        String query = null;
+        
+        query = "select * from checkout where patron_id = ? and publication_id = ? and end_time is null";
+
+        PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
+        ps.setInt(1, patron_id);
+        ps.setInt(2, publication_id);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        if(rs.next())
+        {
+            flag = true;
+        }
+        else
+        {
+            flag = false;
+        }
+        
+        return flag;
+    }
     public static double getLateFees(int hours,int fees,long no_of_hours)
     {
         double late_fee;
