@@ -2,6 +2,9 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
+        <group/>
+=======
         <group>
 <<<<<<< HEAD
             <file>file:/home/abhishek/Java/CSC540/CSC540_P1/src/my/control/ButtonEvents.java</file>
@@ -16,5 +19,6 @@
             <file>file:/home/amrit/CSC540_P1/src/my/control/ButtonEvents.java</file>
 >>>>>>> d840fb975bb32f82f567970fcaa9433af047a7e3
         </group>
+>>>>>>> c055ac8eac1a34a37bd9abefdee9dbc1e680ad60
     </open-files>
 </project-private>
