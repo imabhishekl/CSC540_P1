@@ -168,7 +168,18 @@ public class BookCheckoutForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        int selected = jTable1.getSelectedRow();
+        int p_id = (int) jTable1.getValueAt(selected, 0);
+        String isbn = (String) jTable1.getValueAt(selected, 1);
+        Date date = (Date) jTable1.getValueAt(selected, 4);
+        
+        try {
+            ButtonEvents.renew_resource(LibrarySystemConst.BOOK, p_id, isbn, date);
+            this.setVisible(false);
+            CheckoutResources.init();
+        } catch (SQLException ex) {
+            Logger.getLogger(BookCheckoutForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
