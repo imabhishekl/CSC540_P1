@@ -1017,6 +1017,115 @@ public class ButtonEvents {
 
     }
 
+    public static int renew_resource(String resource_type, int p_id, String id, Date start_time)throws SQLException
+    {
+        int hours;
+        int late_fee;
+        int fees;
+        int duration;
+        String query = null;
+        String table_name = null;
+        String set_clause;
+        String where_col = null;
+        String library_name = null;
+        String is_ecopy = null;
+        Timestamp allowed_time;
+        
+        LibrarySystem.connection.setAutoCommit(false);
+        
+        is_ecopy = LibraryAPI.isECopy(p_id, LibrarySystem.patron_id);
+        Date end_time = new Date(System.currentTimeMillis());
+        Timestamp ts1 = new Timestamp(end_time.getTime());
+        /* Update the check out book table */
+        query = "update checkout set END_TIME = ? where PUBLICATION_ID = ? and PATRON_ID = ? and END_TIME is NULL";
+        st = LibrarySystem.connection.prepareStatement(query);
+        st.setTimestamp(1, ts1);
+        st.setInt(2, p_id);
+        st.setInt(3, LibrarySystem.patron_id);
+
+        if (st.executeUpdate() == 0) {
+            LibrarySystem.connection.setAutoCommit(true);
+            return -1;
+        }
+
+        query = "insert into checkout (PUBLICATION_ID,PATRON_ID,START_TIME,LIB_NAME,E_COPY) values (?,?,?,?,?)";
+            st = LibrarySystem.connection.prepareStatement(query);
+
+            st.setInt(1, p_id);
+            st.setInt(2, LibrarySystem.patron_id);
+            st.setTimestamp(3, new Timestamp(new java.util.Date(System.currentTimeMillis()).getTime()));
+            st.setString(4, library_name);
+            st.setString(5, is_ecopy);
+            if (st.executeUpdate() != 0) {
+                System.out.println("Inserted in checkout");
+                LibrarySystem.connection.commit();
+                LibrarySystem.connection.setAutoCommit(true);
+                return 1;
+            } else {
+                System.out.println("Error while insert into checkout");
+            }
+        if (is_ecopy.equalsIgnoreCase("Y")) {
+            System.out.println("ECOPY:" + is_ecopy);
+            LibrarySystem.connection.setAutoCommit(true);
+            LibrarySystem.connection.commit();
+            return 1;
+        }
+
+        /* Calucate the late fee charge */
+        query = "select FEES,FREQUENCY_HOURS from late_fee where resource_type = ? order by frequency_hours asc";
+        st = LibrarySystem.connection.prepareStatement(query);
+        System.out.println("Resource Type:" + resource_type);
+        st.setString(1, resource_type);
+
+        ResultSet rs = st.executeQuery();
+
+        if (rs.next()) {
+            fees = rs.getInt(1);
+            hours = rs.getInt(2);
+        } else {
+            System.out.println("no entry in late fee");
+            LibrarySystem.connection.setAutoCommit(true);
+            return -1;
+        }
+
+        duration = LibraryAPI.getDuration(LibrarySystem.patron_type, resource_type);
+
+        System.out.println("Duration : " + duration);
+        System.out.println("Start Time : " + start_time.toString());
+       
+        Timestamp start_time_stamp = new Timestamp(start_time.getTime());
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(start_time_stamp.getTime());
+        cal.add(Calendar.HOUR, duration);
+        allowed_time = new Timestamp(cal.getTimeInMillis());
+
+        System.out.println("Allowed : " + allowed_time.getTime());
+        System.out.println("ts1" + ts1.getTime());
+        
+        long hours_left = (long) ((ts1.getTime() - allowed_time.getTime()));
+        
+        System.out.println("Hours Left:" + hours_left);
+
+        if (hours_left <= 0) {
+            LibrarySystem.connection.commit();
+            LibrarySystem.connection.setAutoCommit(true);
+            return 1;
+        }
+
+        long diffInMillies = hours_left / (3600);//end_time.getTime() - start_time.getTime();
+        long no_of_hours = (diffInMillies) / (1000);
+        System.out.println("no_of_hours : " + no_of_hours);
+        late_fee = (int) LibraryAPI.getLateFees(hours, fees, no_of_hours);
+
+        System.out.println("Late Fee:" + late_fee);
+
+        LibraryAPI.updateBalance(getBalance() - late_fee);
+
+        LibrarySystem.connection.setAutoCommit(true);
+        LibrarySystem.connection.commit();
+
+        return 1;        
+    }
     public static int return_resource(String resource_type, int p_id, String id, Date start_time) throws SQLException {
         int hours;
         int late_fee;
@@ -1309,5 +1418,5 @@ public class ButtonEvents {
             return null;
         }
         return notification_text;
-    }
+    }    
 }
