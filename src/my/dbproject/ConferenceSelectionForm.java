@@ -27,6 +27,7 @@ public class ConferenceSelectionForm extends javax.swing.JFrame {
     }
     public void populate(ArrayList <Conf> c)
     {
+        System.out.println(c.get(0).getGroup_id());
         String[] schema = {"Conference No.", "Name", "Title", "Year", "Authors", "library", "e-Copy", "Hard Copy"};
         DefaultTableModel d = new DefaultTableModel(schema,0);
         for(int i = 0; i< c.size(); i++)
@@ -69,7 +70,9 @@ public class ConferenceSelectionForm extends javax.swing.JFrame {
                 Object[] o = {conf_no, name, title, year, author, library, e_copy, hard_copy};
                 d.addRow(o);
             }
+          
         }
+        jTable1.setModel(d);
     }
 
     /**

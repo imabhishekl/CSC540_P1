@@ -164,6 +164,7 @@ public class JournalSelectionForm extends javax.swing.JFrame {
         String issn = (String) jTable1.getValueAt(select, 0);
         Journals j = new Journals();
         j.setIssn_no(issn);
+        j.setE_copy((String) jTable1.getValueAt(select, 5));
         String library = (String) jTable1.getValueAt(select, 4);
         try {
             ButtonEvents.checkout_journal(j, library);
