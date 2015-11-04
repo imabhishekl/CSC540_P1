@@ -25,13 +25,10 @@ public class Test {
         
         try {            
             LibrarySystem.setup();
+
             LibrarySystem.patron_id = 2;
             System.out.println("Size:" + ButtonEvents.getNotification().size());
-            
-            //System.out.println("::" + LibraryAPI.isECopy(27, 1));
-            //Date date = new Date();
-        //    System.out.println("run");
-            //ButtonEvents.getRoom("Hunt", 3, "study");
+ 
             
             //Date date = new Date();
        
@@ -43,7 +40,7 @@ public class Test {
 
         //System.out.println(d);
         try{
-        ButtonEvents.update_checkout_room("R2", new Timestamp(System.currentTimeMillis()));
+        //ButtonEvents.update_checkout_room("R2", new Timestamp(System.currentTimeMillis()));
             //System.out.println("run");
 //            ArrayList<Rooms> a=ButtonEvents.checkout_room();
             
