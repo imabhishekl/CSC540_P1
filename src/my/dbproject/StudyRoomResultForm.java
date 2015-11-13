@@ -133,7 +133,7 @@ public class StudyRoomResultForm extends javax.swing.JFrame {
         this.setVisible(false);
         start=null;
         end=null;
-        MenuForm.init();
+        ResourceForm.init();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
