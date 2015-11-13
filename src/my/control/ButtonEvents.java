@@ -514,13 +514,23 @@ public class ButtonEvents {
         Timestamp tstamp_tocheck = new Timestamp(zeroedDate.getTime());
         Timestamp tstamp_current = new Timestamp(date.getTime());
         Timestamp tstamp_8 = tstamp_tocheck;
-
-        cal.set(Calendar.HOUR_OF_DAY, 10);
+        
+        cal = Calendar.getInstance();
         cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 10);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        //cal.setTime(date);
         zeroedDate = cal.getTime();
         Timestamp tstamp_10 = new Timestamp(zeroedDate.getTime());
-        cal.set(Calendar.HOUR_OF_DAY, 12);
+        cal = Calendar.getInstance();
         cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 12);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        //cal.setTime(date);
         zeroedDate = cal.getTime();
         Timestamp tstamp_12 = new Timestamp(zeroedDate.getTime());
 
@@ -532,6 +542,7 @@ public class ButtonEvents {
         ResultSet rs = st.executeQuery();
         while (rs.next()) {
             status = 1;
+            
             WaitlistCamera wc = new WaitlistCamera();
             wc.setRequest_time(rs.getTimestamp("request_time"));
             wc.setCamera_id(rs.getString("camera_id"));
@@ -546,8 +557,7 @@ public class ButtonEvents {
         }
         try {
             if (tstamp_current.after(tstamp_8) && tstamp_current.before(tstamp_10)) {
-
-                if (w_c.get(0).getId() == LibrarySystem.patron_id) {
+                if (w_c.get(0).getPatron_id() == LibrarySystem.patron_id) {
 
                     LibrarySystem.camera_id = w_c.get(0).getCamera_id();
                     return "Ready for Hold";
@@ -557,7 +567,7 @@ public class ButtonEvents {
                 }
 
             } else if (tstamp_current.after(tstamp_10) && tstamp_current.before(tstamp_12)) {
-                if (w_c.get(1).getId() == LibrarySystem.patron_id) {
+                if (w_c.get(1).getPatron_id() == LibrarySystem.patron_id) {
 
                     LibrarySystem.camera_id = w_c.get(1).getCamera_id();
                     return "Ready for hold";
@@ -585,22 +595,43 @@ public class ButtonEvents {
     public static String camera_hold() throws SQLException {
         Date date = new Date(System.currentTimeMillis());
         Timestamp tstamp1 = new Timestamp(date.getTime());
+        
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 12);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        //cal.setTime(date);
+        Date zeroedDate = cal.getTime();
+        Timestamp tstamp_12 = new Timestamp(zeroedDate.getTime());
+        cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 8);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        //cal.setTime(date);
+        zeroedDate = cal.getTime();
+        Timestamp tstamp_8 = new Timestamp(zeroedDate.getTime());
+                String str = "";
+
+            if (tstamp1.after(tstamp_8) && tstamp1.before(tstamp_12)) {
 
         st = LibrarySystem.connection.prepareStatement("insert into camera_checkout (patron_id,camera_id, checkout_time) values (?,?,?)");
         st.setInt(1, LibrarySystem.patron_id);
         st.setString(2, LibrarySystem.camera_id);
         st.setTimestamp(3, tstamp1);
-        String str = "";
 //        System.out.println();
         if (st.executeUpdate() == 1) {
-            Calendar cal = Calendar.getInstance();
+            cal = Calendar.getInstance();
             cal.setTime(date);
             cal.set(Calendar.HOUR_OF_DAY, 8);
             cal.set(Calendar.MINUTE, 0);
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
             cal.setTime(date);
-            Date zeroedDate = cal.getTime();
+            zeroedDate = cal.getTime();
             Timestamp tstamp = new Timestamp(zeroedDate.getTime());
 
             st = LibrarySystem.connection.prepareStatement("delete from waitlist_camera where request_time<?");
@@ -623,11 +654,23 @@ public class ButtonEvents {
                 System.out.println(e.getMessage());
 
             }
-
-            LibrarySystem.connection.commit();
-            LibrarySystem.connection.setAutoCommit(true);
         }
+           
+        }
+            else if (tstamp1.after(tstamp_12)){
+                st = LibrarySystem.connection.prepareStatement("delete from waitlist_camera where request_time<?");
+            st.setTimestamp(1, tstamp_12);
+            try {
+                st.executeUpdate();
+            } catch (SQLException e) {
 
+                System.out.println(e.getMessage());
+
+            }
+            }
+            
+ LibrarySystem.connection.commit();
+            LibrarySystem.connection.setAutoCommit(true);
         str = "Camera is on hold. Pick it up before 12";
         return str;
     }
@@ -646,7 +689,12 @@ public class ButtonEvents {
 
         Timestamp tstamp12 = new Timestamp(zeroedDate.getTime());
         Timestamp tstamp_current = new Timestamp(date.getTime());
+        cal = Calendar.getInstance();
+        cal.setTime(date);
         cal.set(Calendar.HOUR_OF_DAY, 8);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
         cal.setTime(date);
         zeroedDate = cal.getTime();
         Timestamp tstamp8 = new Timestamp(zeroedDate.getTime());
@@ -663,11 +711,22 @@ public class ButtonEvents {
                 System.out.println(e.getMessage());
 
             }
+            
+        }
+        else if (tstamp_current.after(tstamp12)){
+                st = LibrarySystem.connection.prepareStatement("delete from waitlist_camera where request_time<?");
+            st.setTimestamp(1, tstamp12);
+            try {
+                st.executeUpdate();
+            } catch (SQLException e) {
+
+                System.out.println(e.getMessage());
+
+            }
             LibrarySystem.connection.commit();
             LibrarySystem.connection.setAutoCommit(true);
-        }
         LibrarySystem.camera_id = null;
-
+        }
         return str;
     }
 
