@@ -1,6 +1,7 @@
 package my.dbproject;
 
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import my.control.ButtonEvents;
 
 public class LoginForm extends javax.swing.JFrame {
@@ -36,7 +37,6 @@ public class LoginForm extends javax.swing.JFrame {
 
         jLabel2.setText("Password");
 
-        jPasswordField1.setText("jPasswordField1");
         jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jPasswordField1ActionPerformed(evt);
@@ -123,12 +123,13 @@ public class LoginForm extends javax.swing.JFrame {
             int is_valid = ButtonEvents.validate_login(jTextField1.getText(),jPasswordField1.getText());
             if(is_valid == 1)
             {
-                System.out.println("Success in Login");
+                //System.out.println("Success in Login");
                 this.setVisible(false);
                 MenuForm.init();
             }
             else
             {
+                JOptionPane.showMessageDialog(null, "Wrong ID or password. Try again!");
                 System.out.println("Failed Login");
             }
         }

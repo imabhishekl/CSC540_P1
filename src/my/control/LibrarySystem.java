@@ -39,7 +39,7 @@ public class LibrarySystem
     public static void render_login()
     {
         LoginForm.init();
-        System.out.println("render login");
+        //System.out.println("render login");
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new LoginForm().setVisible(true);
