@@ -5,6 +5,11 @@
  */
 package my.dbproject;
 
+import TableStrcuture.Rooms;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+import my.control.ButtonEvents;
+
 /**
  *
  * @author chintanpanchamia
@@ -16,6 +21,23 @@ public class StudyRoomResultForm extends javax.swing.JFrame {
      */
     public StudyRoomResultForm() {
         initComponents();
+    }
+    public void populate(ArrayList <Rooms> a)
+    {
+        String[] schema = {"Room No.", "Floor No.", "Capacity", "Library Name", "Type"};
+        DefaultTableModel d = new DefaultTableModel();
+        for(int i = 0; i < a.size(); i++)
+        {
+            String room_no = a.get(i).getRoom_no();
+            int floor_no = a.get(i).getFloor_no();
+            int capacity = a.get(i).getCapacity();
+            String library = a.get(i).getLib_name();
+            String type = a.get(i).getType();
+            
+            Object[] o = {room_no, floor_no, capacity, library, type};
+            d.addRow(o);
+        }
+        jTable1.setModel(d);
     }
 
     /**
@@ -37,17 +59,6 @@ public class StudyRoomResultForm extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Study Rooms"));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Room No.", "Floor No.", "Type", "Capacity"
-            }
-        ));
         jScrollPane1.setViewportView(jTable1);
 
         jButton1.setText("Back");
@@ -108,7 +119,10 @@ public class StudyRoomResultForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // Fire QUERY here
+        int select = jTable1.getSelectedRow();
+        String room_no =(String) jTable1.getValueAt(select, 0);
+        String library = (String) jTable1.getValueAt(select, 4);
+       // ButtonEvents.reserve_room(room_no,library);
         this.setVisible(false);
         MenuForm.init();
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -121,7 +135,7 @@ public class StudyRoomResultForm extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void init() {
+    public static void init(ArrayList <Rooms> a) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -145,11 +159,14 @@ public class StudyRoomResultForm extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        final ArrayList <Rooms> r = a;
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StudyRoomResultForm().setVisible(true);
+                StudyRoomResultForm s = new StudyRoomResultForm();
+                s.setVisible(true);
+                s.populate(r);
             }
         });
     }

@@ -172,8 +172,8 @@ public class StudyRoomForm extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel4)
@@ -331,7 +331,8 @@ public class StudyRoomForm extends javax.swing.JFrame {
         
         try {
             //System.out.println(lib_name+" "+capacity+" "+type+" "+start_time+" "+end_time);
-            ButtonEvents.getRoom(lib_name, capacity, type,start_time,end_time);
+            this.setVisible(false);
+            StudyRoomResultForm.init(ButtonEvents.getRoom(lib_name, capacity, type,start_time,end_time));
         } catch (Exception e) {
         }
 
