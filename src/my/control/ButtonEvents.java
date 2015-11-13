@@ -634,10 +634,14 @@ public class ButtonEvents {
             zeroedDate = cal.getTime();
             Timestamp tstamp = new Timestamp(zeroedDate.getTime());
 
-            st = LibrarySystem.connection.prepareStatement("delete from waitlist_camera where request_time<?");
+            st = LibrarySystem.connection.prepareStatement("delete from waitlist_camera  where request_time < ?");
             st.setTimestamp(1, tstamp);
-            try {
-                st.executeUpdate();
+            System.out.println(tstamp.toString());
+            try {                              
+
+                //System.out.println(
+                        st.executeUpdate();
+
             } catch (SQLException e) {
 
                 System.out.println(e.getMessage());
@@ -648,6 +652,7 @@ public class ButtonEvents {
             st.setString(1, LibrarySystem.camera_id);
             st.setTimestamp(2, tstamp);
             try {
+
                 st.executeUpdate();
             } catch (SQLException e) {
 
@@ -821,12 +826,12 @@ public class ButtonEvents {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         end_time = new Timestamp(cal.getTimeInMillis());
-        System.out.println(end_time.toString());
         int hours = (int) (tstamp_current.getTime() - end_time.getTime()) / (1000 * 60 * 60);
+                    System.out.println(hours);
 
         PreparedStatement st1 = LibrarySystem.connection.prepareStatement("Select * from late_fee where resource_type = ?");
-        st1.setString(1, "camera");
-        ResultSet rs1 = st.executeQuery();
+        st1.setString(1, "CAMERA");
+        ResultSet rs1 = st1.executeQuery();
         if (rs1.next()) {
             int fees = rs1.getInt("fees");
             int frequency_hours = rs1.getInt("frequency_hours");
@@ -836,11 +841,14 @@ public class ButtonEvents {
                 st.setString(1, LibrarySystem.login_id);
                 rs = st.executeQuery();
                 if (rs.next()) {
-                    int val = rs.getInt(1) - fees * (hours / frequency_hours + 1);
+                    System.out.println(fees);
+                    int val = (int ) (rs.getInt(1) - fees * ( Math.floor((double) (hours / frequency_hours))));
                     st = LibrarySystem.connection.prepareStatement("Update " + LibrarySystem.patron_type + " set account_balance = ? where " + LibrarySystem.patron_type + "_id =?");
                     st.setInt(1, val);
                     st.setString(2, LibrarySystem.login_id);
                     try {
+                    System.out.println(val);
+                        
                         st.executeUpdate();
                     } catch (SQLException e) {
 
@@ -849,9 +857,12 @@ public class ButtonEvents {
                     }
 
                 }
-            } else {
-                st = LibrarySystem.connection.prepareStatement("Delete from camera_checkout where camera_id = ?");
+            } 
+            
+                st = LibrarySystem.connection.prepareStatement("Delete from camera_checkout where camera_id = ? and patron_id=? and start_time=?");
                 st.setString(1, camera_id);
+                st.setInt(2, LibrarySystem.patron_id);
+                st.setTimestamp(3, tst);
                 try {
                     st.executeUpdate();
                 } catch (SQLException e) {
@@ -859,8 +870,10 @@ public class ButtonEvents {
                     System.out.println(e.getMessage());
 
                 }
-            }
+            
         }
+         LibrarySystem.connection.commit();
+         LibrarySystem.connection.setAutoCommit(true);
         return str;
     }
 

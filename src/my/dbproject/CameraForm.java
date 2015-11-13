@@ -38,7 +38,6 @@ public class CameraForm extends javax.swing.JFrame {
     {
         String[] schema = {"Camera ID", "Lens", "Model", "Make", "Memory Available", "Library"};
         DefaultTableModel d = new DefaultTableModel(schema,0);
-        System.out.println(c.toString());
         
         for (int i = 0; i< c.size(); i++)
         {
@@ -48,7 +47,6 @@ public class CameraForm extends javax.swing.JFrame {
             String make = c.get(i).getMake();
             String memory_available = c.get(i).getMemory_available();
             String library = c.get(i).getLib_name();
-            System.out.println(camera_id);
             Object[] o = {camera_id, lens, model, make, memory_available, library};
             
             d.addRow(o);
@@ -191,7 +189,6 @@ public class CameraForm extends javax.swing.JFrame {
         try {
             
             String str = ButtonEvents.waitlistCamera(camera_id, formal_date);
-            System.out.println(str);
             JOptionPane.showMessageDialog(null, str);
             this.setVisible(false);
             ResourceForm.init();
