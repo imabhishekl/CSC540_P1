@@ -62,7 +62,7 @@ public class LibraryAPI
     {
         String query;
         
-        query = "select id from publication where where publication_id = ?";
+        query = "select id from publication where publication_id = ?";
         PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
         ps.setString(1, isbn);
         
@@ -113,7 +113,7 @@ public class LibraryAPI
     {
         String query = null;
         
-        query = "select LIB_NAME from checkout where PUBLICATION_ID = ? and PATRON_ID = ?";
+        query = "select LIB_NAME from checkout where PUBLICATION_ID = ? and PATRON_ID = ? and END_TIME is NULL";
         
         PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
         
@@ -128,6 +128,27 @@ public class LibraryAPI
         }
         return null;
     }
+
+    public static String isECopy(int r_id,int login_id)throws SQLException
+    {
+        String query = null;
+        
+        query = "select E_COPY from checkout where PUBLICATION_ID = ? and PATRON_ID = ? and END_TIME is NULL";
+        
+        PreparedStatement ps = LibrarySystem.connection.prepareStatement(query);
+        
+        ps.setInt(1, r_id);
+        ps.setInt(2, login_id);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        if(rs.next())
+        {
+            return rs.getString(1);
+        }
+        return null;
+    }
+
     
     public static int getDuration(String patron_type,String resource_type)throws SQLException
     {

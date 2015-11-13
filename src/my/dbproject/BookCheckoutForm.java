@@ -5,6 +5,18 @@
  */
 package my.dbproject;
 
+import TableStrcuture.Books;
+import TableStrcuture.CheckOut;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import my.control.ButtonEvents;
+import my.control.LibrarySystem;
+import my.control.LibrarySystemConst;
+
 /**
  *
  * @author chintanpanchamia
@@ -16,6 +28,31 @@ public class BookCheckoutForm extends javax.swing.JFrame {
      */
     public BookCheckoutForm() {
         initComponents();
+    }
+    public void populate(ArrayList <CheckOut> a)
+    {
+        System.out.println(a.size());
+        String[] schema = {"Publication ID","ISBN","Title","Authors","Date of Reservation"};
+        DefaultTableModel d = new DefaultTableModel(schema,0);
+        for(int i = 0; i< a.size(); i++)
+        {
+            Books b = a.get(i).getBooks_det();
+            int p_id = a.get(i).getPublication_id();
+            String isbn = b.getIsbn_no();
+            String title = b.getTitle();
+            String authors = "";
+            Date date = a.get(i).getStart_time();
+            int patron_id = a.get(i).getPatron_id();
+            ArrayList <String> author = b.getAuthor_list();
+            for(int j = 0; j< author.size(); j++)
+            {
+                authors = author.get(j) + ",";
+            }
+            
+            Object[] o = {p_id, isbn, title, authors, date};
+            d.addRow(o);
+        }
+        jTable1.setModel(d);
     }
 
     /**
@@ -40,8 +77,18 @@ public class BookCheckoutForm extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         jButton1.setText("Back");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Return");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -86,10 +133,30 @@ public class BookCheckoutForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        this.setVisible(false);
+        int selected = jTable1.getSelectedRow();
+        String isbn = (String) jTable1.getValueAt(selected, 1);
+        int p_id = Integer.parseInt((String) jTable1.getValueAt(selected, 0));
+        Date date = (Date) jTable1.getValueAt(selected, 4);
+        try {
+            ButtonEvents.return_resource(LibrarySystemConst.BOOK, p_id, isbn, date);
+            this.setVisible(false);
+            CheckoutResources.init();
+        } catch (SQLException ex) {
+            Logger.getLogger(BookCheckoutForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.setVisible(false);
+        CheckoutResources.init();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void init() {
+    public static void init(ArrayList <CheckOut> a) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -112,11 +179,14 @@ public class BookCheckoutForm extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(BookCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        final ArrayList <CheckOut> a1 = a;
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BookCheckoutForm().setVisible(true);
+                BookCheckoutForm b = new BookCheckoutForm();
+                b.setVisible(true);
+                b.populate(a1);
             }
         });
     }

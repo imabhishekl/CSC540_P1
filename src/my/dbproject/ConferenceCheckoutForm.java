@@ -5,6 +5,17 @@
  */
 package my.dbproject;
 
+import TableStrcuture.CheckOut;
+import TableStrcuture.Conf;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import my.control.ButtonEvents;
+import my.control.LibrarySystemConst;
+
 /**
  *
  * @author chintanpanchamia
@@ -16,6 +27,29 @@ public class ConferenceCheckoutForm extends javax.swing.JFrame {
      */
     public ConferenceCheckoutForm() {
         initComponents();
+    }
+    public void populate(ArrayList <CheckOut> acf)
+    {
+        String[] schema = {"Publication ID", "Conference No.", "Title", "Authors", "Date of Reservation"};
+        DefaultTableModel d = new DefaultTableModel(schema,0);
+        for(int i = 0; i < acf.size(); i++)
+        {
+            Conf c = acf.get(i).getCf();
+            int p_id = acf.get(i).getPublication_id();
+            String title = c.getConfname();
+            String conf_num = c.getConfnum();
+            Date date = acf.get(i).getStart_time();
+            ArrayList <String> author = c.getAuthor_list();
+            String authors = "";
+            for(int j = 0; j < author.size(); j++)
+            {
+                authors += author.get(j) + ",";
+            }
+            
+            Object[] o = {p_id, conf_num, title, authors, date};
+            d.addRow(o);
+        }
+        jTable1.setModel(d);
     }
 
     /**
@@ -40,8 +74,18 @@ public class ConferenceCheckoutForm extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         jButton1.setText("Back");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Return");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -86,10 +130,29 @@ public class ConferenceCheckoutForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.setVisible(false);
+        CheckoutResources.init();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int selected = jTable1.getSelectedRow();
+        String conf_num = (String) jTable1.getValueAt(selected, 1);
+        int p_id = Integer.parseInt((String) jTable1.getValueAt(selected, 0));
+        Date date = (Date) jTable1.getValueAt(selected, 4);
+        try {
+            ButtonEvents.return_resource(LibrarySystemConst.CONFERENCE, p_id, conf_num, date);
+            this.setVisible(false);
+            CheckoutResources.init();
+        } catch (SQLException ex) {
+            Logger.getLogger(ConferenceCheckoutForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void init() {
+    public static void init(ArrayList <CheckOut> ac) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -112,11 +175,14 @@ public class ConferenceCheckoutForm extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(ConferenceCheckoutForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        final ArrayList <CheckOut> ac1 = ac;
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ConferenceCheckoutForm().setVisible(true);
+                ConferenceCheckoutForm cf = new ConferenceCheckoutForm();
+                cf.setVisible(true);
+                cf.populate(ac1);
             }
         });
     }

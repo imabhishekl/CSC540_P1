@@ -5,9 +5,11 @@
  */
 package my.control;
 
+import TableStrcuture.Rooms;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -34,22 +36,26 @@ public class Test {
 
         try {
             //Date date = new Date();
-            System.out.println("run");
+        //    System.out.println("run");
             //ButtonEvents.getRoom("Hunt", 3, "study");
             
-            Date date = new Date();
-            System.out.println(ButtonEvents.camera_notify());
+            //Date date = new Date();
+            //System.out.println(ButtonEvents.camera_notify());
             // ButtonEvents.getRoom("Hunt", 3, "study",);
             //System.out.println("main");
         } catch (Exception e) {
         }
 
         //System.out.println(d);
-        /*try{
-        //ButtonEvents.print();}
-            ButtonEvents.room_notify();
+        try{
+        //ButtonEvents.print();
+            System.out.println("run");
+//            ArrayList<Rooms> a=ButtonEvents.checkout_room();
+            
+            
         }
         catch (Exception e) {
-        }*/
+        
+    }
     }
 }
