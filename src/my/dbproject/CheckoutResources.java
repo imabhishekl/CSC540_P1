@@ -200,8 +200,10 @@ public class CheckoutResources extends javax.swing.JFrame {
         try {
             
             a = ButtonEvents.camera_resources();
+            
             ButtonEvents.camera_notify();
             b = ButtonEvents.camera_holdresources();
+            //System.out.println(a.get(0).getCamera_id()+" "+b);
             CameraCheckoutForm.init(a,b);
             
         } catch (SQLException ex) {
