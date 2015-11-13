@@ -618,7 +618,7 @@ public class ButtonEvents {
 
             if (tstamp1.after(tstamp_8) && tstamp1.before(tstamp_12)) {
 
-        st = LibrarySystem.connection.prepareStatement("insert into camera_checkout (patron_id,camera_id, checkout_time) values (?,?,?)");
+        st = LibrarySystem.connection.prepareStatement("insert into camera_checkout (patron_id,camera_id, checkout) values (?,?,?)");
         st.setInt(1, LibrarySystem.patron_id);
         st.setString(2, LibrarySystem.camera_id);
         st.setTimestamp(3, tstamp1);
@@ -723,10 +723,11 @@ public class ButtonEvents {
                 System.out.println(e.getMessage());
 
             }
-            LibrarySystem.connection.commit();
-            LibrarySystem.connection.setAutoCommit(true);
+            
         LibrarySystem.camera_id = null;
         }
+        LibrarySystem.connection.commit();
+            LibrarySystem.connection.setAutoCommit(true);
         return str;
     }
 
@@ -774,9 +775,8 @@ public class ButtonEvents {
         Date date = new Date(System.currentTimeMillis());
         Timestamp tstamp_current = new Timestamp(date.getTime());
         Camera c;
-                    System.out.println(LibrarySystem.camera_id);
 
-System.out.println(tstamp_current.toString());
+//System.out.println(tstamp_current.toString());
         ArrayList<Camera> cameras = new ArrayList<Camera>();
         if (LibrarySystem.camera_id != null) {
             PreparedStatement st1 = LibrarySystem.connection.prepareStatement("Select * from camera where camera_id=?");
@@ -789,11 +789,11 @@ System.out.println(tstamp_current.toString());
                 c.setCamera_id(rs1.getString("camera_id"));
                 c.setModel(rs1.getString("model"));
                 cameras.add(c);
-                System.out.println(rs1.getString("camera_id"));
+                //System.out.println(rs1.getString("camera_id"));
             }
 
         }
-        System.out.println(" he" +cameras);
+        //System.out.println(" he" +cameras.get(0));
         return cameras;
     }
 

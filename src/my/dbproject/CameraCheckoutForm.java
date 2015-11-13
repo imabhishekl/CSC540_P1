@@ -39,6 +39,7 @@ boolean b1 = false;
         
         String[] schema = {"Camera ID","Model"};
         DefaultTableModel d = new DefaultTableModel(schema,0);
+
         if(c1.size()!=0)
         {
             jTable1.setVisible(true);
@@ -59,10 +60,11 @@ boolean b1 = false;
         if(c2.size()!=0)
         {
             
-            
+            d = new DefaultTableModel(schema,0);
             jButton3.setVisible(true);
             for(int i = 0; i < c2.size(); i++)
             {
+
                 String camera_id = c2.get(i).getCamera_id();
                 String model = c2.get(i).getModel();
                 //boolean b = Boolean.FALSE;
