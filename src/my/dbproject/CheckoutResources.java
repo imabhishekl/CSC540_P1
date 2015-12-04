@@ -102,7 +102,7 @@ public class CheckoutResources extends javax.swing.JFrame {
 
         jLabel5.setText("View your Room-reservation status");
 
-        jButton2.setText("jButton2");
+        jButton2.setText("Back");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -195,8 +195,20 @@ public class CheckoutResources extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.setVisible(false);
-        //ArrayList <Camera> a = new ArrayList <Camera>();
-        //CameraCheckoutForm.init(a);
+        ArrayList <Camera> a,b;
+        
+        try {
+            
+            a = ButtonEvents.camera_resources();
+            ButtonEvents.camera_notify();
+            b = ButtonEvents.camera_holdresources();
+            CameraCheckoutForm.init(a,b);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(CheckoutResources.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

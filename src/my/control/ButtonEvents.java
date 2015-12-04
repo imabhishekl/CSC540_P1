@@ -618,7 +618,7 @@ public class ButtonEvents {
         return str;
     }
 
-    public ArrayList<Camera> camera_resources() throws SQLException 
+    public static ArrayList<Camera> camera_resources() throws SQLException 
     {
         Date date = new Date(System.currentTimeMillis());
         Timestamp tstamp_current = new Timestamp(date.getTime());
@@ -646,7 +646,7 @@ public class ButtonEvents {
       
         return cameras;
     }
-    public ArrayList<Camera> camera_holdresources() throws SQLException 
+    public static ArrayList<Camera> camera_holdresources() throws SQLException 
     {
         Date date = new Date(System.currentTimeMillis());
         Timestamp tstamp_current = new Timestamp(date.getTime());
@@ -671,7 +671,7 @@ public class ButtonEvents {
         return cameras;
     }
     
-    public static String camera_return() throws SQLException {
+    public static String camera_return(String camera_id) throws SQLException {
         String str = "";
         Date date = new Date(System.currentTimeMillis());
         Timestamp tstamp_current = new Timestamp(date.getTime());

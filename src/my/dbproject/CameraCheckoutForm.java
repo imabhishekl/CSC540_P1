@@ -6,25 +6,75 @@
 package my.dbproject;
 
 import TableStrcuture.Camera;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import my.control.ButtonEvents;
 
 /**
  *
  * @author chintanpanchamia
  */
 public class CameraCheckoutForm extends javax.swing.JFrame {
-
+boolean b1 = false;
     /**
      * Creates new form CameraCheckoutForm
      */
     public CameraCheckoutForm() {
         initComponents();
     }
-    public void populate(ArrayList <Camera> c)
+    public void visibility()
     {
-        String[] schema = {"Camera ID","Model"};
+        jTable1.setVisible(false);
+        jTable2.setVisible(false);
+        jButton1.setVisible(false);
+        jButton2.setVisible(false);
+        jButton3.setVisible(false);
+    }
+    public void populate(ArrayList <Camera> c1, ArrayList <Camera> c2)
+    {
+        
+        String[] schema = {"Camera ID","Model", "Check"};
         DefaultTableModel d = new DefaultTableModel();
+        if(c1.size()!=0)
+        {
+            
+            jButton1.setVisible(true);
+            for(int i = 0; i < c1.size(); i++)
+            {
+                String camera_id = c1.get(i).getCamera_id();
+                String model = c1.get(i).getModel();
+                boolean b = Boolean.FALSE;
+                
+                Object[] o = {camera_id, model, b};
+                
+                d.addRow(o);
+            }
+            jTable1.setModel(d);
+            jTable1.setVisible(true);
+        }
+        if(c2.size()!=0 && b1 != false)
+        {
+            
+            
+            jButton3.setVisible(true);
+            for(int i = 0; i < c2.size(); i++)
+            {
+                String camera_id = c2.get(i).getCamera_id();
+                String model = c2.get(i).getModel();
+                boolean b = Boolean.FALSE;
+                
+                Object[] o = {camera_id, model, b};
+                
+                d.addRow(o);
+            }
+            jTable2.setModel(d);
+            jTable2.setVisible(true);
+        }
+        
         
     }
 
@@ -56,6 +106,11 @@ public class CameraCheckoutForm extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTable2);
 
         jButton1.setText("Return");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Pickup");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -65,6 +120,11 @@ public class CameraCheckoutForm extends javax.swing.JFrame {
         });
 
         jButton3.setText("Hold");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Back");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -128,13 +188,46 @@ public class CameraCheckoutForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        int select = jTable2.getSelectedRow();
+    try {
+        ButtonEvents.camera_pickup();
+        DefaultTableModel d = (DefaultTableModel) jTable2.getModel();
+        d.removeRow(select);
+        jTable2.setModel(d);
+        
+    } catch (SQLException ex) {
+        Logger.getLogger(CameraCheckoutForm.class.getName()).log(Level.SEVERE, null, ex);
+    }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         this.setVisible(false);
         CheckoutResources.init();
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int select = jTable1.getSelectedRow();
+        try {
+            ButtonEvents.camera_return((String) jTable1.getValueAt(select, 0));
+            DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
+            d.removeRow(select);
+            jTable1.setModel(d);
+        } catch (SQLException ex) {
+            Logger.getLogger(CameraCheckoutForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        int select = jTable2.getSelectedRow();
+        try {
+            ButtonEvents.camera_hold();
+            b1 = true;
+            jButton3.setVisible(false);
+            jButton2.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(CameraCheckoutForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -163,13 +256,15 @@ public class CameraCheckoutForm extends javax.swing.JFrame {
         }
         //</editor-fold>
         final ArrayList <Camera> c2 = c;
+        final ArrayList <Camera> c3 = c1;
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 CameraCheckoutForm c = new CameraCheckoutForm();
                 c.setVisible(true);
-                c.populate(c2);
+                c.visibility();
+                c.populate(c2,c3);
             }
         });
     }
